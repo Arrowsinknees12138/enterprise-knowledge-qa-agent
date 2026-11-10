@@ -1,0 +1,7 @@
+{
+  "question": "那要等几天？",
+  "history": [
+    {"role": "user", "content": "我刚入职，想了解门禁权限申请。"},
+    {"role": "assistant", "content": "你是想问申请后的开通时间吗？"}
+  ]
+}

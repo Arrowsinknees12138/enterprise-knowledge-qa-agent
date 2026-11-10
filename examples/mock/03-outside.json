@@ -1,0 +1,49 @@
+{
+  "status": "insufficient_evidence",
+  "answer": "",
+  "citations": [],
+  "gap": "当前资料中未找到对应条目。",
+  "follow_up": "",
+  "run": {
+    "mode": "mock",
+    "model": "offline-rules",
+    "api_requests": 0,
+    "max_steps": 8,
+    "steps_used": 2
+  },
+  "trace": [
+    {
+      "step": 1,
+      "action": "search_docs",
+      "arguments": {
+        "query": "公司允许员工带宠物到办公室吗？"
+      },
+      "reason": "先检索当前问题",
+      "observation": {
+        "ok": true,
+        "total": 0,
+        "hits": [],
+        "unread_doc_ids": []
+      },
+      "next_action": "finish"
+    },
+    {
+      "step": 2,
+      "action": "finish",
+      "arguments": {
+        "status": "insufficient_evidence",
+        "citations": [],
+        "gap": "当前资料中未找到对应条目。",
+        "follow_up": ""
+      },
+      "reason": "本地检索无命中",
+      "observation": {
+        "ok": true,
+        "status": "insufficient_evidence",
+        "citations": [],
+        "gap": "当前资料中未找到对应条目。"
+      },
+      "next_action": null
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+PASS 01-answer: answered | search_docs -> read_doc -> finish
+PASS 02-conflict: needs_clarification | search_docs -> read_doc -> read_doc -> finish
+PASS 03-outside: insufficient_evidence | search_docs -> finish
+PASS 04-paraphrase: answered | search_docs -> read_doc -> finish
+PASS 05-follow-up: answered | search_docs -> search_docs -> read_doc -> finish
+PASS 06-tool-failure: tool_error | search_docs -> read_doc -> finish
+PASS 07-updated-source: answered | search_docs -> read_doc -> finish
+PASS 08-step-limit: step_limit | search_docs
+8/8 mock example checks passed

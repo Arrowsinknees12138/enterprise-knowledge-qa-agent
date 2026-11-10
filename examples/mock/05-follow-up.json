@@ -1,0 +1,117 @@
+{
+  "status": "answered",
+  "answer": "【D03/P1】员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。",
+  "citations": [
+    {
+      "doc_id": "D03",
+      "title": "门禁权限申请 FAQ",
+      "version_date": "2025-03-12",
+      "passage_id": "P1",
+      "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+    }
+  ],
+  "gap": "",
+  "follow_up": "",
+  "run": {
+    "mode": "mock",
+    "model": "offline-rules",
+    "api_requests": 0,
+    "max_steps": 8,
+    "steps_used": 4
+  },
+  "trace": [
+    {
+      "step": 1,
+      "action": "search_docs",
+      "arguments": {
+        "query": "那要等几天？"
+      },
+      "reason": "先检索当前问题",
+      "observation": {
+        "ok": true,
+        "total": 0,
+        "hits": [],
+        "unread_doc_ids": []
+      },
+      "next_action": "search_docs"
+    },
+    {
+      "step": 2,
+      "action": "search_docs",
+      "arguments": {
+        "query": "我刚入职，想了解门禁权限申请。 那要等几天？"
+      },
+      "reason": "首次未命中，合并上一条用户问题补查",
+      "observation": {
+        "ok": true,
+        "total": 1,
+        "hits": [
+          {
+            "doc_id": "D03",
+            "title": "门禁权限申请 FAQ",
+            "version_date": "2025-03-12",
+            "matched_terms": [
+              "门禁"
+            ]
+          }
+        ],
+        "unread_doc_ids": [
+          "D03"
+        ]
+      },
+      "next_action": "read_doc"
+    },
+    {
+      "step": 3,
+      "action": "read_doc",
+      "arguments": {
+        "doc_id": "D03"
+      },
+      "reason": "候选文档尚未读取原文",
+      "observation": {
+        "ok": true,
+        "doc_id": "D03",
+        "title": "门禁权限申请 FAQ",
+        "version_date": "2025-03-12",
+        "passages": [
+          {
+            "passage_id": "P1",
+            "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+          }
+        ]
+      },
+      "next_action": "finish"
+    },
+    {
+      "step": 4,
+      "action": "finish",
+      "arguments": {
+        "status": "answered",
+        "citations": [
+          {
+            "doc_id": "D03",
+            "passage_id": "P1"
+          }
+        ],
+        "gap": "",
+        "follow_up": ""
+      },
+      "reason": "展示唯一候选的原文",
+      "observation": {
+        "ok": true,
+        "status": "answered",
+        "citations": [
+          {
+            "doc_id": "D03",
+            "title": "门禁权限申请 FAQ",
+            "version_date": "2025-03-12",
+            "passage_id": "P1",
+            "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+          }
+        ],
+        "gap": ""
+      },
+      "next_action": null
+    }
+  ]
+}

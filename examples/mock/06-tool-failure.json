@@ -1,0 +1,74 @@
+{
+  "status": "tool_error",
+  "answer": "",
+  "citations": [],
+  "gap": "模拟文档读取服务不可用",
+  "follow_up": "",
+  "run": {
+    "mode": "mock",
+    "model": "offline-rules",
+    "api_requests": 0,
+    "max_steps": 8,
+    "steps_used": 3
+  },
+  "trace": [
+    {
+      "step": 1,
+      "action": "search_docs",
+      "arguments": {
+        "query": "门禁权限申请提交后多久开通？"
+      },
+      "reason": "先检索当前问题",
+      "observation": {
+        "ok": true,
+        "total": 1,
+        "hits": [
+          {
+            "doc_id": "D03",
+            "title": "门禁权限申请 FAQ",
+            "version_date": "2025-03-12",
+            "matched_terms": [
+              "门禁"
+            ]
+          }
+        ],
+        "unread_doc_ids": [
+          "D03"
+        ]
+      },
+      "next_action": "read_doc"
+    },
+    {
+      "step": 2,
+      "action": "read_doc",
+      "arguments": {
+        "doc_id": "D03"
+      },
+      "reason": "候选文档尚未读取原文",
+      "observation": {
+        "ok": false,
+        "error": "read_unavailable",
+        "message": "模拟文档读取服务不可用"
+      },
+      "next_action": "finish"
+    },
+    {
+      "step": 3,
+      "action": "finish",
+      "arguments": {
+        "status": "tool_error",
+        "citations": [],
+        "gap": "模拟文档读取服务不可用",
+        "follow_up": ""
+      },
+      "reason": "离线规则在工具失败后停止",
+      "observation": {
+        "ok": true,
+        "status": "tool_error",
+        "citations": [],
+        "gap": "模拟文档读取服务不可用"
+      },
+      "next_action": null
+    }
+  ]
+}

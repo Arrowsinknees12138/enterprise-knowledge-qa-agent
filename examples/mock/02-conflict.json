@@ -1,0 +1,154 @@
+{
+  "status": "needs_clarification",
+  "answer": "【D01/P1】员工应在出差结束后 30 天内提交差旅费用报销申请。\n【D02/P1】员工应在出差结束后 15 天内提交差旅费用报销申请。",
+  "citations": [
+    {
+      "doc_id": "D01",
+      "title": "差旅费用报销办法",
+      "version_date": "2025-01-15",
+      "passage_id": "P1",
+      "quote": "员工应在出差结束后 30 天内提交差旅费用报销申请。"
+    },
+    {
+      "doc_id": "D02",
+      "title": "差旅报销操作指引",
+      "version_date": "2025-06-01",
+      "passage_id": "P1",
+      "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+    }
+  ],
+  "gap": "离线规则无法判断多份原文的适用关系。",
+  "follow_up": "能否提供适用的制度名称？",
+  "run": {
+    "mode": "mock",
+    "model": "offline-rules",
+    "api_requests": 0,
+    "max_steps": 8,
+    "steps_used": 4
+  },
+  "trace": [
+    {
+      "step": 1,
+      "action": "search_docs",
+      "arguments": {
+        "query": "出差结束后，差旅报销最晚要在多久内提交？"
+      },
+      "reason": "先检索当前问题",
+      "observation": {
+        "ok": true,
+        "total": 2,
+        "hits": [
+          {
+            "doc_id": "D01",
+            "title": "差旅费用报销办法",
+            "version_date": "2025-01-15",
+            "matched_terms": [
+              "差旅",
+              "出差",
+              "报销"
+            ]
+          },
+          {
+            "doc_id": "D02",
+            "title": "差旅报销操作指引",
+            "version_date": "2025-06-01",
+            "matched_terms": [
+              "差旅",
+              "出差",
+              "报销"
+            ]
+          }
+        ],
+        "unread_doc_ids": [
+          "D01",
+          "D02"
+        ]
+      },
+      "next_action": "read_doc"
+    },
+    {
+      "step": 2,
+      "action": "read_doc",
+      "arguments": {
+        "doc_id": "D01"
+      },
+      "reason": "候选文档尚未读取原文",
+      "observation": {
+        "ok": true,
+        "doc_id": "D01",
+        "title": "差旅费用报销办法",
+        "version_date": "2025-01-15",
+        "passages": [
+          {
+            "passage_id": "P1",
+            "quote": "员工应在出差结束后 30 天内提交差旅费用报销申请。"
+          }
+        ]
+      },
+      "next_action": "read_doc"
+    },
+    {
+      "step": 3,
+      "action": "read_doc",
+      "arguments": {
+        "doc_id": "D02"
+      },
+      "reason": "候选文档尚未读取原文",
+      "observation": {
+        "ok": true,
+        "doc_id": "D02",
+        "title": "差旅报销操作指引",
+        "version_date": "2025-06-01",
+        "passages": [
+          {
+            "passage_id": "P1",
+            "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+          }
+        ]
+      },
+      "next_action": "finish"
+    },
+    {
+      "step": 4,
+      "action": "finish",
+      "arguments": {
+        "status": "needs_clarification",
+        "citations": [
+          {
+            "doc_id": "D01",
+            "passage_id": "P1"
+          },
+          {
+            "doc_id": "D02",
+            "passage_id": "P1"
+          }
+        ],
+        "gap": "离线规则无法判断多份原文的适用关系。",
+        "follow_up": "能否提供适用的制度名称？"
+      },
+      "reason": "离线规则只展示多个候选原文",
+      "observation": {
+        "ok": true,
+        "status": "needs_clarification",
+        "citations": [
+          {
+            "doc_id": "D01",
+            "title": "差旅费用报销办法",
+            "version_date": "2025-01-15",
+            "passage_id": "P1",
+            "quote": "员工应在出差结束后 30 天内提交差旅费用报销申请。"
+          },
+          {
+            "doc_id": "D02",
+            "title": "差旅报销操作指引",
+            "version_date": "2025-06-01",
+            "passage_id": "P1",
+            "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+          }
+        ],
+        "gap": "离线规则无法判断多份原文的适用关系。"
+      },
+      "next_action": null
+    }
+  ]
+}
