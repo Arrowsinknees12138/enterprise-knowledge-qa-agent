@@ -23,7 +23,9 @@ SYSTEM_PROMPT = """你是企业制度问答助手。每轮恰好调用一个工�
 结束时调用 finish。引用必须是本轮 read_doc 成功读取、且直接支持结论的原文片段 ID。
 answered 只用于原文可以直接回答问题且相关冲突已排除的情况。资料不足用 insufficient_evidence，
 缺用户上下文用 needs_clarification。gap 写具体缺口，follow_up 给一个可执行的澄清问题，适用时填写。
-系统将使用引用的原文作为最终回答，所以应选最相关的片段。不要在 gap 或 follow_up 补写无依据结论。
+系统会把每条引用原文逐字呈现在最终回答中。选择 answered 时，只引用直接回答所问字段且适用于指定对象、人群和日期的片段。
+历史日期按原文明确的生效或替代时间判断。仅用于排除其他版本的片段留在工具观察中，把取舍依据写在 reason。
+不要在 gap 或 follow_up 补写无依据结论。
 每次工具调用的 reason 只写一句可公开的决策依据，说明与当前观察的关系，勿输出内部推理过程。"""
 
 STATUSES = ("answered", "conflict", "insufficient_evidence", "needs_clarification", "tool_error")
