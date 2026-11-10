@@ -1,0 +1,47 @@
+{
+  "status": "step_limit",
+  "answer": "",
+  "citations": [],
+  "gap": "已用完 1 步，问答未完成。",
+  "follow_up": "",
+  "run": {
+    "mode": "live",
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "api_requests": 1,
+    "usage": {
+      "prompt_tokens": 1052,
+      "completion_tokens": 71
+    },
+    "max_steps": 1,
+    "steps_used": 1
+  },
+  "trace": [
+    {
+      "step": 1,
+      "action": "search_docs",
+      "arguments": {
+        "query": "门禁权限申请 开通时限"
+      },
+      "reason": "用户询问新员工门禁权限开通时限，需检索门禁管理相关制度",
+      "observation": {
+        "ok": true,
+        "total": 1,
+        "hits": [
+          {
+            "doc_id": "D03",
+            "title": "门禁权限申请 FAQ",
+            "version_date": "2025-03-12",
+            "matched_terms": [
+              "门禁"
+            ]
+          }
+        ],
+        "unread_doc_ids": [
+          "D03"
+        ]
+      },
+      "next_action": "step_limit"
+    }
+  ]
+}

@@ -112,6 +112,23 @@ class KnowledgeTests(unittest.TestCase):
         self.assertEqual(result["trace"][0]["observation"]["error"], "search_unavailable")
         self.assertEqual(result["answer"], "")
 
+    def test_insufficient_evidence_keeps_background_out_of_answer_citations(self):
+        model = ScriptedModel(
+            ("search_docs", {"query": "门禁"}),
+            ("read_doc", {"doc_id": "D03"}),
+            ("finish", {
+                "status": "insufficient_evidence",
+                "citations": [{"doc_id": "D03", "passage_id": "P1"}],
+                "gap": "资料未说明办理地点",
+                "follow_up": "",
+            }),
+        )
+        result = KnowledgeAgent(model, self.knowledge).run("门禁在哪里办理？", [])
+        self.assertEqual(result["status"], "insufficient_evidence")
+        self.assertEqual(result["answer"], "")
+        self.assertEqual(result["citations"], [])
+        self.assertEqual(result["trace"][1]["observation"]["passages"][0]["passage_id"], "P1")
+
     def test_limit_marks_unfinished_without_citations(self):
         result = KnowledgeAgent(MockModel(), self.knowledge, max_steps=1).run("门禁", [])
         self.assertEqual(result["status"], "step_limit")

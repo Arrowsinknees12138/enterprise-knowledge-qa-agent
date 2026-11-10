@@ -151,8 +151,11 @@ class Evidence:
             return rejection("没有未恢复的业务工具错误")
         if status in ("insufficient_evidence", "needs_clarification") and (self.search_failed or self.failed_reads):
             return rejection("存在未恢复的业务工具错误，应先尝试恢复或明确返回 tool_error")
-        if status == "insufficient_evidence" and not self.search_queries:
-            return rejection("资料不足需要成功完成至少一次检索")
+        if status == "insufficient_evidence":
+            if not self.search_queries:
+                return rejection("资料不足需要成功完成至少一次检索")
+            # Keep background passages in the trace, separate from answer citations.
+            citations = []
         if status == "answered" and (self.search_failed or self.candidates - self.reads.keys()):
             return rejection("存在未核对的候选文档或未恢复的检索失败")
 

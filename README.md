@@ -49,6 +49,7 @@ python tests/run_examples.py --mode live
 ## 评审入口
 
 - [验收矩阵与复现方法](docs/03-evaluation.md)
+- [DeepSeek 官方 API 实跑记录](examples/deepseek-evaluation.txt)
 - [真实模型正常路径](examples/live/01-answer.json)和[冲突补查路径](examples/live/02-conflict.json)
 - [真实模型工具失败路径](examples/live/06-tool-failure.json)和[更换文档原文](examples/live/07-updated-source.json)
 - [修改原文后冲突消失](examples/live/09-resolved-conflict.json)和[检索命中但缺少答案](examples/live/10-missing-detail.json)

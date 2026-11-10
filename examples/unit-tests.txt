@@ -2,6 +2,7 @@ test_aliases_recall_paraphrase_missed_by_canonical_term_alone (test_agent.Knowle
 test_conflict_requires_a_new_query_after_both_passages_are_read (test_agent.KnowledgeTests.test_conflict_requires_a_new_query_after_both_passages_are_read) ... ok
 test_deepseek_replays_tool_observations_over_chat_completions (test_agent.KnowledgeTests.test_deepseek_replays_tool_observations_over_chat_completions) ... ok
 test_deepseek_requires_its_own_key (test_agent.KnowledgeTests.test_deepseek_requires_its_own_key) ... ok
+test_insufficient_evidence_keeps_background_out_of_answer_citations (test_agent.KnowledgeTests.test_insufficient_evidence_keeps_background_out_of_answer_citations) ... ok
 test_invalid_citation_is_observed_and_corrected (test_agent.KnowledgeTests.test_invalid_citation_is_observed_and_corrected) ... ok
 test_limit_marks_unfinished_without_citations (test_agent.KnowledgeTests.test_limit_marks_unfinished_without_citations) ... ok
 test_missing_live_key_reports_model_error_without_mocking (test_agent.KnowledgeTests.test_missing_live_key_reports_model_error_without_mocking) ... ok
@@ -13,6 +14,6 @@ test_search_supports_local_aliases_and_unicode_normalization (test_agent.Knowled
 test_unknown_document_and_search_failure_are_explicit (test_agent.KnowledgeTests.test_unknown_document_and_search_failure_are_explicit) ... ok
 
 ----------------------------------------------------------------------
-Ran 13 tests in 0.006s
+Ran 14 tests in 0.007s
 
 OK

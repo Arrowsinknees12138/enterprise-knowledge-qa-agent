@@ -1,6 +1,6 @@
 # 评估与复现
 
-2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 13/13，Mock CLI 验收 8/8，真实 `qwen-plus` CLI 验收 10/10。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [真实模型验收输出及用量](../examples/live-evaluation.txt)
+2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 14/14，Mock CLI 验收 8/8。真实 `qwen-plus` 和 `deepseek-flash` 各有 10 组通过的实际执行记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DashScope 验收输出](../examples/live-evaluation.txt) · [DeepSeek 记录复核](../examples/deepseek-evaluation.txt)
 
 ## 真实模型验收
 
@@ -39,7 +39,11 @@ python tests/run_examples.py --mode live
 
 ### DeepSeek 验证
 
-DeepSeek 的多轮工具调用、结果回传和缺密钥行为通过了模拟 HTTP 单测及 CLI 配置检查。接入后也实跑了默认 DashScope 的正常问答作为回归。当前 DeepSeek 官方 API 实跑待配置 `DEEPSEEK_API_KEY` 后执行。全量命令为 `python tests/run_examples.py --mode live --provider deepseek`，输出位于 `examples/deepseek/`。
+DeepSeek 官方 API 首轮通过 9 组用例。第 10 组正确返回 `insufficient_evidence`，但将只说明申请方式的段落放进了引用列表，未通过验收。修复后，该状态的背景片段保留在 Trace，最终答案与引用均为空，并增加了回归单测。[首轮第 10 组输出](../examples/deepseek-initial-missing-detail.json)
+
+修复后重跑时，资料外问题有一次模型连接或超时类错误，随后单独复测资料外问题与缺少答案两个场景，均通过。保存的 10 组 Trace 来自多次官方 API 实跑。冲突用例在读完两份原文后补查，改成同一时限后直接结束并引用原文。[冲突 Trace](../examples/deepseek/02-conflict.json) · [资料外 Trace](../examples/deepseek/03-outside.json) · [更换原文后的 Trace](../examples/deepseek/09-resolved-conflict.json) · [修复后第 10 组输出](../examples/deepseek/10-missing-detail.json)
+
+全量命令为 `python tests/run_examples.py --mode live --provider deepseek`，输出位于 `examples/deepseek/`。
 
 ## 限制
 
