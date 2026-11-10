@@ -39,6 +39,12 @@ class KnowledgeTests(unittest.TestCase):
             with self.subTest(query=query):
                 self.assertEqual(self.knowledge.search_docs(query)["hits"][0]["doc_id"], doc_id)
 
+    def test_aliases_recall_paraphrase_missed_by_canonical_term_alone(self):
+        query = "新入职的同事交完申请后，要等多久才能刷卡进楼？"
+        self.assertEqual([hit["doc_id"] for hit in self.knowledge.search_docs(query)["hits"]], ["D03"])
+        self.knowledge.documents["D03"]["terms"] = ["门禁"]
+        self.assertEqual(self.knowledge.search_docs(query)["hits"], [])
+
     def test_unknown_document_and_search_failure_are_explicit(self):
         self.assertEqual(self.knowledge.read_doc("missing")["error"], "doc_not_found")
         broken = KnowledgeBase(CORPUS, "search_docs")

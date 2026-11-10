@@ -1,6 +1,6 @@
 # 评估与复现
 
-2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 10/10，Mock CLI 验收 8/8，真实 `qwen-plus` CLI 验收 8/8。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [真实模型验收输出及用量](../examples/live-evaluation.txt)
+2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 11/11，Mock CLI 验收 8/8，真实 `qwen-plus` CLI 验收 10/10。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [真实模型验收输出及用量](../examples/live-evaluation.txt)
 
 ## 真实模型验收
 
@@ -16,12 +16,16 @@
 | 工具失败 | [06](../examples/inputs/06-tool-failure.json) | 注入 `read_doc` 故障后，`tool_error` 保留工具观察和证据缺口 | [06](../examples/live/06-tool-failure.json) |
 | 更换原文 | [01](../examples/inputs/01-answer.json) | 仅把 D03/P1 的 2 个工作日改成 4 个工作日，结果引用新原文 | [07](../examples/live/07-updated-source.json) |
 | 执行上限 | [01](../examples/inputs/01-answer.json) | 限制为 1 步，返回 `step_limit` 和未完成说明 | [08](../examples/live/08-step-limit.json) |
+| 修改原文消除冲突 | [02](../examples/inputs/02-conflict.json) | 仅把 D02/P1 的 15 天改为 30 天，模型读完两份原文后直接结束，给出 30 天和有效引用 | [09](../examples/live/09-resolved-conflict.json) |
+| 命中但原文无法回答 | [01](../examples/inputs/01-answer.json) | D03/P1 只保留申请方式，仍检索命中且实际读取，返回 `insufficient_evidence` 和缺口，回答及引用为空 | [10](../examples/live/10-missing-detail.json) |
 
-正常路径读到 D03 原文后结束。冲突路径读完两个期限后执行新的检索。资料外问题则在空结果后调整查询。可按 Trace 的 `arguments`、`observation` 和 `next_action` 核对这些差异。
+对照 02 与 09。问题、候选文档及检索词表保持一致，仅替换 D02/P1 的期限。原文冲突时，模型读完两份文档后补查适用依据并请求确认。期限一致时，模型在同一位置选择直接回答。对照 01 与 10 可核对同一候选命中后，答案如何取决于片段是否包含所问时长。[冲突 Trace](../examples/live/02-conflict.json) · [一致 Trace](../examples/live/09-resolved-conflict.json) · [缺字段 Trace](../examples/live/10-missing-detail.json)
+
+检索对照使用同一个包含“刷卡进楼”的问题直接调用本地工具。仅保留“门禁”作为检索词时命中 0 份，启用别名后命中 D03。真实模型用例 04 则把该问法改写成门禁主题后取证。[对照测试](../tests/test_agent.py) · [改写 Trace](../examples/live/04-paraphrase.json)
 
 ## 开发中发现的问题
 
-首轮真实模型识别了两个期限，但跳过了补查，并在缺口中断言两份资料现行有效，验收脚本因此失败。修正后，冲突结束前须在读完双方后成功执行不同查询，最终缺口使用受控文本。在检索结果中加入未读文档 ID 后，本轮冲突用例从 8 步降为 5 步，省去两次重复读取和一次额外检索。[首轮冲突输出](../examples/initial-conflict.json) · [提交版冲突输出](../examples/live/02-conflict.json)
+首轮真实模型识别了两个期限，但跳过了补查，并在缺口中断言两份资料现行有效，验收脚本因此失败。修正后，冲突结束前须在读完双方后成功执行不同查询，最终缺口使用受控文本。早期两次实跑中，加入未读文档 ID 前后，冲突路径由 8 步缩为 5 步，省去两次重复读取和一次额外检索。[首轮冲突输出](../examples/initial-conflict.json) · [提交版冲突输出](../examples/live/02-conflict.json)
 
 ## 复现
 

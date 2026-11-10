@@ -18,7 +18,7 @@
     "api_requests": 3,
     "usage": {
       "prompt_tokens": 3397,
-      "completion_tokens": 205
+      "completion_tokens": 204
     },
     "max_steps": 8,
     "steps_used": 3
@@ -85,7 +85,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "D03 明确规定新员工提交完整申请后，行政将在 4 个工作日内开通门禁权限",
+      "reason": "D03 明确规定新员工提交完整申请后，行政将在 4 个工作日内开通门禁",
       "observation": {
         "ok": true,
         "status": "answered",

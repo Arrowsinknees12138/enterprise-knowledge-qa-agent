@@ -10,7 +10,7 @@
     "api_requests": 1,
     "usage": {
       "prompt_tokens": 983,
-      "completion_tokens": 96
+      "completion_tokens": 95
     },
     "max_steps": 1,
     "steps_used": 1
@@ -20,9 +20,9 @@
       "step": 1,
       "action": "search_docs",
       "arguments": {
-        "query": "门禁 权限 开通 时效"
+        "query": "门禁权限 开通时限"
       },
-      "reason": "问题聚焦新员工门禁权限开通所需时间，应检索含门禁、权限、开通、时效等关键词的制度",
+      "reason": "问题聚焦新员工门禁权限开通所需时间，需查找明确时限规定的制度文件",
       "observation": {
         "ok": true,
         "total": 1,

@@ -1,3 +1,4 @@
+test_aliases_recall_paraphrase_missed_by_canonical_term_alone (test_agent.KnowledgeTests.test_aliases_recall_paraphrase_missed_by_canonical_term_alone) ... ok
 test_conflict_requires_a_new_query_after_both_passages_are_read (test_agent.KnowledgeTests.test_conflict_requires_a_new_query_after_both_passages_are_read) ... ok
 test_invalid_citation_is_observed_and_corrected (test_agent.KnowledgeTests.test_invalid_citation_is_observed_and_corrected) ... ok
 test_limit_marks_unfinished_without_citations (test_agent.KnowledgeTests.test_limit_marks_unfinished_without_citations) ... ok
@@ -10,6 +11,6 @@ test_search_supports_local_aliases_and_unicode_normalization (test_agent.Knowled
 test_unknown_document_and_search_failure_are_explicit (test_agent.KnowledgeTests.test_unknown_document_and_search_failure_are_explicit) ... ok
 
 ----------------------------------------------------------------------
-Ran 10 tests in 0.004s
+Ran 11 tests in 0.005s
 
 OK

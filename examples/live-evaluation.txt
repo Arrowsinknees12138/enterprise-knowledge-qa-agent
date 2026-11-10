@@ -1,10 +1,12 @@
 PASS 01-answer: answered | search_docs -> read_doc -> finish
 PASS 02-conflict: conflict | search_docs -> read_doc -> read_doc -> search_docs -> finish
-PASS 03-outside: insufficient_evidence | search_docs -> search_docs -> search_docs -> finish
+PASS 03-outside: insufficient_evidence | search_docs -> search_docs -> search_docs -> finish -> finish
 PASS 04-paraphrase: answered | search_docs -> read_doc -> finish
 PASS 05-follow-up: answered | search_docs -> read_doc -> finish
 PASS 06-tool-failure: tool_error | search_docs -> read_doc -> search_docs -> read_doc -> finish
 PASS 07-updated-source: answered | search_docs -> read_doc -> finish
 PASS 08-step-limit: step_limit | search_docs
-Live provider tokens: {"prompt_tokens": 31746, "completion_tokens": 1975}
-8/8 live example checks passed
+PASS 09-resolved-conflict: answered | search_docs -> read_doc -> read_doc -> finish
+PASS 10-missing-detail: insufficient_evidence | search_docs -> read_doc -> search_docs -> search_docs -> search_docs -> finish
+Live provider tokens: {"prompt_tokens": 46110, "completion_tokens": 2648}
+10/10 live example checks passed

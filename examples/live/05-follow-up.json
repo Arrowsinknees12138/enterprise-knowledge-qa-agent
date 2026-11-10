@@ -17,8 +17,8 @@
     "model": "qwen-plus",
     "api_requests": 3,
     "usage": {
-      "prompt_tokens": 3492,
-      "completion_tokens": 232
+      "prompt_tokens": 3472,
+      "completion_tokens": 203
     },
     "max_steps": 8,
     "steps_used": 3
@@ -28,9 +28,9 @@
       "step": 1,
       "action": "search_docs",
       "arguments": {
-        "query": "门禁权限 开通时间 时效"
+        "query": "门禁权限 开通时间 审批时限"
       },
-      "reason": "用户追问门禁权限申请后的开通等待天数，需定位制度中关于开通时限的条款",
+      "reason": "检索门禁权限申请后开通所需天数的制度依据",
       "observation": {
         "ok": true,
         "total": 1,
@@ -56,7 +56,7 @@
       "arguments": {
         "doc_id": "D03"
       },
-      "reason": "D03 是唯一匹配门禁权限开通时效的候选文档，需读取全文确认具体天数",
+      "reason": "读取门禁权限申请 FAQ 全文，查找开通时限相关内容",
       "observation": {
         "ok": true,
         "doc_id": "D03",
@@ -85,7 +85,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "文档 D03 明确规定门禁权限在申请提交完整后 2 个工作日内开通，直接回答用户‘要等几天’的疑问",
+      "reason": "FAQ 明确规定行政在 2 个工作日内开通门禁",
       "observation": {
         "ok": true,
         "status": "answered",

@@ -18,7 +18,7 @@
     "api_requests": 3,
     "usage": {
       "prompt_tokens": 3399,
-      "completion_tokens": 217
+      "completion_tokens": 218
     },
     "max_steps": 8,
     "steps_used": 3
@@ -56,7 +56,7 @@
       "arguments": {
         "doc_id": "D03"
       },
-      "reason": "D03 是唯一匹配文档，需读取全文确认新员工门禁开通时效",
+      "reason": "检索到唯一相关文档 D03，需读取全文确认门禁权限开通时效",
       "observation": {
         "ok": true,
         "doc_id": "D03",
@@ -85,7 +85,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "D03 明确规定新员工提交完整申请后，行政将在 2 个工作日内开通门禁权限",
+      "reason": "文档 D03 明确规定新员工提交完整申请后，行政将在 2 个工作日内开通门禁权限",
       "observation": {
         "ok": true,
         "status": "answered",

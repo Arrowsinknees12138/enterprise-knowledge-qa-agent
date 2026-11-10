@@ -17,8 +17,8 @@
     "model": "qwen-plus",
     "api_requests": 3,
     "usage": {
-      "prompt_tokens": 3403,
-      "completion_tokens": 234
+      "prompt_tokens": 3379,
+      "completion_tokens": 206
     },
     "max_steps": 8,
     "steps_used": 3
@@ -28,9 +28,9 @@
       "step": 1,
       "action": "search_docs",
       "arguments": {
-        "query": "门禁 权限 开通 时效"
+        "query": "门禁权限 开通时限"
       },
-      "reason": "问题聚焦新员工门禁权限开通所需时间，应检索含门禁、权限、开通、时效等关键词的制度",
+      "reason": "问题聚焦新员工门禁权限开通所需时间，需定位规定时限的制度条款",
       "observation": {
         "ok": true,
         "total": 1,
@@ -56,7 +56,7 @@
       "arguments": {
         "doc_id": "D03"
       },
-      "reason": "D03 是唯一匹配文档，标题含 '门禁权限申请 FAQ'，最可能包含开通时效信息",
+      "reason": "D03 是唯一匹配文档，标题与门禁权限相关，需读取全文确认开通时限",
       "observation": {
         "ok": true,
         "doc_id": "D03",
@@ -85,7 +85,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "D03 明确规定‘员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁’，直接回答问题",
+      "reason": "D03 明确规定新员工提交完整申请后，行政将在 2 个工作日内开通门禁权限",
       "observation": {
         "ok": true,
         "status": "answered",
