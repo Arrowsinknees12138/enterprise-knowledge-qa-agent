@@ -40,6 +40,7 @@ def main():
     parser.add_argument("--provider", choices=LIVE_PROVIDERS, help="真实模型提供方，默认 dashscope")
     parser.add_argument("--data", type=Path, default=DEFAULT_CORPUS, help="替换合成知识库 JSON")
     parser.add_argument("--max-steps", type=int, choices=range(1, 21), default=8)
+    parser.add_argument("--max-tool-calls", type=int, choices=range(21), default=6, help="实际业务工具调用上限")
     parser.add_argument("--fail-tool", choices=("search_docs", "read_doc"), help="注入持续业务工具故障")
     args = parser.parse_args()
     if args.provider and args.mode != "live":
@@ -51,10 +52,10 @@ def main():
         parser.error(str(error))
 
     model = LiveModel(args.provider or "dashscope") if args.mode == "live" else MockModel()
-    result = KnowledgeAgent(model, knowledge, args.max_steps).run(question, history)
+    result = KnowledgeAgent(model, knowledge, args.max_steps, args.max_tool_calls).run(question, history)
     sys.stdout.reconfigure(encoding="utf-8")
     print(json.dumps(result, ensure_ascii=False, indent=2))
-    return int(result["status"] in ("tool_error", "model_error", "step_limit"))
+    return int(result["status"] in ("tool_error", "model_error", "step_limit", "tool_limit"))
 
 
 if __name__ == "__main__":

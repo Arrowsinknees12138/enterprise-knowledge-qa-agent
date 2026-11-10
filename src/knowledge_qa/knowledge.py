@@ -1,5 +1,6 @@
 import json
 import unicodedata
+from collections import Counter
 from datetime import date
 from pathlib import Path
 
@@ -16,6 +17,7 @@ class KnowledgeBase:
         if not isinstance(records, list) or not records:
             raise ValueError("知识库必须是非空的文档数组")
         self.documents = {}
+        self.term_frequency = Counter()
         self.fail_tool = fail_tool
         for doc in records:
             if not isinstance(doc, dict):
@@ -38,6 +40,7 @@ class KnowledgeBase:
             ):
                 raise ValueError(f"{doc_id} 的 passages 必须包含有效的片段 ID 和原文")
             self.documents[doc_id] = doc
+            self.term_frequency.update({normalize(term) for term in terms})
 
     @staticmethod
     def metadata(doc):
@@ -49,10 +52,11 @@ class KnowledgeBase:
         query = normalize(query)
         matches = []
         for doc in self.documents.values():
-            matched = [term for term in doc["terms"] if normalize(term) in query]
+            matched = {normalize(term): term for term in doc["terms"] if normalize(term) in query}
             if matched:
-                matches.append({**self.metadata(doc), "matched_terms": matched})
-        matches.sort(key=lambda doc: (-len(doc["matched_terms"]), doc["doc_id"]))
+                score = sum(1 / self.term_frequency[term] for term in matched)
+                matches.append({**self.metadata(doc), "matched_terms": list(matched.values()), "score": round(score, 6)})
+        matches.sort(key=lambda doc: (-doc["score"], doc["doc_id"]))
         return {"ok": True, "total": len(matches), "hits": matches[:5]}
 
     def read_doc(self, doc_id):

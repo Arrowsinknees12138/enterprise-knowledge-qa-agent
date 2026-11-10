@@ -1,0 +1,185 @@
+{
+  "status": "answered",
+  "answer": "【D04/P1】企业邮箱单封邮件的附件总大小上限为 25 MB。",
+  "citations": [
+    {
+      "doc_id": "D04",
+      "title": "企业邮箱产品 FAQ",
+      "version_date": "2025-05-20",
+      "passage_id": "P1",
+      "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+    }
+  ],
+  "gap": "",
+  "follow_up": "",
+  "run": {
+    "mode": "live",
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "api_requests": 5,
+    "usage": {
+      "prompt_tokens": 7882,
+      "completion_tokens": 522
+    },
+    "max_steps": 8,
+    "steps_used": 5,
+    "max_tool_calls": 6,
+    "tool_calls_used": 3
+  },
+  "trace": [
+    {
+      "step": 1,
+      "action": "search_docs",
+      "arguments": {
+        "query": "企业邮箱 附件大小 上限"
+      },
+      "reason": "用户询问企业邮箱附件大小上限，需检索相关制度条款。",
+      "observation": {
+        "ok": true,
+        "total": 2,
+        "hits": [
+          {
+            "doc_id": "D04",
+            "title": "企业邮箱产品 FAQ",
+            "version_date": "2025-05-20",
+            "matched_terms": [
+              "企业邮箱",
+              "邮箱",
+              "附件"
+            ],
+            "score": 2.5
+          },
+          {
+            "doc_id": "D07",
+            "title": "企业云盘上传与分享",
+            "version_date": "2025-06-12",
+            "matched_terms": [
+              "附件"
+            ],
+            "score": 0.5
+          }
+        ],
+        "cached": false,
+        "unread_doc_ids": [
+          "D04",
+          "D07"
+        ]
+      },
+      "tool_calls_remaining": 5,
+      "next_action": "read_doc"
+    },
+    {
+      "step": 2,
+      "action": "read_doc",
+      "arguments": {
+        "doc_id": "D04"
+      },
+      "reason": "D04 标题与问题直接相关，需读取原文确认附件上限。",
+      "observation": {
+        "ok": true,
+        "doc_id": "D04",
+        "title": "企业邮箱产品 FAQ",
+        "version_date": "2025-05-20",
+        "passages": [
+          {
+            "passage_id": "P1",
+            "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+          },
+          {
+            "passage_id": "P2",
+            "quote": "企业邮箱回收站中的邮件自删除起保留 30 天。"
+          },
+          {
+            "passage_id": "P3",
+            "quote": "企业邮箱单封邮件最多可填写 50 个收件人。"
+          }
+        ],
+        "cached": false
+      },
+      "tool_calls_remaining": 4,
+      "next_action": "finish"
+    },
+    {
+      "step": 3,
+      "action": "finish",
+      "arguments": {
+        "status": "answered",
+        "citations": [
+          {
+            "doc_id": "D04",
+            "passage_id": "P1"
+          }
+        ],
+        "gap": "",
+        "follow_up": ""
+      },
+      "reason": "FAQ 原文明确给出单封邮件附件总大小上限，可直接回答。",
+      "observation": {
+        "ok": false,
+        "error": "invalid_action",
+        "message": "存在未核对的候选文档或未恢复的检索失败"
+      },
+      "tool_calls_remaining": 4,
+      "next_action": "read_doc"
+    },
+    {
+      "step": 4,
+      "action": "read_doc",
+      "arguments": {
+        "doc_id": "D07"
+      },
+      "reason": "D07 也匹配“附件”，需读取以排除其是否涉及邮箱附件限制。",
+      "observation": {
+        "ok": true,
+        "doc_id": "D07",
+        "title": "企业云盘上传与分享",
+        "version_date": "2025-06-12",
+        "passages": [
+          {
+            "passage_id": "P1",
+            "quote": "企业云盘的单个文件上传大小上限为 2 GB。"
+          },
+          {
+            "passage_id": "P2",
+            "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+          }
+        ],
+        "cached": false
+      },
+      "tool_calls_remaining": 3,
+      "next_action": "finish"
+    },
+    {
+      "step": 5,
+      "action": "finish",
+      "arguments": {
+        "citations": [
+          {
+            "doc_id": "D04",
+            "passage_id": "P1"
+          }
+        ],
+        "follow_up": "",
+        "gap": "",
+        "status": "answered"
+      },
+      "reason": "D04 明确给出邮箱附件上限；D07 讲的是云盘上传，与邮箱附件无关，已排除。",
+      "observation": {
+        "ok": true,
+        "status": "answered",
+        "citations": [
+          {
+            "doc_id": "D04",
+            "title": "企业邮箱产品 FAQ",
+            "version_date": "2025-05-20",
+            "passage_id": "P1",
+            "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+          }
+        ],
+        "gap": ""
+      },
+      "tool_calls_remaining": 3,
+      "next_action": null
+    }
+  ]
+}

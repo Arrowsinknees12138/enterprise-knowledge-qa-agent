@@ -25,11 +25,13 @@
     "model": "deepseek-flash",
     "api_requests": 4,
     "usage": {
-      "prompt_tokens": 5328,
-      "completion_tokens": 395
+      "prompt_tokens": 5712,
+      "completion_tokens": 379
     },
     "max_steps": 8,
-    "steps_used": 4
+    "steps_used": 4,
+    "max_tool_calls": 6,
+    "tool_calls_used": 3
   },
   "trace": [
     {
@@ -38,7 +40,7 @@
       "arguments": {
         "query": "差旅报销 提交时限"
       },
-      "reason": "用户询问差旅报销提交期限，先检索相关制度主题词。",
+      "reason": "检索差旅报销提交期限相关制度",
       "observation": {
         "ok": true,
         "total": 2,
@@ -50,7 +52,8 @@
             "matched_terms": [
               "差旅",
               "报销"
-            ]
+            ],
+            "score": 1.0
           },
           {
             "doc_id": "D02",
@@ -59,14 +62,17 @@
             "matched_terms": [
               "差旅",
               "报销"
-            ]
+            ],
+            "score": 1.0
           }
         ],
+        "cached": false,
         "unread_doc_ids": [
           "D01",
           "D02"
         ]
       },
+      "tool_calls_remaining": 5,
       "next_action": "read_doc"
     },
     {
@@ -75,7 +81,7 @@
       "arguments": {
         "doc_id": "D01"
       },
-      "reason": "读取差旅费用报销办法原文以核对提交时限。",
+      "reason": "读取差旅费用报销办法原文核对提交时限",
       "observation": {
         "ok": true,
         "doc_id": "D01",
@@ -86,8 +92,10 @@
             "passage_id": "P1",
             "quote": "员工应在出差结束后 30 天内提交差旅费用报销申请。"
           }
-        ]
+        ],
+        "cached": false
       },
+      "tool_calls_remaining": 4,
       "next_action": "read_doc"
     },
     {
@@ -96,7 +104,7 @@
       "arguments": {
         "doc_id": "D02"
       },
-      "reason": "另一份操作指引可能规定不同时限，需读取核对是否冲突。",
+      "reason": "读取操作指引核对是否存在不同时限口径",
       "observation": {
         "ok": true,
         "doc_id": "D02",
@@ -107,8 +115,10 @@
             "passage_id": "P1",
             "quote": "员工应在出差结束后 30 天内提交差旅费用报销申请。"
           }
-        ]
+        ],
+        "cached": false
       },
+      "tool_calls_remaining": 3,
       "next_action": "finish"
     },
     {
@@ -151,6 +161,7 @@
         ],
         "gap": ""
       },
+      "tool_calls_remaining": 3,
       "next_action": null
     }
   ]

@@ -9,7 +9,9 @@
     "model": "offline-rules",
     "api_requests": 0,
     "max_steps": 8,
-    "steps_used": 3
+    "steps_used": 3,
+    "max_tool_calls": 6,
+    "tool_calls_used": 2
   },
   "trace": [
     {
@@ -29,13 +31,16 @@
             "version_date": "2025-03-12",
             "matched_terms": [
               "门禁"
-            ]
+            ],
+            "score": 1.0
           }
         ],
+        "cached": false,
         "unread_doc_ids": [
           "D03"
         ]
       },
+      "tool_calls_remaining": 5,
       "next_action": "read_doc"
     },
     {
@@ -48,8 +53,10 @@
       "observation": {
         "ok": false,
         "error": "read_unavailable",
-        "message": "模拟文档读取服务不可用"
+        "message": "模拟文档读取服务不可用",
+        "cached": false
       },
+      "tool_calls_remaining": 4,
       "next_action": "finish"
     },
     {
@@ -68,6 +75,7 @@
         "citations": [],
         "gap": "模拟文档读取服务不可用"
       },
+      "tool_calls_remaining": 4,
       "next_action": null
     }
   ]

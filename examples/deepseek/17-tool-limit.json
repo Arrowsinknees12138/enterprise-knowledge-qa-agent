@@ -1,0 +1,67 @@
+{
+  "status": "tool_limit",
+  "answer": "",
+  "citations": [],
+  "gap": "已用完 1 次实际工具调用，当前证据不足以完成问答。",
+  "follow_up": "",
+  "run": {
+    "mode": "live",
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "api_requests": 2,
+    "usage": {
+      "prompt_tokens": 2423,
+      "completion_tokens": 124
+    },
+    "max_steps": 8,
+    "steps_used": 2,
+    "max_tool_calls": 1,
+    "tool_calls_used": 1
+  },
+  "trace": [
+    {
+      "step": 1,
+      "action": "search_docs",
+      "arguments": {
+        "query": "门禁权限申请 开通时限"
+      },
+      "reason": "检索门禁权限申请与开通时限相关制度",
+      "observation": {
+        "ok": true,
+        "total": 1,
+        "hits": [
+          {
+            "doc_id": "D03",
+            "title": "门禁权限申请 FAQ",
+            "version_date": "2025-03-12",
+            "matched_terms": [
+              "门禁"
+            ],
+            "score": 1.0
+          }
+        ],
+        "cached": false,
+        "unread_doc_ids": [
+          "D03"
+        ]
+      },
+      "tool_calls_remaining": 0,
+      "next_action": "read_doc"
+    },
+    {
+      "step": 2,
+      "action": "read_doc",
+      "arguments": {
+        "doc_id": "D03"
+      },
+      "reason": "唯一候选文档，需读取原文确认开通时限",
+      "observation": {
+        "ok": false,
+        "error": "tool_limit",
+        "message": "已用完 1 次实际工具调用，当前证据不足以完成问答。"
+      },
+      "tool_calls_remaining": 0,
+      "next_action": "tool_limit"
+    }
+  ]
+}

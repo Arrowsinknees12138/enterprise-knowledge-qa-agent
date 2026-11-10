@@ -18,11 +18,13 @@
     "model": "deepseek-flash",
     "api_requests": 3,
     "usage": {
-      "prompt_tokens": 3657,
-      "completion_tokens": 262
+      "prompt_tokens": 3904,
+      "completion_tokens": 253
     },
     "max_steps": 8,
-    "steps_used": 3
+    "steps_used": 3,
+    "max_tool_calls": 6,
+    "tool_calls_used": 2
   },
   "trace": [
     {
@@ -31,7 +33,7 @@
       "arguments": {
         "query": "门禁权限申请 开通时限"
       },
-      "reason": "用户询问新员工门禁权限开通时限，需检索门禁管理相关制度",
+      "reason": "检索门禁权限申请与开通时限相关制度",
       "observation": {
         "ok": true,
         "total": 1,
@@ -42,13 +44,16 @@
             "version_date": "2025-03-12",
             "matched_terms": [
               "门禁"
-            ]
+            ],
+            "score": 1.0
           }
         ],
+        "cached": false,
         "unread_doc_ids": [
           "D03"
         ]
       },
+      "tool_calls_remaining": 5,
       "next_action": "read_doc"
     },
     {
@@ -57,7 +62,7 @@
       "arguments": {
         "doc_id": "D03"
       },
-      "reason": "唯一命中门禁主题的候选文档，需读取原文确认开通时限",
+      "reason": "唯一候选文档，需读取原文确认开通时限",
       "observation": {
         "ok": true,
         "doc_id": "D03",
@@ -68,8 +73,10 @@
             "passage_id": "P1",
             "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
           }
-        ]
+        ],
+        "cached": false
       },
+      "tool_calls_remaining": 4,
       "next_action": "finish"
     },
     {
@@ -86,7 +93,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "门禁权限申请 FAQ 明确给出开通时限，且无冲突版本",
+      "reason": "FAQ 原文明确说明提交完整申请后 2 个工作日内开通，可直接回答。",
       "observation": {
         "ok": true,
         "status": "answered",
@@ -101,6 +108,7 @@
         ],
         "gap": ""
       },
+      "tool_calls_remaining": 4,
       "next_action": null
     }
   ]

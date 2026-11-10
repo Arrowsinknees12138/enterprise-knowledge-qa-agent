@@ -2,19 +2,21 @@
   "status": "insufficient_evidence",
   "answer": "",
   "citations": [],
-  "gap": "以“宠物/办公室”“办公区管理规定/员工行为规范”“动物/访客/安全卫生”等主题词检索均无命中，制度库中未找到关于携带宠物进入办公场所的规定原文。",
-  "follow_up": "您想了解的是哪个办公场所（如总部办公楼、工厂园区或某个分支机构）的宠物携带规定？我可以据此再检索对应制度。",
+  "gap": "以“宠物/办公室”“办公区域管理规定 禁止携带物品”“员工行为规范 办公环境”等主题词检索均无命中，制度库中未找到关于携带宠物进入办公场所的规定。",
+  "follow_up": "您指的是哪一类场所或制度（例如办公区出入管理、员工行为规范、访客管理）？或者您是否知道相关制度的名称，我可以据此再查。",
   "run": {
     "mode": "live",
     "provider": "deepseek",
     "model": "deepseek-flash",
     "api_requests": 4,
     "usage": {
-      "prompt_tokens": 4927,
-      "completion_tokens": 399
+      "prompt_tokens": 5267,
+      "completion_tokens": 390
     },
     "max_steps": 8,
-    "steps_used": 4
+    "steps_used": 4,
+    "max_tool_calls": 6,
+    "tool_calls_used": 3
   },
   "trace": [
     {
@@ -23,43 +25,49 @@
       "arguments": {
         "query": "宠物 办公室 办公场所"
       },
-      "reason": "用户询问办公场所是否允许带宠物，需检索相关制度主题词。",
+      "reason": "检索与带宠物进入办公场所相关的制度条款",
       "observation": {
         "ok": true,
         "total": 0,
         "hits": [],
+        "cached": false,
         "unread_doc_ids": []
       },
+      "tool_calls_remaining": 5,
       "next_action": "search_docs"
     },
     {
       "step": 2,
       "action": "search_docs",
       "arguments": {
-        "query": "办公区管理规定 员工行为规范"
+        "query": "办公区域管理规定 禁止携带物品"
       },
-      "reason": "首次检索无结果，换用办公区管理与员工行为规范主题词补查。",
+      "reason": "首轮无结果，换用办公区域管理规定主题词补查",
       "observation": {
         "ok": true,
         "total": 0,
         "hits": [],
+        "cached": false,
         "unread_doc_ids": []
       },
+      "tool_calls_remaining": 4,
       "next_action": "search_docs"
     },
     {
       "step": 3,
       "action": "search_docs",
       "arguments": {
-        "query": "动物 访客 安全卫生"
+        "query": "员工行为规范 办公环境"
       },
-      "reason": "前两次检索均无结果，再尝试动物、访客与安全卫生相关主题词。",
+      "reason": "再次换用员工行为规范主题词，确认是否存在相关条款",
       "observation": {
         "ok": true,
         "total": 0,
         "hits": [],
+        "cached": false,
         "unread_doc_ids": []
       },
+      "tool_calls_remaining": 3,
       "next_action": "finish"
     },
     {
@@ -68,16 +76,17 @@
       "arguments": {
         "status": "insufficient_evidence",
         "citations": [],
-        "gap": "以“宠物/办公室”“办公区管理规定/员工行为规范”“动物/访客/安全卫生”等主题词检索均无命中，制度库中未找到关于携带宠物进入办公场所的规定原文。",
-        "follow_up": "您想了解的是哪个办公场所（如总部办公楼、工厂园区或某个分支机构）的宠物携带规定？我可以据此再检索对应制度。"
+        "gap": "以“宠物/办公室”“办公区域管理规定 禁止携带物品”“员工行为规范 办公环境”等主题词检索均无命中，制度库中未找到关于携带宠物进入办公场所的规定。",
+        "follow_up": "您指的是哪一类场所或制度（例如办公区出入管理、员工行为规范、访客管理）？或者您是否知道相关制度的名称，我可以据此再查。"
       },
-      "reason": "三次不同主题词检索均无结果，无法取得任何可引用的制度原文。",
+      "reason": "三次不同主题词检索均无结果，无原文可引用，需用户补充制度范围。",
       "observation": {
         "ok": true,
         "status": "insufficient_evidence",
         "citations": [],
-        "gap": "以“宠物/办公室”“办公区管理规定/员工行为规范”“动物/访客/安全卫生”等主题词检索均无命中，制度库中未找到关于携带宠物进入办公场所的规定原文。"
+        "gap": "以“宠物/办公室”“办公区域管理规定 禁止携带物品”“员工行为规范 办公环境”等主题词检索均无命中，制度库中未找到关于携带宠物进入办公场所的规定。"
       },
+      "tool_calls_remaining": 3,
       "next_action": null
     }
   ]

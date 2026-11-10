@@ -1,12 +1,21 @@
-Checking saved DeepSeek official API traces retained across multiple runs.
 PASS 01-answer: answered | search_docs -> read_doc -> finish
 PASS 02-conflict: conflict | search_docs -> read_doc -> read_doc -> search_docs -> finish
 PASS 03-outside: insufficient_evidence | search_docs -> search_docs -> search_docs -> finish
-PASS 04-paraphrase: answered | search_docs -> read_doc -> finish
+PASS 04-paraphrase: answered | search_docs -> read_doc -> read_doc -> finish
 PASS 05-follow-up: answered | search_docs -> read_doc -> finish
 PASS 06-tool-failure: tool_error | search_docs -> read_doc -> read_doc -> search_docs -> finish
 PASS 07-updated-source: answered | search_docs -> read_doc -> finish
 PASS 08-step-limit: step_limit | search_docs
 PASS 09-resolved-conflict: answered | search_docs -> read_doc -> read_doc -> finish
 PASS 10-missing-detail: insufficient_evidence | search_docs -> read_doc -> search_docs -> finish
-10/10 retained DeepSeek traces verified.
+PASS 11-attachment-noise: answered | search_docs -> read_doc -> finish -> read_doc -> finish
+PASS 12-multipassage: answered | search_docs -> read_doc -> finish
+PASS 13-explicit-supersession: answered | search_docs -> read_doc -> read_doc -> finish
+PASS 14-audience-scope: answered | search_docs -> read_doc -> finish -> read_doc -> finish
+PASS 15-ambiguous: needs_clarification | search_docs -> search_docs -> finish
+PASS 16-search-failure: tool_error | search_docs -> search_docs -> search_docs -> finish
+PASS 17-tool-limit: tool_limit | search_docs -> read_doc
+PASS 18-finish-at-limit: answered | search_docs -> read_doc -> finish
+PASS 19-password: answered | search_docs -> read_doc -> finish
+Live provider tokens: {"prompt_tokens": 94705, "completion_tokens": 6420}
+19/19 live example checks passed

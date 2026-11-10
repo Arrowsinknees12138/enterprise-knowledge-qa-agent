@@ -46,6 +46,12 @@ class KnowledgeTests(unittest.TestCase):
         self.knowledge.documents["D03"]["terms"] = ["门禁"]
         self.assertEqual(self.knowledge.search_docs(query)["hits"], [])
 
+    def test_retrieval_keeps_distractors_and_ranks_specific_mailbox_matches_first(self):
+        hits = self.knowledge.search_docs("企业邮箱单封邮件附件大小上限")["hits"]
+        self.assertEqual([hit["doc_id"] for hit in hits], ["D04", "D07"])
+        self.assertGreater(hits[0]["score"], hits[1]["score"])
+        self.assertNotIn("passages", hits[0])
+
     def test_unknown_document_and_search_failure_are_explicit(self):
         self.assertEqual(self.knowledge.read_doc("missing")["error"], "doc_not_found")
         broken = KnowledgeBase(CORPUS, "search_docs")
@@ -134,6 +140,46 @@ class KnowledgeTests(unittest.TestCase):
         self.assertEqual(result["status"], "step_limit")
         self.assertEqual(result["citations"], [])
         self.assertEqual(result["trace"][0]["next_action"], "step_limit")
+
+    def test_tool_limit_blocks_actual_read_before_it_runs(self):
+        with patch.object(self.knowledge, "read_doc", wraps=self.knowledge.read_doc) as read:
+            result = KnowledgeAgent(MockModel(), self.knowledge, max_tool_calls=1).run("门禁", [])
+        read.assert_not_called()
+        self.assertEqual(result["status"], "tool_limit")
+        self.assertEqual(result["run"]["tool_calls_used"], 1)
+        self.assertEqual(result["trace"][-1]["observation"]["error"], "tool_limit")
+
+    def test_cached_search_and_read_leave_budget_for_finishing(self):
+        model = ScriptedModel(
+            ("search_docs", {"query": "门禁权限"}),
+            ("search_docs", {"query": "门禁 权限"}),
+            ("read_doc", {"doc_id": "D03"}),
+            ("read_doc", {"doc_id": "D03"}),
+            ("finish", {
+                "status": "answered", "citations": [{"doc_id": "D03", "passage_id": "P1"}],
+                "gap": "", "follow_up": "",
+            }),
+        )
+        with (
+            patch.object(self.knowledge, "search_docs", wraps=self.knowledge.search_docs) as search,
+            patch.object(self.knowledge, "read_doc", wraps=self.knowledge.read_doc) as read,
+        ):
+            result = KnowledgeAgent(model, self.knowledge, max_tool_calls=2).run("门禁", [])
+        search.assert_called_once()
+        read.assert_called_once()
+        self.assertEqual(result["status"], "answered")
+        self.assertEqual(result["run"]["tool_calls_used"], 2)
+        self.assertEqual([step["tool_calls_remaining"] for step in result["trace"]], [1, 1, 0, 0, 0])
+        self.assertTrue(result["trace"][1]["observation"]["cached"])
+        self.assertTrue(result["trace"][3]["observation"]["cached"])
+
+    def test_tool_failures_consume_budget_and_are_not_cached(self):
+        evidence = Evidence(KnowledgeBase(CORPUS, "search_docs"), max_tool_calls=2)
+        for remaining in (1, 0):
+            result = evidence.execute("search_docs", {"query": "门禁"})
+            self.assertEqual(result["error"], "search_unavailable")
+            self.assertEqual(evidence.remaining, remaining)
+        self.assertEqual(evidence.execute("search_docs", {"query": "门禁"})["error"], "tool_limit")
 
     def test_missing_live_key_reports_model_error_without_mocking(self):
         with patch.dict("os.environ", {"DASHSCOPE_API_KEY": ""}):

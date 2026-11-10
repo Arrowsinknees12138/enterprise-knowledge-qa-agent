@@ -42,9 +42,18 @@ python -m src.knowledge_qa --mode live --input examples/inputs/06-tool-failure.j
 python tests/run_examples.py --mode live
 ```
 
-可用 `--question` 输入单条问题，用 `--input` 提供带可选 `history` 的 JSON，用 `--data` 替换知识库，用 `--max-steps` 调整决策预算（默认 8）。`--fail-tool search_docs` 或 `--fail-tool read_doc` 可模拟持续故障。未指定 `--mode` 时使用 Mock。
+可用 `--question` 输入单条问题，用 `--input` 提供带可选 `history` 的 JSON，用 `--data` 替换知识库。`--max-steps` 设置决策轮次（默认 8），`--max-tool-calls` 设置实际检索和读取的总次数（默认 6）。`--fail-tool search_docs` 或 `--fail-tool read_doc` 可模拟持续故障。未指定 `--mode` 时使用 Mock。
 
-输出为 UTF-8 JSON。业务状态包括 `answered`、`conflict`、`insufficient_evidence` 和 `needs_clarification`，退出码为 0。`tool_error`、`model_error`、`step_limit` 的退出码为 1，输入或配置文件格式错误为 2。
+每条 Trace 记录剩余工具预算，成功结果在本轮重用时标记 `cached: true`。预算为零后仍可以用已取得的证据结束。若继续请求一个需要实际执行的工具，则返回 `tool_limit`。
+
+输出为 UTF-8 JSON。业务状态包括 `answered`、`conflict`、`insufficient_evidence` 和 `needs_clarification`，退出码为 0。`tool_error`、`model_error`、`step_limit`、`tool_limit` 的退出码为 1，输入或配置文件格式错误为 2。
+
+可以单独复跑用例，也可以直接调低工具预算查看限额行为。
+
+```text
+python tests/run_examples.py --mode live --provider deepseek --case 12-multipassage
+python -m src.knowledge_qa --mode mock --input examples/inputs/01-answer.json --max-tool-calls 1
+```
 
 ## 评审入口
 

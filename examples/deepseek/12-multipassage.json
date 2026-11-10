@@ -1,0 +1,127 @@
+{
+  "status": "answered",
+  "answer": "【D04/P2】企业邮箱回收站中的邮件自删除起保留 30 天。",
+  "citations": [
+    {
+      "doc_id": "D04",
+      "title": "企业邮箱产品 FAQ",
+      "version_date": "2025-05-20",
+      "passage_id": "P2",
+      "quote": "企业邮箱回收站中的邮件自删除起保留 30 天。"
+    }
+  ],
+  "gap": "",
+  "follow_up": "",
+  "run": {
+    "mode": "live",
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "api_requests": 3,
+    "usage": {
+      "prompt_tokens": 3998,
+      "completion_tokens": 262
+    },
+    "max_steps": 8,
+    "steps_used": 3,
+    "max_tool_calls": 6,
+    "tool_calls_used": 2
+  },
+  "trace": [
+    {
+      "step": 1,
+      "action": "search_docs",
+      "arguments": {
+        "query": "企业邮箱 已删除邮件 回收站 保留期限"
+      },
+      "reason": "检索企业邮箱回收站保留期限相关制度条款",
+      "observation": {
+        "ok": true,
+        "total": 1,
+        "hits": [
+          {
+            "doc_id": "D04",
+            "title": "企业邮箱产品 FAQ",
+            "version_date": "2025-05-20",
+            "matched_terms": [
+              "企业邮箱",
+              "邮箱",
+              "邮件",
+              "回收站",
+              "删除邮件"
+            ],
+            "score": 5.0
+          }
+        ],
+        "cached": false,
+        "unread_doc_ids": [
+          "D04"
+        ]
+      },
+      "tool_calls_remaining": 5,
+      "next_action": "read_doc"
+    },
+    {
+      "step": 2,
+      "action": "read_doc",
+      "arguments": {
+        "doc_id": "D04"
+      },
+      "reason": "唯一候选文档，需读取原文确认回收站保留期限",
+      "observation": {
+        "ok": true,
+        "doc_id": "D04",
+        "title": "企业邮箱产品 FAQ",
+        "version_date": "2025-05-20",
+        "passages": [
+          {
+            "passage_id": "P1",
+            "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+          },
+          {
+            "passage_id": "P2",
+            "quote": "企业邮箱回收站中的邮件自删除起保留 30 天。"
+          },
+          {
+            "passage_id": "P3",
+            "quote": "企业邮箱单封邮件最多可填写 50 个收件人。"
+          }
+        ],
+        "cached": false
+      },
+      "tool_calls_remaining": 4,
+      "next_action": "finish"
+    },
+    {
+      "step": 3,
+      "action": "finish",
+      "arguments": {
+        "status": "answered",
+        "citations": [
+          {
+            "doc_id": "D04",
+            "passage_id": "P2"
+          }
+        ],
+        "gap": "",
+        "follow_up": ""
+      },
+      "reason": "FAQ 原文明确写明回收站邮件自删除起保留 30 天，无冲突版本。",
+      "observation": {
+        "ok": true,
+        "status": "answered",
+        "citations": [
+          {
+            "doc_id": "D04",
+            "title": "企业邮箱产品 FAQ",
+            "version_date": "2025-05-20",
+            "passage_id": "P2",
+            "quote": "企业邮箱回收站中的邮件自删除起保留 30 天。"
+          }
+        ],
+        "gap": ""
+      },
+      "tool_calls_remaining": 4,
+      "next_action": null
+    }
+  ]
+}

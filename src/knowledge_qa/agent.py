@@ -13,19 +13,22 @@ def short_text(value, max_length):
 
 
 class KnowledgeAgent:
-    def __init__(self, model, knowledge, max_steps=8):
+    def __init__(self, model, knowledge, max_steps=8, max_tool_calls=6):
         if max_steps < 1:
             raise ValueError("max_steps 必须大于 0")
+        if max_tool_calls < 0:
+            raise ValueError("max_tool_calls 不能小于 0")
         self.model = model
         self.knowledge = knowledge
         self.max_steps = max_steps
+        self.max_tool_calls = max_tool_calls
 
     def run(self, question, history):
         messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": json.dumps({"question": question, "history": history}, ensure_ascii=False)},
         ]
-        evidence = Evidence(self.knowledge)
+        evidence = Evidence(self.knowledge, self.max_tool_calls)
         trace = []
         for step in range(1, self.max_steps + 1):
             try:
@@ -37,8 +40,9 @@ class KnowledgeAgent:
                     "arguments": {},
                     "reason": "未取得可执行的模型动作",
                     "observation": {"ok": False, "error": "model_error", "message": str(error)},
+                    "tool_calls_remaining": evidence.remaining,
                 })
-                return self.result("model_error", trace, gap=str(error))
+                return self.result("model_error", trace, evidence, gap=str(error))
 
             arguments = action.arguments.copy()
             reason = arguments.pop("reason", None)
@@ -53,10 +57,14 @@ class KnowledgeAgent:
                 "arguments": arguments,
                 "reason": reason,
                 "observation": observation,
+                "tool_calls_remaining": evidence.remaining,
             })
+            if observation.get("error") == "tool_limit":
+                return self.result("tool_limit", trace, evidence, gap=observation["message"])
             if action.name == "finish" and observation["ok"]:
                 return self.result(
-                    arguments["status"], trace, observation["citations"], observation["gap"], arguments["follow_up"]
+                    arguments["status"], trace, evidence, observation["citations"],
+                    observation["gap"], arguments["follow_up"],
                 )
 
             messages.extend([
@@ -64,17 +72,20 @@ class KnowledgeAgent:
                 {
                     "role": "tool",
                     "tool_call_id": action.call_id,
-                    "content": json.dumps({"action": action.name, "result": observation}, ensure_ascii=False),
+                    "content": json.dumps(
+                        {"action": action.name, "result": observation, "tool_calls_remaining": evidence.remaining},
+                        ensure_ascii=False,
+                    ),
                 },
             ])
-        return self.result("step_limit", trace, gap=f"已用完 {self.max_steps} 步，问答未完成。")
+        return self.result("step_limit", trace, evidence, gap=f"已用完 {self.max_steps} 步，问答未完成。")
 
-    def result(self, status, trace, citations=None, gap="", follow_up=""):
+    def result(self, status, trace, evidence, citations=None, gap="", follow_up=""):
         citations = citations or []
         for current, following in zip(trace, trace[1:]):
             current["next_action"] = following["action"]
         if trace:
-            trace[-1]["next_action"] = "step_limit" if status == "step_limit" else None
+            trace[-1]["next_action"] = status if status in ("step_limit", "tool_limit") else None
         answer = ""
         if status in ("answered", "conflict", "needs_clarification") and citations:
             excerpts = [f'【{ref["doc_id"]}/{ref["passage_id"]}】{ref["quote"]}' for ref in citations]
@@ -87,14 +98,20 @@ class KnowledgeAgent:
             "citations": citations,
             "gap": gap,
             "follow_up": follow_up,
-            "run": {**self.model.metadata(), "max_steps": self.max_steps, "steps_used": len(trace)},
+            "run": {
+                **self.model.metadata(), "max_steps": self.max_steps, "steps_used": len(trace),
+                "max_tool_calls": evidence.max_tool_calls, "tool_calls_used": evidence.tool_calls_used,
+            },
             "trace": trace,
         }
 
 
 class Evidence:
-    def __init__(self, knowledge):
+    def __init__(self, knowledge, max_tool_calls=6):
         self.knowledge = knowledge
+        self.max_tool_calls = max_tool_calls
+        self.tool_calls_used = 0
+        self.search_cache = {}
         self.candidates = set()
         self.reads = {}
         self.failed_reads = set()
@@ -102,32 +119,59 @@ class Evidence:
         self.reads_before_new_query = set()
         self.search_failed = False
 
+    @property
+    def remaining(self):
+        return self.max_tool_calls - self.tool_calls_used
+
+    def tool_limit(self):
+        return {
+            "ok": False,
+            "error": "tool_limit",
+            "message": f"已用完 {self.max_tool_calls} 次实际工具调用，当前证据不足以完成问答。",
+        }
+
     def execute(self, name, arguments):
         if name == "search_docs":
             query = arguments.get("query")
             if arguments.keys() != {"query"} or not short_text(query, 200) or not normalize(query):
                 return rejection("query 必须是非空且不超过 200 字的字符串")
-            result = self.knowledge.search_docs(query)
+            normalized_query = normalize(query)
+            cached = normalized_query in self.search_cache
+            if cached:
+                result = self.search_cache[normalized_query]
+            else:
+                if not self.remaining:
+                    return self.tool_limit()
+                self.tool_calls_used += 1
+                result = self.knowledge.search_docs(query)
             self.search_failed = not result["ok"]
-            if result["ok"]:
-                normalized_query = normalize(query)
-                if normalized_query not in self.search_queries:
-                    self.reads_before_new_query.update(self.reads)
-                    self.search_queries.add(normalized_query)
+            if not result["ok"]:
+                return result
+            if not cached:
+                self.search_cache[normalized_query] = result
+                self.reads_before_new_query.update(self.reads)
+                self.search_queries.add(normalized_query)
                 self.candidates.update(hit["doc_id"] for hit in result["hits"])
-                result["unread_doc_ids"] = [hit["doc_id"] for hit in result["hits"] if hit["doc_id"] not in self.reads]
-            return result
+            return {
+                **result, "cached": cached,
+                "unread_doc_ids": [hit["doc_id"] for hit in result["hits"] if hit["doc_id"] not in self.reads],
+            }
         if name == "read_doc":
             doc_id = arguments.get("doc_id")
             if arguments.keys() != {"doc_id"} or not isinstance(doc_id, str) or doc_id not in self.candidates:
                 return rejection("doc_id 必须来自本轮的检索结果")
+            if doc_id in self.reads:
+                return {**self.reads[doc_id], "cached": True}
+            if not self.remaining:
+                return self.tool_limit()
+            self.tool_calls_used += 1
             result = self.knowledge.read_doc(doc_id)
             if result["ok"]:
                 self.failed_reads.discard(doc_id)
                 self.reads[doc_id] = result
-            elif doc_id not in self.reads:
+            else:
                 self.failed_reads.add(doc_id)
-            return result
+            return {**result, "cached": False}
         if name == "finish":
             return self.finish(arguments)
         return rejection("未知动作")
@@ -154,6 +198,8 @@ class Evidence:
         if status == "insufficient_evidence":
             if not self.search_queries:
                 return rejection("资料不足需要成功完成至少一次检索")
+            if not self.remaining and self.candidates - self.reads.keys():
+                return self.tool_limit()
             # Keep background passages in the trace, separate from answer citations.
             citations = []
         if status == "answered" and (self.search_failed or self.candidates - self.reads.keys()):
