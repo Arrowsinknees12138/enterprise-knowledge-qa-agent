@@ -1,0 +1,92 @@
+[
+  {
+    "id": "H01-mail-two-limits",
+    "question": "企业邮箱同一封邮件的附件总大小上限和收件人数上限分别是多少？",
+    "status": "answered",
+    "refs": ["D04/P1", "D04/P3"],
+    "relevant_docs": ["D04"]
+  },
+  {
+    "id": "H02-lost-card",
+    "question": "我的门禁卡丢了，挂失后把补领材料交齐，新卡多久能拿到？",
+    "status": "answered",
+    "refs": ["D05/P1"],
+    "relevant_docs": ["D05"]
+  },
+  {
+    "id": "H03-visitor-processing-time",
+    "question": "接待人提交访客临时通行申请以后，审批要等几个工作日？我问的是审批耗时。",
+    "status": "insufficient_evidence",
+    "refs": [],
+    "relevant_docs": ["D06"]
+  },
+  {
+    "id": "H04-unspecified-worker-type",
+    "question": "我准备在家办公，下周要提前几个工作日提交申请？",
+    "status": "needs_clarification",
+    "refs": [],
+    "allowed_context_refs": ["D10/P1", "D11/P1"],
+    "follow_up_terms": ["正式", "外包"],
+    "relevant_docs": ["D10", "D11"]
+  },
+  {
+    "id": "H05-historical-rule",
+    "question": "我在 2025 年 5 月 6 日发现设备故障，按当时适用的制度，应在几个工作日内提交设备维修申请？",
+    "status": "answered",
+    "refs": ["D08/P1"],
+    "relevant_docs": ["D08", "D09"]
+  },
+  {
+    "id": "H06-replacement-date-and-limit",
+    "question": "设备维修规范从哪天起取代旧细则？新版规定发现故障后几个工作日内提交？",
+    "status": "answered",
+    "refs": ["D09/P1"],
+    "relevant_docs": ["D09"]
+  },
+  {
+    "id": "H07-history-is-not-evidence",
+    "question": "所以企业云盘外发链接按产品默认设置，到底过几天失效？",
+    "history": [
+      {"role": "user", "content": "我想了解企业云盘给外部人员分享文件的链接。"},
+      {"role": "assistant", "content": "我印象里这种链接默认永久有效。"}
+    ],
+    "status": "answered",
+    "refs": ["D07/P2"],
+    "relevant_docs": ["D07"]
+  },
+  {
+    "id": "H08-reset-extension",
+    "question": "密码重置链接已经过期，服务台能延长同一条链接的有效期吗？",
+    "status": "insufficient_evidence",
+    "refs": [],
+    "relevant_docs": ["D12"]
+  },
+  {
+    "id": "H09-employee-scope",
+    "question": "我已经转成正式员工，在家办公的申请要比开始日期早几个工作日提交？",
+    "status": "answered",
+    "refs": ["D10/P1"],
+    "relevant_docs": ["D10"]
+  },
+  {
+    "id": "H10-travel-unit",
+    "question": "先只问计时口径：差旅报销制度写的“天”是工作日还是自然日？具体报销期限暂时不用确认。",
+    "status": "insufficient_evidence",
+    "refs": [],
+    "relevant_docs": ["D01", "D02"]
+  },
+  {
+    "id": "H11-unrelated-reimbursement",
+    "question": "公司给员工报销个人健身房年卡吗？",
+    "status": "insufficient_evidence",
+    "refs": [],
+    "relevant_docs": []
+  },
+  {
+    "id": "H12-drive-vs-mail",
+    "question": "文件太大无法发邮件。我改用企业云盘上传，问的是云盘单文件最大多少 GB？",
+    "status": "answered",
+    "refs": ["D07/P1"],
+    "relevant_docs": ["D07"]
+  }
+]

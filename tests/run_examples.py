@@ -14,11 +14,11 @@ ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "examples"
 
 
-def run_cli(mode, provider, case, *options):
+def run_cli(mode, provider, input_path, *options):
     command = [sys.executable, "-m", "src.knowledge_qa", "--mode", mode]
     if mode == "live":
         command.extend(["--provider", provider])
-    command.extend(["--input", str(EXAMPLES / "inputs" / f"{case}.json"), *options])
+    command.extend(["--input", str(input_path), *options])
     proc = subprocess.run(
         command,
         cwd=ROOT,
@@ -27,7 +27,7 @@ def run_cli(mode, provider, case, *options):
         timeout=620,
     )
     if not proc.stdout.strip():
-        raise RuntimeError(f"{case} produced no JSON (exit {proc.returncode})")
+        raise RuntimeError(f"{input_path.name} produced no JSON (exit {proc.returncode})")
     return json.loads(proc.stdout), proc.returncode
 
 
@@ -119,11 +119,12 @@ def main():
         if args.case and name not in args.case:
             return
         try:
-            result, exit_code = run_cli(args.mode, provider, input_name, *options)
+            input_path = EXAMPLES / "inputs" / f"{input_name}.json"
+            result, exit_code = run_cli(args.mode, provider, input_path, *options)
             if (args.mode == "live" and result["status"] == "model_error"
                     and result["gap"] == "模型连接失败、超时或返回格式无效"):
                 print(f"RETRY {name}: model connection or timeout", flush=True)
-                result, exit_code = run_cli(args.mode, provider, input_name, *options)
+                result, exit_code = run_cli(args.mode, provider, input_path, *options)
             (output / f"{name}.json").write_text(
                 json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
             )
