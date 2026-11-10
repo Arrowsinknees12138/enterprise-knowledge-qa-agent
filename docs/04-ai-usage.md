@@ -7,3 +7,5 @@ Codex 辅助范围包括方案与接口选择、合成知识库、CLI 与 Agent 
 关键修改由 Codex 根据实际运行提出并实现。首轮模型发现两条冲突原文后跳过补查，且将缺少效力信息的文档描述为现行有效。随后增加冲突结束校验和受控缺口文本，并补上回归测试。[首轮实际输出](../examples/initial-conflict.json)
 
 Codex 已执行单元测试、Mock CLI 和真实模型 CLI 验收，结果见[评估记录](03-evaluation.md)。候选人本人独立修改、代码审阅和复跑的记录待本人据实补充。
+
+候选人后续要求接入 DeepSeek。Codex 增加可切换提供方、模拟 HTTP 测试和真实运行命令。已实跑离线单测、Mock CLI 和 DashScope 正常路径，DeepSeek 官方 API 实跑待配置密钥后执行。

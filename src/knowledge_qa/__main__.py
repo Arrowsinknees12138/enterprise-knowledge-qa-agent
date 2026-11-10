@@ -5,7 +5,7 @@ from pathlib import Path
 
 from .agent import KnowledgeAgent
 from .knowledge import KnowledgeBase
-from .models import LiveModel, MockModel
+from .models import LIVE_PROVIDERS, LiveModel, MockModel
 
 
 DEFAULT_CORPUS = Path(__file__).resolve().parents[2] / "data" / "knowledge.json"
@@ -37,17 +37,20 @@ def main():
     source.add_argument("--question", help="直接输入问题")
     source.add_argument("--input", type=Path, help="包含 question 和可选 history 的 JSON 文件")
     parser.add_argument("--mode", choices=("mock", "live"), default="mock")
+    parser.add_argument("--provider", choices=LIVE_PROVIDERS, help="真实模型提供方，默认 dashscope")
     parser.add_argument("--data", type=Path, default=DEFAULT_CORPUS, help="替换合成知识库 JSON")
     parser.add_argument("--max-steps", type=int, choices=range(1, 21), default=8)
     parser.add_argument("--fail-tool", choices=("search_docs", "read_doc"), help="注入持续业务工具故障")
     args = parser.parse_args()
+    if args.provider and args.mode != "live":
+        parser.error("--provider 需要配合 --mode live")
     try:
         question, history = load_input(args)
         knowledge = KnowledgeBase(args.data, args.fail_tool)
     except (OSError, ValueError) as error:
         parser.error(str(error))
 
-    model = LiveModel() if args.mode == "live" else MockModel()
+    model = LiveModel(args.provider or "dashscope") if args.mode == "live" else MockModel()
     result = KnowledgeAgent(model, knowledge, args.max_steps).run(question, history)
     sys.stdout.reconfigure(encoding="utf-8")
     print(json.dumps(result, ensure_ascii=False, indent=2))

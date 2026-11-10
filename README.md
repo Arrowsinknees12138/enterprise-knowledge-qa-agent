@@ -18,6 +18,21 @@ Mock 无需网络和环境变量。它用确定性规则跑同一套工具、引
 
 ## 真实模型运行
 
+### DeepSeek
+
+在 PowerShell 7 中运行以下命令。第一行提示输入 DeepSeek API Key，密钥仅设置在当前终端会话。默认模型是 `deepseek-flash`，可用 `DEEPSEEK_MODEL` 选择兼容模型。[DeepSeek API 文档](https://api-docs.deepseek.com/en/)
+
+```powershell
+$env:DEEPSEEK_API_KEY = Read-Host 'DeepSeek API Key' -MaskInput
+python -m src.knowledge_qa --mode live --provider deepseek --input examples/inputs/01-answer.json
+python -m src.knowledge_qa --mode live --provider deepseek --input examples/inputs/02-conflict.json
+python tests/run_examples.py --mode live --provider deepseek
+```
+
+第一条问答预期返回 `answered`，引用 D03/P1 的 2 个工作日。冲突用例预期读取两条原文并补查后返回 `conflict`。JSON 中 `run.provider` 为 `deepseek`，`run.api_requests` 记录请求数，`trace` 记录实际步骤。全量验收会把 DeepSeek 输出写到 `examples/deepseek/`。
+
+### DashScope
+
 将 DashScope API 密钥设为 shell 环境变量 `DASHSCOPE_API_KEY`。默认使用 `qwen-plus` 和北京区兼容端点。其他兼容地址与模型名可通过 `QA_BASE_URL`、`QA_MODEL` 配置。变量说明见 [.env.example](.env.example)。CLI 从进程环境读取配置。[阿里云兼容接口文档](https://www.alibabacloud.com/help/en/model-studio/compatibility-of-openai-with-dashscope.md)
 
 ```text

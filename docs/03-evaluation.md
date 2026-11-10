@@ -1,6 +1,6 @@
 # 评估与复现
 
-2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 11/11，Mock CLI 验收 8/8，真实 `qwen-plus` CLI 验收 10/10。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [真实模型验收输出及用量](../examples/live-evaluation.txt)
+2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 13/13，Mock CLI 验收 8/8，真实 `qwen-plus` CLI 验收 10/10。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [真实模型验收输出及用量](../examples/live-evaluation.txt)
 
 ## 真实模型验收
 
@@ -36,6 +36,10 @@ python tests/run_examples.py --mode live
 ```
 
 最后一条命令需要按 [README](../README.md) 配置模型密钥，并会重新生成 `examples/live/` 中的输出。验收脚本用临时知识库文件测试替换原文。Mock 的冲突用例预期为 `needs_clarification`，只验证多个候选可被读取、引用和交给用户确认。
+
+### DeepSeek 验证
+
+DeepSeek 的多轮工具调用、结果回传和缺密钥行为通过了模拟 HTTP 单测及 CLI 配置检查。接入后也实跑了默认 DashScope 的正常问答作为回归。当前 DeepSeek 官方 API 实跑待配置 `DEEPSEEK_API_KEY` 后执行。全量命令为 `python tests/run_examples.py --mode live --provider deepseek`，输出位于 `examples/deepseek/`。
 
 ## 限制
 

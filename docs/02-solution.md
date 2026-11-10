@@ -20,4 +20,6 @@
 
 用 Python 标准库实现 CLI、JSON 和 HTTP。知识库足够小，关键词别名与少量工具便于审查。没有引入 Agent 框架。真实模式默认用 DashScope `qwen-plus` 的 Chat Completions 兼容接口，离线模式则以固定规则调用同一个执行器。[兼容接口文档](https://www.alibabacloud.com/help/en/model-studio/compatibility-of-openai-with-dashscope.md)
 
+DeepSeek 提供方复用同一套工具 schema、HTTP 请求和观察消息。该提供方显式关闭思考模式并设定 `tool_choice=required`，使模型每轮在已注册动作中选择。DeepSeek 配置从独立密钥变量读取，默认使用官方端点和 `deepseek-flash`。[DeepSeek 工具调用文档](https://api-docs.deepseek.com/guides/tool_calls/) · [Chat Completions 参数](https://api-docs.deepseek.com/api/create-chat-completion/)
+
 `search_docs` 和 `read_doc` 都是只读操作。每次请求最多八步，可从命令行调整。工具不可用和模型接口不可用分别进入明确的失败状态。

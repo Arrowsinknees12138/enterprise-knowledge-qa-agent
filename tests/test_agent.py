@@ -1,5 +1,6 @@
 import json
 import unittest
+from io import BytesIO
 from pathlib import Path
 from unittest.mock import patch
 
@@ -124,6 +125,65 @@ class KnowledgeTests(unittest.TestCase):
         self.assertEqual(result["run"]["mode"], "live")
         self.assertEqual(result["run"]["api_requests"], 0)
         self.assertEqual(result["trace"][0]["action"], "model_error")
+
+    def test_deepseek_requires_its_own_key(self):
+        with patch.dict("os.environ", {"DASHSCOPE_API_KEY": "unused-test-key", "DEEPSEEK_API_KEY": ""}):
+            result = KnowledgeAgent(LiveModel("deepseek"), self.knowledge).run("门禁", [])
+        self.assertEqual(result["status"], "model_error")
+        self.assertIn("DEEPSEEK_API_KEY", result["gap"])
+        self.assertEqual(result["run"]["provider"], "deepseek")
+        self.assertEqual(result["run"]["api_requests"], 0)
+
+    def test_deepseek_replays_tool_observations_over_chat_completions(self):
+        def response(step, name, arguments):
+            body = {
+                "model": "deepseek-flash",
+                "usage": {"prompt_tokens": 10, "completion_tokens": 5},
+                "choices": [{"message": {"content": None, "tool_calls": [{
+                    "type": "function",
+                    "id": f"call-{step}",
+                    "function": {"name": name, "arguments": json.dumps({"reason": "测试动作", **arguments})},
+                }]}}],
+            }
+            return BytesIO(json.dumps(body).encode())
+
+        env = {
+            "DEEPSEEK_API_KEY": "test-key",
+            "DEEPSEEK_MODEL": "",
+            "QA_BASE_URL": "https://example.invalid/qwen-only",
+            "QA_MODEL": "qwen-only",
+        }
+        with patch.dict("os.environ", env), patch("src.knowledge_qa.models.urlopen") as http:
+            http.side_effect = [
+                response(1, "search_docs", {"query": "门禁"}),
+                response(2, "read_doc", {"doc_id": "D03"}),
+                response(3, "finish", {
+                    "status": "answered", "citations": [{"doc_id": "D03", "passage_id": "P1"}],
+                    "gap": "", "follow_up": "",
+                }),
+            ]
+            result = KnowledgeAgent(LiveModel("deepseek"), self.knowledge).run("门禁", [])
+
+        self.assertEqual(result["status"], "answered")
+        self.assertIn("2 个工作日", result["answer"])
+        self.assertEqual(result["run"]["provider"], "deepseek")
+        self.assertEqual(result["run"]["api_requests"], 3)
+        self.assertEqual(result["run"]["usage"]["prompt_tokens"], 30)
+        requests = [call.args[0] for call in http.call_args_list]
+        for request in requests:
+            self.assertEqual(request.full_url, "https://api.deepseek.com/chat/completions")
+            self.assertEqual(request.get_header("Authorization"), "Bearer test-key")
+            payload = json.loads(request.data)
+            self.assertEqual(payload["model"], "deepseek-flash")
+            self.assertEqual(payload["thinking"], {"type": "disabled"})
+            self.assertEqual(payload["tool_choice"], "required")
+        messages = json.loads(requests[-1].data)["messages"]
+        for step, assistant, observation in ((1, messages[2], messages[3]), (2, messages[4], messages[5])):
+            self.assertEqual(assistant["tool_calls"][0]["id"], f"call-{step}")
+            self.assertEqual(observation["role"], "tool")
+            self.assertEqual(observation["tool_call_id"], f"call-{step}")
+            self.assertTrue(json.loads(observation["content"])["result"]["ok"])
+        self.assertEqual(json.loads(messages[-1]["content"])["result"]["doc_id"], "D03")
 
 
 if __name__ == "__main__":

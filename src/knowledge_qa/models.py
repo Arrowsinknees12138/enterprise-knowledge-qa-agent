@@ -25,6 +25,7 @@ answered 只用于原文可以直接回答问题且相关冲突已排除的情�
 每次工具调用的 reason 只写一句可公开的决策依据，说明与当前观察的关系，勿输出内部推理过程。"""
 
 STATUSES = ("answered", "conflict", "insufficient_evidence", "needs_clarification", "tool_error")
+LIVE_PROVIDERS = ("dashscope", "deepseek")
 
 
 def tool(name, description, properties):
@@ -95,17 +96,24 @@ class ModelError(RuntimeError):
 
 
 class LiveModel:
-    def __init__(self):
-        self.api_key = os.environ.get("DASHSCOPE_API_KEY", "").strip()
-        self.base_url = os.environ.get("QA_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1")
-        self.name = os.environ.get("QA_MODEL", "qwen-plus")
+    def __init__(self, provider="dashscope"):
+        self.provider = provider
+        if provider == "deepseek":
+            self.key_variable = "DEEPSEEK_API_KEY"
+            self.base_url = "https://api.deepseek.com"
+            self.name = os.environ.get("DEEPSEEK_MODEL", "").strip() or "deepseek-flash"
+        else:
+            self.key_variable = "DASHSCOPE_API_KEY"
+            self.base_url = os.environ.get("QA_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1")
+            self.name = os.environ.get("QA_MODEL", "qwen-plus")
+        self.api_key = os.environ.get(self.key_variable, "").strip()
         self.reported_model = None
         self.requests = 0
         self.usage = {"prompt_tokens": 0, "completion_tokens": 0}
 
     def choose(self, messages):
         if not self.api_key:
-            raise ModelError("缺少 DASHSCOPE_API_KEY")
+            raise ModelError(f"缺少 {self.key_variable}")
         payload = {
             "model": self.name,
             "messages": messages,
@@ -113,6 +121,9 @@ class LiveModel:
             "temperature": 0,
             "max_tokens": 512,
         }
+        if self.provider == "deepseek":
+            payload["thinking"] = {"type": "disabled"}
+            payload["tool_choice"] = "required"
         try:
             request = Request(
                 f"{self.base_url.rstrip('/')}/chat/completions",
@@ -145,6 +156,7 @@ class LiveModel:
     def metadata(self):
         return {
             "mode": "live",
+            "provider": self.provider,
             "model": self.reported_model or self.name,
             "api_requests": self.requests,
             "usage": self.usage.copy(),

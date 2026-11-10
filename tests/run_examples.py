@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -13,10 +14,13 @@ ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "examples"
 
 
-def run_cli(mode, case, *options):
+def run_cli(mode, provider, case, *options):
+    command = [sys.executable, "-m", "src.knowledge_qa", "--mode", mode]
+    if mode == "live":
+        command.extend(["--provider", provider])
+    command.extend(["--input", str(EXAMPLES / "inputs" / f"{case}.json"), *options])
     proc = subprocess.run(
-        [sys.executable, "-m", "src.knowledge_qa", "--mode", mode,
-         "--input", str(EXAMPLES / "inputs" / f"{case}.json"), *options],
+        command,
         cwd=ROOT,
         capture_output=True,
         encoding="utf-8",
@@ -81,15 +85,25 @@ def main():
     sys.stderr.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mode", choices=("live", "mock"), required=True)
+    parser.add_argument("--provider", choices=("dashscope", "deepseek"))
     args = parser.parse_args()
-    output = EXAMPLES / args.mode
+    if args.provider and args.mode != "live":
+        parser.error("--provider requires --mode live")
+    provider = args.provider or "dashscope"
+    if args.mode == "live":
+        key_variable = "DEEPSEEK_API_KEY" if provider == "deepseek" else "DASHSCOPE_API_KEY"
+        if not os.environ.get(key_variable, "").strip():
+            parser.error(f"Set {key_variable} before running live examples.")
+    output = EXAMPLES / ("deepseek" if provider == "deepseek" else args.mode)
     output.mkdir(exist_ok=True)
     runs = {}
 
     def check(name, input_name, status, docs, snippet=None, options=(), extra_check=None):
-        result, exit_code = run_cli(args.mode, input_name, *options)
+        result, exit_code = run_cli(args.mode, provider, input_name, *options)
         (output / f"{name}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         verify(args.mode, result, exit_code, status, docs, snippet)
+        if args.mode == "live":
+            assert result["run"]["provider"] == provider
         if extra_check:
             extra_check(result)
         path = " -> ".join(step["action"] for step in result["trace"])
