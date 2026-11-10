@@ -57,7 +57,22 @@ python -m src.knowledge_qa --mode mock --input examples/inputs/01-answer.json --
 
 ## 评审入口
 
+设置好 `DEEPSEEK_API_KEY` 后，可以只复跑同一个报销问题在两份语料上的行为。
+
+```text
+python tests/run_examples.py --mode live --provider deepseek --case 02-conflict --case 09-resolved-conflict
+```
+
+比较两条 Trace 中第二次 `read_doc` 的 `observation` 和 `next_action`。D02 写 15 天时，下一步是检索适用依据。仅把它改为 30 天后，下一步是结束并给出回答。[冲突 Trace](examples/deepseek/02-conflict.json) · [替换原文后的 Trace](examples/deepseek/09-resolved-conflict.json)
+
+冻结对照集可独立复跑。报告会包含逐题得分和实际 Trace。
+
+```text
+python tests/run_holdout.py --output holdout-replay.json
+```
+
 - [验收矩阵与复现方法](docs/03-evaluation.md)
+- [冻结对照题与标准答案](examples/holdout/cases.json) · [改动前记录](examples/holdout/baseline.json) · [改动后记录](examples/holdout/after.json)
 - [DeepSeek 官方 API 实跑记录](examples/deepseek-evaluation.txt)
 - [真实模型正常路径](examples/live/01-answer.json)和[冲突补查路径](examples/live/02-conflict.json)
 - [真实模型工具失败路径](examples/live/06-tool-failure.json)和[更换文档原文](examples/live/07-updated-source.json)

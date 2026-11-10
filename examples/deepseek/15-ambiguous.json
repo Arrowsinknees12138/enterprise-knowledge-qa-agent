@@ -2,74 +2,40 @@
   "status": "needs_clarification",
   "answer": "",
   "citations": [],
-  "gap": "用户问题“那需要提前多久？”缺少上文，无法确定所指事项（如请假、出差、用印、采购、会议室预约等），且以“提前多久/预约/报备/时间要求”检索均无命中。",
-  "follow_up": "您指的是哪项事项需要提前多久办理（例如请假、出差、用印、采购或会议室预约）？",
+  "gap": "用户仅问\"需要提前多久\"，未说明所指事项（如请假、报销、用印、采购申请等）及适用人群。",
+  "follow_up": "请问您问的是哪项事项需要提前多久申请（例如请假、报销、用印或采购）？",
   "run": {
     "mode": "live",
     "provider": "deepseek",
     "model": "deepseek-flash",
-    "api_requests": 3,
+    "api_requests": 1,
     "usage": {
-      "prompt_tokens": 3772,
-      "completion_tokens": 342
+      "prompt_tokens": 1160,
+      "completion_tokens": 161
     },
     "max_steps": 8,
-    "steps_used": 3,
+    "steps_used": 1,
     "max_tool_calls": 6,
-    "tool_calls_used": 2
+    "tool_calls_used": 0
   },
   "trace": [
     {
       "step": 1,
-      "action": "search_docs",
-      "arguments": {
-        "query": "提前多久 申请 审批 时限"
-      },
-      "reason": "用户追问“需要提前多久”，但缺少上下文，先检索制度中关于提前申请时限的条款。",
-      "observation": {
-        "ok": true,
-        "total": 0,
-        "hits": [],
-        "cached": false,
-        "unread_doc_ids": []
-      },
-      "tool_calls_remaining": 5,
-      "next_action": "search_docs"
-    },
-    {
-      "step": 2,
-      "action": "search_docs",
-      "arguments": {
-        "query": "提前申请 预约 报备 时间要求"
-      },
-      "reason": "首次检索无结果，换用“预约/报备/时间要求”等表达补查。",
-      "observation": {
-        "ok": true,
-        "total": 0,
-        "hits": [],
-        "cached": false,
-        "unread_doc_ids": []
-      },
-      "tool_calls_remaining": 4,
-      "next_action": "finish"
-    },
-    {
-      "step": 3,
       "action": "finish",
       "arguments": {
         "status": "needs_clarification",
         "citations": [],
-        "gap": "用户问题“那需要提前多久？”缺少上文，无法确定所指事项（如请假、出差、用印、采购、会议室预约等），且以“提前多久/预约/报备/时间要求”检索均无命中。",
-        "follow_up": "您指的是哪项事项需要提前多久办理（例如请假、出差、用印、采购或会议室预约）？"
+        "gap": "用户仅问\"需要提前多久\"，未说明所指事项（如请假、报销、用印、采购申请等）及适用人群。",
+        "follow_up": "请问您问的是哪项事项需要提前多久申请（例如请假、报销、用印或采购）？"
       },
-      "reason": "问题缺少上下文且两次检索均无结果，需先确认所指事项才能定位条款。",
+      "reason": "问题缺少所指制度事项，无法确定检索主题词。",
       "observation": {
         "ok": true,
         "status": "needs_clarification",
         "citations": [],
-        "gap": "用户问题“那需要提前多久？”缺少上文，无法确定所指事项（如请假、出差、用印、采购、会议室预约等），且以“提前多久/预约/报备/时间要求”检索均无命中。"
+        "gap": "用户仅问\"需要提前多久\"，未说明所指事项（如请假、报销、用印、采购申请等）及适用人群。"
       },
-      "tool_calls_remaining": 4,
+      "tool_calls_remaining": 6,
       "next_action": null
     }
   ]

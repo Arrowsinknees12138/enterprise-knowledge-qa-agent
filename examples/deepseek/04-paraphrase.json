@@ -18,8 +18,8 @@
     "model": "deepseek-flash",
     "api_requests": 4,
     "usage": {
-      "prompt_tokens": 5835,
-      "completion_tokens": 418
+      "prompt_tokens": 6070,
+      "completion_tokens": 436
     },
     "max_steps": 8,
     "steps_used": 4,
@@ -31,9 +31,9 @@
       "step": 1,
       "action": "search_docs",
       "arguments": {
-        "query": "门禁卡 申请 办理 时限 新员工"
+        "query": "门禁卡 申请 办理时限 新员工 刷卡进楼"
       },
-      "reason": "用户问新员工提交门禁申请后多久能刷卡进楼，需检索门禁卡办理时限相关制度。",
+      "reason": "用户询问新入职同事提交门禁申请后多久可刷卡进楼，需检索门禁权限办理时限相关制度。",
       "observation": {
         "ok": true,
         "total": 2,
@@ -43,9 +43,11 @@
             "title": "门禁权限申请 FAQ",
             "version_date": "2025-03-12",
             "matched_terms": [
-              "门禁"
+              "门禁",
+              "刷卡",
+              "进楼"
             ],
-            "score": 1.0
+            "score": 3.0
           },
           {
             "doc_id": "D05",
@@ -72,7 +74,7 @@
       "arguments": {
         "doc_id": "D03"
       },
-      "reason": "FAQ 可能直接说明新员工门禁申请生效时限。",
+      "reason": "D03 为门禁权限申请 FAQ，最可能包含新员工申请后的生效时限。",
       "observation": {
         "ok": true,
         "doc_id": "D03",
@@ -95,7 +97,7 @@
       "arguments": {
         "doc_id": "D05"
       },
-      "reason": "另一候选为遗失补办指引，需确认是否也涉及新员工开通时限或替代关系。",
+      "reason": "D05 涉及门禁卡办理，需确认是否含新入职开通时限或替代口径。",
       "observation": {
         "ok": true,
         "doc_id": "D05",
@@ -126,7 +128,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "FAQ 明确新员工提交完整门禁权限申请后 2 个工作日内开通；补办指引针对挂失补办场景，不适用。",
+      "reason": "D03 明确新提交完整门禁权限申请后 2 个工作日内开通；D05 仅针对遗失补办，不适用于新入职场景。",
       "observation": {
         "ok": true,
         "status": "answered",

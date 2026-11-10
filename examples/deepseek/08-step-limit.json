@@ -10,7 +10,7 @@
     "model": "deepseek-flash",
     "api_requests": 1,
     "usage": {
-      "prompt_tokens": 1120,
+      "prompt_tokens": 1167,
       "completion_tokens": 64
     },
     "max_steps": 1,

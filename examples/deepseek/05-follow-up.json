@@ -18,8 +18,8 @@
     "model": "deepseek-flash",
     "api_requests": 3,
     "usage": {
-      "prompt_tokens": 4033,
-      "completion_tokens": 267
+      "prompt_tokens": 4174,
+      "completion_tokens": 271
     },
     "max_steps": 8,
     "steps_used": 3,
@@ -93,7 +93,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "FAQ原文明确写明提交完整申请后2个工作日内开通门禁，可直接回答。",
+      "reason": "FAQ原文明确员工提交完整申请后行政在2个工作日内开通门禁，直接回答等待时长。",
       "observation": {
         "ok": true,
         "status": "answered",

@@ -18,8 +18,8 @@
     "model": "deepseek-flash",
     "api_requests": 4,
     "usage": {
-      "prompt_tokens": 5806,
-      "completion_tokens": 395
+      "prompt_tokens": 5964,
+      "completion_tokens": 385
     },
     "max_steps": 8,
     "steps_used": 4,
@@ -33,7 +33,7 @@
       "arguments": {
         "query": "设备维修申请 提交时限"
       },
-      "reason": "用户询问设备故障后提交维修申请的最晚时限，需检索相关制度条款。",
+      "reason": "检索设备维修申请提交时限的制度条款。",
       "observation": {
         "ok": true,
         "total": 2,
@@ -76,7 +76,7 @@
       "arguments": {
         "doc_id": "D08"
       },
-      "reason": "需读取该细则原文确认维修申请时限条款。",
+      "reason": "读取设备维修细则原文以核对提交时限。",
       "observation": {
         "ok": true,
         "doc_id": "D08",
@@ -99,7 +99,7 @@
       "arguments": {
         "doc_id": "D09"
       },
-      "reason": "存在替代版文件，需读取其原文以核对时限及替代关系。",
+      "reason": "存在替代版文件，需读取其原文核对时限与替代关系。",
       "observation": {
         "ok": true,
         "doc_id": "D09",
@@ -130,7 +130,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "替代版规范明确自2025-07-01起替代旧细则，并规定5个工作日内提交，冲突已排除。",
+      "reason": "D09 明确自 2025-07-01 起替代《设备维修办理细则》，故以替代版规定的 5 个工作日为准。",
       "observation": {
         "ok": true,
         "status": "answered",

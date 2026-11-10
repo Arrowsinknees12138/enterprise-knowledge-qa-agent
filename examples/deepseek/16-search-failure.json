@@ -2,16 +2,16 @@
   "status": "tool_error",
   "answer": "",
   "citations": [],
-  "gap": "检索服务连续三次不可用，无法获取门禁权限申请与开通时限的制度原文。",
-  "follow_up": "检索服务暂不可用，请稍后重试；或告知门禁制度的具体文件名称/编号，以便直接定位原文。",
+  "gap": "检索服务连续三次不可用，未能获取任何门禁权限申请与开通时限的制度原文。",
+  "follow_up": "检索服务恢复后，是否需要我重新查询\"新员工门禁权限开通时限\"？",
   "run": {
     "mode": "live",
     "provider": "deepseek",
     "model": "deepseek-flash",
     "api_requests": 4,
     "usage": {
-      "prompt_tokens": 5233,
-      "completion_tokens": 352
+      "prompt_tokens": 5422,
+      "completion_tokens": 346
     },
     "max_steps": 8,
     "steps_used": 4,
@@ -55,7 +55,7 @@
       "arguments": {
         "query": "门禁"
       },
-      "reason": "再次以最简主题词尝试检索，确认检索服务是否恢复",
+      "reason": "再次以最简主题词重试检索，确认检索服务是否恢复",
       "observation": {
         "ok": false,
         "error": "search_unavailable",
@@ -70,15 +70,15 @@
       "arguments": {
         "status": "tool_error",
         "citations": [],
-        "gap": "检索服务连续三次不可用，无法获取门禁权限申请与开通时限的制度原文。",
-        "follow_up": "检索服务暂不可用，请稍后重试；或告知门禁制度的具体文件名称/编号，以便直接定位原文。"
+        "gap": "检索服务连续三次不可用，未能获取任何门禁权限申请与开通时限的制度原文。",
+        "follow_up": "检索服务恢复后，是否需要我重新查询\"新员工门禁权限开通时限\"？"
       },
-      "reason": "三次不同主题词检索均返回服务不可用，关键证据无法读取。",
+      "reason": "三次不同主题词检索均返回服务不可用，无原文可引用。",
       "observation": {
         "ok": true,
         "status": "tool_error",
         "citations": [],
-        "gap": "检索服务连续三次不可用，无法获取门禁权限申请与开通时限的制度原文。"
+        "gap": "检索服务连续三次不可用，未能获取任何门禁权限申请与开通时限的制度原文。"
       },
       "tool_calls_remaining": 3,
       "next_action": null

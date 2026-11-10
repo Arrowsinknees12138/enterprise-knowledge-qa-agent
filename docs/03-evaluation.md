@@ -1,6 +1,32 @@
 # 评估与复现
 
-2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行扩展版。单元测试 18/18，Mock CLI 验收 12/12，DeepSeek 官方 API 的完整一轮 CLI 验收 19/19。DashScope 日志保存上一版 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 验收输出](../examples/deepseek-evaluation.txt) · [上一版 DashScope 验收输出](../examples/live-evaluation.txt)
+2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 21/21，Mock CLI 验收 12/12，DeepSeek 常规回归 19/19。DeepSeek 官方 API 另用于冻结对照评估，改动前 11/12，改动后 12/12。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+
+## 冻结对照评估
+
+Codex 在首次调用模型之前拟定并提交了 12 道新问题及标准答案，提交为 `2367ed9`。评分器只将问题和可选历史传给 Agent。基线和改动后均使用 `deepseek-flash`，报告记录了相同的题集与语料 SHA-256，以及各自运行的代码提交。[冻结题集](../examples/holdout/cases.json) · [基线报告](../examples/holdout/baseline.json) · [改动后报告](../examples/holdout/after.json)
+
+| 指标 | 改动前 | 改动后 |
+| --- | ---: | ---: |
+| 逐题通过 | 11/12 | 12/12 |
+| 最终状态匹配 | 12/12 | 12/12 |
+| 应引用题的片段集合完全匹配 | 6/7 | 7/7 |
+| 首轮检索 Hit@3 | 11/11 | 11/11 |
+| 首轮 Top 3 覆盖全部标注相关文档 | 11/11 | 11/11 |
+| 无依据或混入不适用引用的回答 | 1/12 | 0/12 |
+
+逐题通过要求状态、引用集合和必要追问符合标准。引用文字还需与 Trace 中实际读取的片段完全一致。Hit@3 指首次检索的前三名至少包含一份标注相关文档，分母为 11，排除语料中本就没有相关文档的健身房报销题。无依据回答计数包括 `answered` 状态错误或引用集合不符合该题标准的情况。
+
+基线 H05 正确找到旧版和替代版，也在决策依据中判断出 2025 年 5 月适用旧规。最终却同时引用了旧规的 10 个工作日和 7 月才生效的 5 个工作日。提示词现在要求只引用直接回答所问字段、且适用于指定对象和日期的片段。仅用于排除其他版本的依据保留在 Trace。复测中 H05 只引用了 D08/P1，H06 询问新版生效日与期限时仍正确引用 D09/P1。[基线逐步记录](../examples/holdout/baseline.json) · [复测逐步记录](../examples/holdout/after.json)
+
+设置 `DEEPSEEK_API_KEY` 后可复跑全组，或只复跑 H05。
+
+```text
+python tests/run_holdout.py --output holdout-replay.json
+python tests/run_holdout.py --case H05-historical-rule --output holdout-h05.json
+```
+
+题集使用同一批合成文档，由 AI 拟定。改动后结果属于同题对照复测。结果说明本次改动纠正了观测到的引用问题，对其他未知问题的表现仍需另行评估。
 
 ## 真实模型验收
 
@@ -50,7 +76,7 @@ python tests/run_examples.py --mode live
 
 DeepSeek 官方 API 首轮通过 9 组用例。第 10 组正确返回 `insufficient_evidence`，但将只说明申请方式的段落放进了引用列表，未通过验收。修复后，该状态的背景片段保留在 Trace，最终答案与引用均为空，并增加了回归单测。[首轮第 10 组输出](../examples/deepseek-initial-missing-detail.json)
 
-前一版重跑时，资料外问题曾遇到模型连接或超时类错误。现有评估器遇到连接类错误会把该用例重跑一次，也可用 `--case` 定向复跑。该重跑属于评估脚本，单次 Agent 请求的工具与步数预算独立计量。扩展版本次完整一轮通过 19/19。[本轮实跑日志](../examples/deepseek-evaluation.txt)
+本次常规回归中的检索失败场景遇到一次模型连接或超时类错误，评估器重跑该用例后通过。也可用 `--case` 定向复跑。该重跑属于评估脚本，单次 Agent 请求的工具与步数预算独立计量。[本轮实跑日志](../examples/deepseek-evaluation.txt)
 
 全量命令为 `python tests/run_examples.py --mode live --provider deepseek`，输出位于 `examples/deepseek/`。
 

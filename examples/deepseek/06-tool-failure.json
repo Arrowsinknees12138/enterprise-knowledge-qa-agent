@@ -2,16 +2,16 @@
   "status": "tool_error",
   "answer": "",
   "citations": [],
-  "gap": "唯一相关文档《门禁权限申请 FAQ》(D03) 的原文读取服务连续两次不可用，无法获取开通时限的具体条款。",
-  "follow_up": "是否可以在文档读取服务恢复后重试，或由您提供《门禁权限申请 FAQ》中关于开通时限的原文？",
+  "gap": "唯一相关文档《门禁权限申请 FAQ》(D03) 的原文读取服务连续失败，无法获取开通时限的具体条款。",
+  "follow_up": "是否需要稍后重试读取《门禁权限申请 FAQ》，或由您提供该 FAQ 中关于开通时限的原文？",
   "run": {
     "mode": "live",
     "provider": "deepseek",
     "model": "deepseek-flash",
     "api_requests": 5,
     "usage": {
-      "prompt_tokens": 7137,
-      "completion_tokens": 423
+      "prompt_tokens": 7371,
+      "completion_tokens": 422
     },
     "max_steps": 8,
     "steps_used": 5,
@@ -84,9 +84,9 @@
       "step": 4,
       "action": "search_docs",
       "arguments": {
-        "query": "门禁 开通 工作日 审批流程"
+        "query": "门禁 开通 工作日 审批"
       },
-      "reason": "读取服务不可用，尝试换主题词检索是否有其他门禁制度文档",
+      "reason": "读取服务不可用，换主题词补查是否有其他门禁时限文档",
       "observation": {
         "ok": true,
         "total": 1,
@@ -115,15 +115,15 @@
       "arguments": {
         "status": "tool_error",
         "citations": [],
-        "gap": "唯一相关文档《门禁权限申请 FAQ》(D03) 的原文读取服务连续两次不可用，无法获取开通时限的具体条款。",
-        "follow_up": "是否可以在文档读取服务恢复后重试，或由您提供《门禁权限申请 FAQ》中关于开通时限的原文？"
+        "gap": "唯一相关文档《门禁权限申请 FAQ》(D03) 的原文读取服务连续失败，无法获取开通时限的具体条款。",
+        "follow_up": "是否需要稍后重试读取《门禁权限申请 FAQ》，或由您提供该 FAQ 中关于开通时限的原文？"
       },
-      "reason": "检索仅命中 D03，但读取两次均失败，关键证据无法获取。",
+      "reason": "检索仅命中 D03，但两次读取均返回服务不可用，关键证据无法获取。",
       "observation": {
         "ok": true,
         "status": "tool_error",
         "citations": [],
-        "gap": "唯一相关文档《门禁权限申请 FAQ》(D03) 的原文读取服务连续两次不可用，无法获取开通时限的具体条款。"
+        "gap": "唯一相关文档《门禁权限申请 FAQ》(D03) 的原文读取服务连续失败，无法获取开通时限的具体条款。"
       },
       "tool_calls_remaining": 2,
       "next_action": null

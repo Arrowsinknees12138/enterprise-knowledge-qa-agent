@@ -12,10 +12,11 @@ PASS 11-attachment-noise: answered | search_docs -> read_doc -> finish -> read_d
 PASS 12-multipassage: answered | search_docs -> read_doc -> finish
 PASS 13-explicit-supersession: answered | search_docs -> read_doc -> read_doc -> finish
 PASS 14-audience-scope: answered | search_docs -> read_doc -> finish -> read_doc -> finish
-PASS 15-ambiguous: needs_clarification | search_docs -> search_docs -> finish
+PASS 15-ambiguous: needs_clarification | finish
+RETRY 16-search-failure: model connection or timeout
 PASS 16-search-failure: tool_error | search_docs -> search_docs -> search_docs -> finish
 PASS 17-tool-limit: tool_limit | search_docs -> read_doc
 PASS 18-finish-at-limit: answered | search_docs -> read_doc -> finish
 PASS 19-password: answered | search_docs -> read_doc -> finish
-Live provider tokens: {"prompt_tokens": 94705, "completion_tokens": 6420}
+Live provider tokens: {"prompt_tokens": 95196, "completion_tokens": 6215}
 19/19 live example checks passed

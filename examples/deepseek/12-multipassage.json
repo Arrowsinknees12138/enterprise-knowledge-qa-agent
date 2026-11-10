@@ -18,8 +18,8 @@
     "model": "deepseek-flash",
     "api_requests": 3,
     "usage": {
-      "prompt_tokens": 3998,
-      "completion_tokens": 262
+      "prompt_tokens": 4136,
+      "completion_tokens": 261
     },
     "max_steps": 8,
     "steps_used": 3,
@@ -33,7 +33,7 @@
       "arguments": {
         "query": "企业邮箱 已删除邮件 回收站 保留期限"
       },
-      "reason": "检索企业邮箱回收站保留期限相关制度条款",
+      "reason": "检索企业邮箱回收站保留期限相关制度",
       "observation": {
         "ok": true,
         "total": 1,
@@ -66,7 +66,7 @@
       "arguments": {
         "doc_id": "D04"
       },
-      "reason": "唯一候选文档，需读取原文确认回收站保留期限",
+      "reason": "读取唯一候选文档以核对回收站保留期限原文",
       "observation": {
         "ok": true,
         "doc_id": "D04",
@@ -105,7 +105,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "FAQ 原文明确写明回收站邮件自删除起保留 30 天，无冲突版本。",
+      "reason": "FAQ 原文明确写明回收站邮件自删除起保留 30 天，直接回答所问。",
       "observation": {
         "ok": true,
         "status": "answered",
