@@ -1,0 +1,188 @@
+[
+  {
+    "id": "S01-visitor-lead-time", "group": "direct",
+    "question": "下周有外部来访，接待同事至少应该提前几个工作日申请临时通行？",
+    "status": "answered", "refs": ["D06/P1"], "relevant_docs": ["D06"]
+  },
+  {
+    "id": "S02-mail-recipient-cap", "group": "direct",
+    "question": "用企业邮箱群发，单封邮件最多能填多少个收件人？",
+    "status": "answered", "refs": ["D04/P3"], "relevant_docs": ["D04"]
+  },
+  {
+    "id": "S03-drive-two-fields", "group": "direct",
+    "question": "请同时告诉我企业云盘单个上传文件的大小上限，以及外部分享链接默认多久失效。",
+    "status": "answered", "refs": ["D07/P1", "D07/P2"], "relevant_docs": ["D07"]
+  },
+  {
+    "id": "S04-new-access-clock", "group": "direct",
+    "question": "新员工的门禁办理时限是从什么时候开始算，行政最迟几个工作日开通？",
+    "status": "answered", "refs": ["D03/P1"], "relevant_docs": ["D03"]
+  },
+  {
+    "id": "S05-card-loss-prerequisite", "group": "direct",
+    "question": "门禁卡遗失后，提交补办申请之前必须先办哪一步？",
+    "status": "answered", "refs": ["D05/P1"], "relevant_docs": ["D05"]
+  },
+  {
+    "id": "S06-reset-link-validity", "group": "direct",
+    "question": "企业账号服务台刚生成一条密码重置链接，我有多长时间可以使用？",
+    "status": "answered", "refs": ["D12/P1"], "relevant_docs": ["D12"]
+  },
+  {
+    "id": "S07-paraphrase-building-access", "group": "context",
+    "question": "刚来公司的同事办好了进办公楼的申请，啥时候能拿工牌刷进去？",
+    "status": "answered", "refs": ["D03/P1"], "relevant_docs": ["D03"]
+  },
+  {
+    "id": "S08-switch-drive-to-mail", "group": "context",
+    "question": "换成公司邮箱发呢？我问一封信能带多大的附件。",
+    "history": [
+      {"role": "user", "content": "企业云盘单个文件能传多大？"},
+      {"role": "assistant", "content": "云盘单文件上传上限为 2 GB。"}
+    ],
+    "status": "answered", "refs": ["D04/P1"], "relevant_docs": ["D04"]
+  },
+  {
+    "id": "S09-follow-up-project-approval", "group": "context",
+    "question": "那除了交申请，项目负责人还需要确认吗？",
+    "history": [
+      {"role": "user", "content": "我是外包驻场人员，想申请远程办公。"},
+      {"role": "assistant", "content": "我可以帮你核对提交时间和审批要求。"}
+    ],
+    "status": "answered", "refs": ["D11/P1"], "relevant_docs": ["D11"]
+  },
+  {
+    "id": "S10-correct-false-history", "group": "context",
+    "question": "请按产品 FAQ 核对，服务台发的那条链接到底多久就作废？",
+    "history": [
+      {"role": "user", "content": "我忘了企业账号密码，拿到了重置链接。"},
+      {"role": "assistant", "content": "我记得应该是 60 分钟。"}
+    ],
+    "status": "answered", "refs": ["D12/P1"], "relevant_docs": ["D12"]
+  },
+  {
+    "id": "S11-paraphrase-external-share", "group": "context",
+    "question": "网盘分享地址发给公司外的人，不改设置的话，几天后别人就打不开了？",
+    "status": "answered", "refs": ["D07/P2"], "relevant_docs": ["D07"]
+  },
+  {
+    "id": "S12-lost-card-fee", "group": "gap",
+    "question": "补办一张丢失的门禁卡需要交多少工本费？",
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": ["D05"]
+  },
+  {
+    "id": "S13-out-of-scope-parcel", "group": "gap",
+    "question": "前台代收的私人快递会保管多少天？逾期怎么处理？",
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": []
+  },
+  {
+    "id": "S14-remote-weekly-quota", "group": "gap",
+    "question": "正式员工每周最多能申请在家办公几天？我问每周配额。",
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": ["D10"]
+  },
+  {
+    "id": "S15-repair-prepayment", "group": "gap",
+    "question": "报修设备后，维修费需要员工先垫付吗？制度对付款方式有规定吗？",
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": ["D08", "D09"]
+  },
+  {
+    "id": "S16-drive-custom-expiry", "group": "gap",
+    "question": "企业云盘对外分享时，普通员工可以把外链改成永不过期吗？",
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": ["D07"]
+  },
+  {
+    "id": "S17-attachment-count-not-size", "group": "gap",
+    "question": "企业邮箱一封邮件最多能加几个附件？我只问附件个数上限。",
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": ["D04"]
+  },
+  {
+    "id": "S18-unspecified-link", "group": "clarification",
+    "question": "那个链接的有效期是多久？",
+    "status": "needs_clarification", "refs": [], "relevant_docs": []
+  },
+  {
+    "id": "S19-ambiguous-history-reference", "group": "clarification",
+    "question": "我现在只想查其中一项：刚才那个文件大小上限是多少？",
+    "history": [
+      {"role": "user", "content": "我在比较企业邮箱附件和企业云盘上传的限制。"},
+      {"role": "assistant", "content": "这两项都有各自的文件大小限制，你可以指定其中一项。"}
+    ],
+    "status": "needs_clarification", "refs": [],
+    "allowed_context_refs": ["D04/P1", "D07/P1"], "relevant_docs": []
+  },
+  {
+    "id": "S20-unconfirmed-worker-type", "group": "clarification",
+    "question": "所以我自己提交在家办公申请，应该提前几个工作日？",
+    "history": [
+      {"role": "user", "content": "我们项目里既有正式员工也有外包人员。"},
+      {"role": "assistant", "content": "两类人员可能适用不同的远程办公申请流程。"}
+    ],
+    "status": "needs_clarification", "refs": [],
+    "allowed_context_refs": ["D10/P1", "D11/P1"],
+    "follow_up_terms": ["正式", "外包"], "relevant_docs": ["D10", "D11"]
+  },
+  {
+    "id": "S21-unresolved-deadline", "group": "policy",
+    "question": "差旅报销申请在出差结束后最晚多久提交？有人说 15 天，也有人说 30 天，请以制度原文为准。",
+    "status": "conflict", "refs": ["D01/P1", "D02/P1"], "relevant_docs": ["D01", "D02"],
+    "next_after_read": {"docs": ["D01", "D02"], "action": "search_docs"}
+  },
+  {
+    "id": "S22-align-deadline-to-fifteen", "group": "policy",
+    "question": "差旅报销申请在出差结束后最晚多久提交？有人说 15 天，也有人说 30 天，请以制度原文为准。",
+    "status": "answered", "refs": ["D01/P1", "D02/P1"],
+    "acceptable_refs": [["D01/P1"], ["D02/P1"], ["D01/P1", "D02/P1"]],
+    "relevant_docs": ["D01", "D02"],
+    "corpus_edit": {
+      "doc_id": "D01", "passage_id": "P1",
+      "text": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+    },
+    "next_after_read": {"docs": ["D01", "D02"], "action": "finish"}
+  },
+  {
+    "id": "S23-on-effective-date", "group": "policy",
+    "question": "设备故障是在 2025 年 7 月 1 日发现的，以当天有效的制度为准，维修申请须在几个工作日内提交？",
+    "status": "answered", "refs": ["D09/P1"], "relevant_docs": ["D08", "D09"]
+  },
+  {
+    "id": "S24-day-before-effective-date", "group": "policy",
+    "question": "设备故障是在 2025 年 6 月 30 日发现的，以当天有效的制度为准，维修申请须在几个工作日内提交？",
+    "status": "answered", "refs": ["D08/P1"], "relevant_docs": ["D08", "D09"]
+  },
+  {
+    "id": "S25-formal-worker-false-premise", "group": "policy",
+    "question": "我是正式员工，听外包同事说提前 1 个工作日就能申请远程办公。按适用于我的规则，至少提前多久？",
+    "status": "answered", "refs": ["D10/P1"], "relevant_docs": ["D10"]
+  },
+  {
+    "id": "S26-search-unavailable", "group": "operations",
+    "question": "企业邮箱单封邮件的附件总大小上限是多少？",
+    "status": "tool_error", "refs": [], "relevant_docs": [],
+    "fail_tool": "search_docs", "observation_error": "search_unavailable"
+  },
+  {
+    "id": "S27-read-unavailable", "group": "operations",
+    "question": "企业云盘外部分享链接默认多久过期？",
+    "status": "tool_error", "refs": [], "relevant_docs": [],
+    "fail_tool": "read_doc", "observation_error": "read_unavailable"
+  },
+  {
+    "id": "S28-step-budget", "group": "operations",
+    "question": "公司账号的密码重置链接有效多久？",
+    "status": "step_limit", "refs": [], "relevant_docs": [],
+    "max_steps": 1, "expected_run": {"steps_used": 1, "tool_calls_used": 1}
+  },
+  {
+    "id": "S29-zero-tool-budget", "group": "operations",
+    "question": "企业账号密码重置链接是多少分钟有效？",
+    "status": "tool_limit", "refs": [], "relevant_docs": [],
+    "max_tool_calls": 0, "observation_error": "tool_limit", "expected_run": {"tool_calls_used": 0}
+  },
+  {
+    "id": "S30-finish-at-tool-budget", "group": "operations",
+    "question": "通过企业账号服务台生成密码重置链接后，有效期多少分钟？",
+    "status": "answered", "refs": ["D12/P1"], "relevant_docs": ["D12"],
+    "max_tool_calls": 2, "expected_run": {"tool_calls_used": 2, "max_tool_calls": 2}
+  }
+]
