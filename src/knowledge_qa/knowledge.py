@@ -9,6 +9,7 @@ from pathlib import Path
 SEARCH_PAGE_SIZE = 5
 AUTHORITY_TERMS = ("适用", "优先", "废止", "替代", "生效", "效力", "层级", "口径", "现行", "适用对象")
 GENERAL_AUTHORITY_QUERIES = ("制度效力", "制度优先", "制度层级", "政策优先", "规章效力", "政策冲突处理")
+MULTI_FIELD_REQUESTS = ("分别", "同时告诉", "请同时", "两项都", "两个期限都", "两个规则都", "两种链接")
 
 
 # Match a self-contained question that asks only for a start event and a deadline.
@@ -123,15 +124,24 @@ class KnowledgeBase:
             ],
         }
 
-    def wrong_passage_topics(self, question, refs):
+    def citation_topic_error(self, question, refs, reads):
         query = normalize(question)
-        wrong = []
-        for doc_id, passage_id in refs:
-            topics = self.documents[doc_id].get("passage_topics", {})
-            matching = matching_passage_ids(topics, query)
-            if matching and passage_id not in matching:
-                wrong.append(f"{doc_id}/{passage_id}")
-        return wrong
+        matching = {
+            doc_id: matching_passage_ids(self.documents[doc_id].get("passage_topics", {}), query)
+            for doc_id in reads
+        }
+        wrong = [
+            f"{doc_id}/{passage_id}" for doc_id, passage_id in refs
+            if matching[doc_id] and passage_id not in matching[doc_id]
+        ]
+        if wrong:
+            return f"以下片段与问题所问字段不符：{', '.join(wrong)}"
+        if any(marker in query for marker in MULTI_FIELD_REQUESTS):
+            expected = {(doc_id, passage_id) for doc_id, ids in matching.items() for passage_id in ids}
+            missing = [f"{doc_id}/{passage_id}" for doc_id, passage_id in sorted(expected - refs.keys())]
+            if missing:
+                return f"问题明确询问多项内容，请补充缺少的原文片段：{', '.join(missing)}"
+        return ""
 
     def conflicting_refs(self, reads):
         groups = defaultdict(dict)

@@ -274,9 +274,9 @@ class Evidence:
         if status == "answered":
             if not refs:
                 return rejection("回答至少需要一个有效引用")
-            wrong_topics = self.knowledge.wrong_passage_topics(self.question, refs)
-            if wrong_topics:
-                return rejection(f"以下片段与问题所问字段不符：{', '.join(wrong_topics)}")
+            topic_error = self.knowledge.citation_topic_error(self.question, refs, self.reads)
+            if topic_error:
+                return rejection(topic_error)
             for conflict in self.knowledge.conflicting_refs(self.reads):
                 if conflict.intersection(refs):
                     pairs = ", ".join(f"{doc_id}/{passage_id}" for doc_id, passage_id in sorted(conflict))

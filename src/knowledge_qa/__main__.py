@@ -9,6 +9,7 @@ from .models import LIVE_PROVIDERS, LiveModel, MockModel
 
 
 DEFAULT_CORPUS = Path(__file__).resolve().parents[2] / "data" / "knowledge.json"
+TRACE_ACTIONS = {"search_docs", "read_doc", "finish", "model_error", "step_limit", "tool_limit", "time_limit", None}
 
 
 def load_input(args):
@@ -35,8 +36,8 @@ def redact_trace(trace):
     return [
         {
             "step": entry["step"],
-            "action": entry["action"],
-            "next_action": entry["next_action"],
+            "action": entry["action"] if entry["action"] in TRACE_ACTIONS else "unknown_action",
+            "next_action": entry["next_action"] if entry["next_action"] in TRACE_ACTIONS else "unknown_action",
             "tool_calls_remaining": entry["tool_calls_remaining"],
             "observation": {
                 key: value for key, value in entry["observation"].items()

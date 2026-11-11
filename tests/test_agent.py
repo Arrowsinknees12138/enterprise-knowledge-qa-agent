@@ -93,6 +93,18 @@ class KnowledgeTests(unittest.TestCase):
         correct = evidence.finish({**args, "citations": [{"doc_id": "D04", "passage_id": "P2"}]})
         self.assertTrue(correct["ok"])
 
+    def test_explicit_multi_field_question_rejects_incomplete_citations(self):
+        evidence = Evidence(
+            self.knowledge, question="请同时告诉我云盘单个上传文件的大小上限，以及外部分享链接多久失效。",
+        )
+        evidence.execute("search_docs", {"query": "云盘"})
+        evidence.execute("read_doc", {"doc_id": "D07"})
+        args = {"status": "answered", "gap": "", "follow_up": ""}
+        refs = [{"doc_id": "D07", "passage_id": "P2"}]
+        self.assertIn("D07/P1", evidence.finish({**args, "citations": refs})["message"])
+        refs.append({"doc_id": "D07", "passage_id": "P1"})
+        self.assertTrue(evidence.finish({**args, "citations": refs})["ok"])
+
     def test_runtime_rejects_single_answer_after_both_conflicting_versions_are_read(self):
         evidence = Evidence(self.knowledge)
         evidence.execute("search_docs", {"query": "差旅报销"})
@@ -188,6 +200,9 @@ class KnowledgeTests(unittest.TestCase):
         self.assertNotIn("门禁", encoded)
         self.assertNotIn("arguments", encoded)
         self.assertNotIn("quote", encoded)
+        result["trace"][0]["action"] = "门禁专用动作"
+        result["trace"][0]["next_action"] = "门禁专用动作"
+        self.assertNotIn("门禁", json.dumps(redact_trace(result["trace"]), ensure_ascii=False))
 
     def test_time_budget_stops_before_executing_a_late_model_action(self):
         model = ScriptedModel(("search_docs", {"query": "门禁"}))
