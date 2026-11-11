@@ -338,8 +338,16 @@ class Evidence:
             documents = {doc_id for doc_id, _ in refs}
             if len(documents) < 2:
                 return rejection("冲突状态至少需要引用两份不同文档")
+            scope_error = self.knowledge.conflict_scope_error(refs)
+            if scope_error:
+                return rejection(scope_error)
+            topic_error = self.knowledge.citation_topic_error(self.question, refs, active_reads)
+            if topic_error:
+                return rejection(topic_error)
             for values in self.knowledge.policy_values(active_reads):
-                if refs.keys() <= values.keys() and all(values[ref] for ref in refs):
+                if refs.keys() <= values.keys():
+                    if not all(values[ref] for ref in refs):
+                        return rejection("引用中有条款无法核对已登记的数值，请说明资料缺口。")
                     if len(set().union(*(values[ref] for ref in refs))) == 1:
                         return rejection("引用的同一规则数值一致，无法据此报告冲突。")
             if not any(

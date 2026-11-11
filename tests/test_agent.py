@@ -216,6 +216,40 @@ class KnowledgeTests(unittest.TestCase):
         self.assertEqual(check["unread_doc_ids"], [])
         self.assertTrue(evidence.execute("finish", end)["ok"])
 
+    def test_conflict_rejects_unrelated_clauses_after_authority_search(self):
+        evidence = Evidence(self.knowledge, question="企业邮箱回收站保留多久？")
+        evidence.search({"query": "企业邮箱 云盘"})
+        for doc_id in ("D04", "D07"):
+            evidence.execute("read_doc", {"doc_id": doc_id})
+        evidence.search({"query": "企业邮箱 云盘 制度优先级"})
+        result = evidence.finish({
+            "status": "conflict",
+            "citations": [{"doc_id": doc_id, "passage_id": "P2"} for doc_id in ("D04", "D07")],
+            "gap": "期限不同", "follow_up": "哪份适用？",
+        })
+        self.assertFalse(result["ok"])
+        self.assertIn("同一", result["message"])
+
+    def test_conflict_rejects_distinct_audiences_but_allows_unmarked_versions_of_one_rule(self):
+        for doc_ids, query, expected in [
+            (("D10", "D11"), "远程办公", False),
+            (("D01", "D02"), "差旅报销", True),
+        ]:
+            with self.subTest(query=query):
+                for doc_id in doc_ids:
+                    self.knowledge.documents[doc_id].pop("conflict_check", None)
+                evidence = Evidence(self.knowledge, question=f"{query}的期限是多少？")
+                evidence.search({"query": query})
+                for doc_id in doc_ids:
+                    evidence.execute("read_doc", {"doc_id": doc_id})
+                evidence.search({"query": f"{query} 制度优先级"})
+                result = evidence.finish({
+                    "status": "conflict",
+                    "citations": [{"doc_id": doc_id, "passage_id": "P1"} for doc_id in doc_ids],
+                    "gap": "期限不同", "follow_up": "哪份适用？",
+                })
+                self.assertEqual(result["ok"], expected)
+
     def test_no_final_answer_before_remaining_candidate_pages_are_read(self):
         records = [
             {

@@ -212,6 +212,35 @@ class KnowledgeBase:
                     return f"{doc_id}/{passage_id} 明示适用于{scope}，请核对问题所问人群或说明缺口。"
         return ""
 
+    def policy_group(self, doc_id, passage_id=None):
+        rule = self.documents[doc_id].get("conflict_check")
+        if rule and (passage_id is None or passage_id == rule["passage_id"]):
+            return rule["key"]
+        return None
+
+    def conflict_scope_error(self, refs):
+        scopes = {clause_audience(ref["quote"]) for ref in refs.values()} - {None}
+        if len(scopes) > 1:
+            return "冲突引用适用于不同人群，请核对是否在比较同一规则。"
+        quotes = {compact_clause(ref["quote"]) for ref in refs.values()}
+        if len(quotes) < 2:
+            return "冲突引用的原文一致，无法据此报告冲突。"
+        groups = {self.policy_group(*ref) for ref in refs}
+        if len(groups - {None}) > 1:
+            return "冲突引用分属不同的已标注规则，请核对同一规则的原文。"
+        if None not in groups:
+            return ""
+        fields, terms = [], []
+        for (doc_id, passage_id), ref in refs.items():
+            doc = self.documents[doc_id]
+            if aliases := doc.get("passage_topics", {}).get(passage_id):
+                fields.append(set(map(normalize, aliases)))
+            quote = normalize(ref["quote"])
+            terms.append({term for term in map(normalize, doc["terms"]) if term in quote})
+        if (fields and not set.intersection(*fields)) or not set.intersection(*terms):
+            return "冲突引用缺少同一规则或字段的共同依据，请核对可比较的原文。"
+        return ""
+
     def policy_values(self, reads):
         groups = defaultdict(dict)
         for doc_id, observed in reads.items():
