@@ -6,6 +6,7 @@ test_deadline_correction_uses_the_observed_source (test_agent.KnowledgeTests.tes
 test_deepseek_replays_tool_observations_over_chat_completions (test_agent.KnowledgeTests.test_deepseek_replays_tool_observations_over_chat_completions) ... ok
 test_deepseek_requires_its_own_key (test_agent.KnowledgeTests.test_deepseek_requires_its_own_key) ... ok
 test_document_scope_applies_to_search_and_read (test_agent.KnowledgeTests.test_document_scope_applies_to_search_and_read) ... ok
+test_equal_numeric_values_accept_answer_and_reject_false_conflict (test_agent.KnowledgeTests.test_equal_numeric_values_accept_answer_and_reject_false_conflict) ... ok
 test_explicit_applicable_deadline_corrects_false_refusal (test_agent.KnowledgeTests.test_explicit_applicable_deadline_corrects_false_refusal) ... ok
 test_explicit_multi_field_question_rejects_incomplete_citations (test_agent.KnowledgeTests.test_explicit_multi_field_question_rejects_incomplete_citations) ... ok
 test_insufficient_evidence_keeps_background_out_of_answer_citations (test_agent.KnowledgeTests.test_insufficient_evidence_keeps_background_out_of_answer_citations) ... ok
@@ -13,17 +14,23 @@ test_invalid_citation_is_observed_and_corrected (test_agent.KnowledgeTests.test_
 test_limit_marks_unfinished_without_citations (test_agent.KnowledgeTests.test_limit_marks_unfinished_without_citations) ... ok
 test_missing_live_key_reports_model_error_without_mocking (test_agent.KnowledgeTests.test_missing_live_key_reports_model_error_without_mocking) ... ok
 test_model_authentication_errors_are_not_retried (test_agent.KnowledgeTests.test_model_authentication_errors_are_not_retried) ... ok
+test_narrow_search_cannot_drop_other_question_matches (test_agent.KnowledgeTests.test_narrow_search_cannot_drop_other_question_matches) ... ok
+test_narrow_search_replaces_broad_scope_and_discards_stale_candidates (test_agent.KnowledgeTests.test_narrow_search_replaces_broad_scope_and_discards_stale_candidates) ... ok
 test_no_final_answer_before_remaining_candidate_pages_are_read (test_agent.KnowledgeTests.test_no_final_answer_before_remaining_candidate_pages_are_read) ... ok
+test_numeric_conflict_is_detected_with_an_extra_sentence (test_agent.KnowledgeTests.test_numeric_conflict_is_detected_with_an_extra_sentence) ... ok
 test_punctuation_only_is_rejected_as_input (test_agent.KnowledgeTests.test_punctuation_only_is_rejected_as_input) ... ok
 test_redacted_trace_omits_queries_and_read_text (test_agent.KnowledgeTests.test_redacted_trace_omits_queries_and_read_text) ... ok
 test_retrieval_keeps_distractors_and_ranks_specific_mailbox_matches_first (test_agent.KnowledgeTests.test_retrieval_keeps_distractors_and_ranks_specific_mailbox_matches_first) ... ok
 test_runtime_does_not_accept_a_single_unchecked_policy_version (test_agent.KnowledgeTests.test_runtime_does_not_accept_a_single_unchecked_policy_version) ... ok
+test_runtime_rejects_a_quote_from_the_wrong_product (test_agent.KnowledgeTests.test_runtime_rejects_a_quote_from_the_wrong_product) ... ok
 test_runtime_rejects_single_answer_after_both_conflicting_versions_are_read (test_agent.KnowledgeTests.test_runtime_rejects_single_answer_after_both_conflicting_versions_are_read) ... ok
 test_runtime_rejects_unsearched_reads_and_invalid_arguments (test_agent.KnowledgeTests.test_runtime_rejects_unsearched_reads_and_invalid_arguments) ... ok
 test_runtime_rejects_wrong_field_in_the_correct_document (test_agent.KnowledgeTests.test_runtime_rejects_wrong_field_in_the_correct_document) ... ok
 test_search_error_remains_distinct_from_empty_results (test_agent.KnowledgeTests.test_search_error_remains_distinct_from_empty_results) ... ok
+test_search_failure_survives_unrelated_empty_search_until_same_query_recovers (test_agent.KnowledgeTests.test_search_failure_survives_unrelated_empty_search_until_same_query_recovers) ... ok
 test_search_returns_both_versions_without_exposing_text (test_agent.KnowledgeTests.test_search_returns_both_versions_without_exposing_text) ... ok
 test_search_supports_local_aliases_and_unicode_normalization (test_agent.KnowledgeTests.test_search_supports_local_aliases_and_unicode_normalization) ... ok
+test_time_budget_returns_while_model_is_still_blocked (test_agent.KnowledgeTests.test_time_budget_returns_while_model_is_still_blocked) ... ok
 test_time_budget_stops_before_executing_a_late_model_action (test_agent.KnowledgeTests.test_time_budget_stops_before_executing_a_late_model_action) ... ok
 test_tool_failures_consume_budget_and_are_not_cached (test_agent.KnowledgeTests.test_tool_failures_consume_budget_and_are_not_cached) ... ok
 test_tool_limit_blocks_actual_read_before_it_runs (test_agent.KnowledgeTests.test_tool_limit_blocks_actual_read_before_it_runs) ... ok
@@ -40,6 +47,6 @@ test_transition_checked_after_required_read (test_holdout.HoldoutScoringTests.te
 test_variant_changes_one_passage_without_mutating_base (test_holdout.HoldoutScoringTests.test_variant_changes_one_passage_without_mutating_base) ... ok
 
 ----------------------------------------------------------------------
-Ran 40 tests in 0.040s
+Ran 47 tests in 0.150s
 
 OK

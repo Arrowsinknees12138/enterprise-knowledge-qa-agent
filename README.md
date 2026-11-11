@@ -82,7 +82,7 @@ python tests/run_holdout.py --dataset examples/regression-corpus/cases.json --co
 ```
 
 - [验收矩阵与复现方法](docs/03-evaluation.md)
-- [新增 20 题与标准答案](examples/scenarios-50/additional-cases.json) · [最新 50/50 实跑](examples/scenarios-50/hardened.json) · [替代语料实跑](examples/regression-corpus/live.json) · [评估和复核](docs/03-evaluation.md#审阅修复回归)
+- [新增 20 题与标准答案](examples/scenarios-50/additional-cases.json) · [最新 50/50 实跑](examples/scenarios-50/audit-repair.json) · [替代语料 4/4 实跑](examples/regression-corpus/audit-repair.json) · [本轮评估和复核](docs/03-evaluation.md#本轮审阅回归)
 - [30 题场景集与标准答案](examples/scenarios-30/cases.json) · [最终实跑报告](examples/scenarios-30/after.json)
 - [冻结对照题与标准答案](examples/holdout/cases.json) · [改动前记录](examples/holdout/baseline.json) · [改动后记录](examples/holdout/after.json)
 - [DeepSeek 官方 API 实跑记录](examples/deepseek-evaluation.txt)

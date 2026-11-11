@@ -1,6 +1,24 @@
 # 评估与复现
 
-2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 40/40，Mock CLI 验收 12/12。常规回归在代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 47/47，Mock CLI 验收 12/12。常规回归在代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+
+## 本轮审阅回归
+
+新增 7 个单元测试。模型动作由测试控制，可以稳定重放原先会漏判的路径。[回归测试](../tests/test_agent.py)
+
+| 验证输入或动作 | 实际结果 |
+| --- | --- |
+| 读取邮箱和云盘后，尝试用云盘外链期限回答邮箱回收站保留期 | 拒绝结束并指出应核对的 D04/P2，改引 D04/P2 后可结束 |
+| 15 天的条款后附加保留凭证说明，与另一份 30 天的条款一起读取 | 仍检测到数值冲突 |
+| 同一制度写作 15 天与 15.0 天，读完并补查优先级 | 允许依据原文作答，拒绝报告数值冲突 |
+| 6 个广搜候选中只有 1 个命中问题关键词，再检索精准主题 | 替换广搜候选和待翻页范围，旧范围独有的文档不能被引用 |
+| 精准查询漏掉旧范围中另一份同主题的制度 | 保留另一份制度供核对 |
+| 目标查询失败，无关查询成功但无结果 | 保留原故障，同一查询同一页成功后继续取证 |
+| 模拟模型调用一直阻塞 | 在模型返回前结束并报告 `time_limit`，实际业务工具调用为 0 |
+
+代码提交 `e869c0a` 上用 DeepSeek 官方 API 复跑，原题集通过 50/50，替代语料通过 4/4。两组的题集与语料哈希都与上轮一致。应引用题分别精确匹配 28/28 和 3/3，评分器未发现无依据作答。原题集首轮 Top 3 至少命中一份相关文档为 38/39，覆盖全部标注相关文档为 35/39。模型客户端重试一次，评估器未整题重跑。[50 题实跑与 Trace](../examples/scenarios-50/audit-repair.json) · [替代语料实跑与 Trace](../examples/regression-corpus/audit-repair.json)
+
+S21 与 S22 用同一个问题对照数值冲突。读取两份不同期限的原文后，S21 补查制度适用依据，再报告冲突。替换原文使期限一致后，S22 读完两份即提交带引用的答案。复跑命令见 [README 的评审入口](../README.md#评审入口)。
 
 ## 审阅修复回归
 
