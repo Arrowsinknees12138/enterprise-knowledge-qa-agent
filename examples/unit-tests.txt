@@ -1,8 +1,11 @@
 test_aliases_recall_paraphrase_missed_by_canonical_term_alone (test_agent.KnowledgeTests.test_aliases_recall_paraphrase_missed_by_canonical_term_alone) ... ok
 test_cached_search_and_read_leave_budget_for_finishing (test_agent.KnowledgeTests.test_cached_search_and_read_leave_budget_for_finishing) ... ok
 test_conflict_requires_a_new_query_after_both_passages_are_read (test_agent.KnowledgeTests.test_conflict_requires_a_new_query_after_both_passages_are_read) ... ok
+test_deadline_correction_does_not_infer_scope_or_counting_rules (test_agent.KnowledgeTests.test_deadline_correction_does_not_infer_scope_or_counting_rules) ... ok
+test_deadline_correction_uses_the_observed_source (test_agent.KnowledgeTests.test_deadline_correction_uses_the_observed_source) ... ok
 test_deepseek_replays_tool_observations_over_chat_completions (test_agent.KnowledgeTests.test_deepseek_replays_tool_observations_over_chat_completions) ... ok
 test_deepseek_requires_its_own_key (test_agent.KnowledgeTests.test_deepseek_requires_its_own_key) ... ok
+test_explicit_applicable_deadline_corrects_false_refusal (test_agent.KnowledgeTests.test_explicit_applicable_deadline_corrects_false_refusal) ... ok
 test_insufficient_evidence_keeps_background_out_of_answer_citations (test_agent.KnowledgeTests.test_insufficient_evidence_keeps_background_out_of_answer_citations) ... ok
 test_invalid_citation_is_observed_and_corrected (test_agent.KnowledgeTests.test_invalid_citation_is_observed_and_corrected) ... ok
 test_limit_marks_unfinished_without_citations (test_agent.KnowledgeTests.test_limit_marks_unfinished_without_citations) ... ok
@@ -26,6 +29,6 @@ test_transition_checked_after_required_read (test_holdout.HoldoutScoringTests.te
 test_variant_changes_one_passage_without_mutating_base (test_holdout.HoldoutScoringTests.test_variant_changes_one_passage_without_mutating_base) ... ok
 
 ----------------------------------------------------------------------
-Ran 26 tests in 0.030s
+Ran 29 tests in 0.018s
 
 OK

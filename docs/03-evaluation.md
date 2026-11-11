@@ -1,8 +1,10 @@
 # 评估与复现
 
-2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 26/26，Mock CLI 验收 12/12。常规回归在代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 29/29，Mock CLI 验收 12/12。常规回归在代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
 
 ## 50 题场景评估
+
+修复后在 `6585e8d` 上用 DeepSeek 官方 API 完整跑过 50/50，28/28 道应引用题精确匹配，39/39 道有相关资料的题首轮 Top 3 至少命中一份，未观察到无依据作答。S31 和 S38 遇到连接类错误，各自动重跑一次后通过。题集和评分口径与 49/50 的复评分相同。[最新完整实跑](../examples/scenarios-50/fixed.json)
 
 在原有 30 题上增加 S31 至 S50。新增题和评分器在实跑前提交为 `5a432ff`。题集包括跨文档双问、适用人群、日期与计日细节、原文改动、上下文和执行预算。评分检查正确的引用、所需的原文读取、答案值和运行状态。报告记录两个题集文件和合并后的 SHA-256。[原有 30 题](../examples/scenarios-30/cases.json) · [新增 20 题](../examples/scenarios-50/additional-cases.json)
 
@@ -11,6 +13,8 @@ DeepSeek 官方 API 完成 50 题全量运行，其中两题遇到连接类错�
 复评分中，需要作答或报告冲突的 28 题有 27 题精确匹配应引用的片段。首轮检索的前三条在 39/39 道有相关资料的题中至少命中一份，在 36/39 道题中覆盖所有标注相关文档。四道跨文档题、三道语料改动题和八道执行边界题均通过。S41 与 S42 只改变原文中的有效期，回答由 15 分钟变为 45 分钟。
 
 全量运行中，S04 读取了写明“提交完整的门禁权限申请后”的 D03/P1，仍返回资料不足。定向复测复现了 S04 的误判，并验证 S45 返回资料不足且实际读取了 D12。先前的 30 题运行中，S04 曾通过，也曾失败。[两题定向复测](../examples/scenarios-50/focused-retest.json)
+
+修复后，S04 的模型仍提交 `insufficient_evidence`，执行器核对原文中的起算条件、工作日期限和适用人群，返回 `answered`，并记录 `correction`。外包人员时限、提交当天是否计入、重置链接起算点三个缺口题仍返回资料不足。单测还用修改后的四个工作日条款验证回答跟随实际原文。[修复后 Trace](../examples/scenarios-50/fixed.json)
 
 设置 `DEEPSEEK_API_KEY` 后复跑全部题目。可用 `--case S42-reset-link-updated-value` 只验证修改后的重置链接时效。
 
