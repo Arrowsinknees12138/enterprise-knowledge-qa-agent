@@ -3,6 +3,7 @@ import tempfile
 import unittest
 from io import BytesIO
 from pathlib import Path
+from threading import Event
 from types import SimpleNamespace
 from unittest.mock import patch
 from urllib.error import HTTPError, URLError
@@ -93,6 +94,18 @@ class KnowledgeTests(unittest.TestCase):
         correct = evidence.finish({**args, "citations": [{"doc_id": "D04", "passage_id": "P2"}]})
         self.assertTrue(correct["ok"])
 
+    def test_runtime_rejects_a_quote_from_the_wrong_product(self):
+        evidence = Evidence(self.knowledge, question="企业邮箱回收站保留多久？")
+        evidence.search({"query": "企业邮箱 云盘"})
+        for doc_id in ("D04", "D07"):
+            evidence.execute("read_doc", {"doc_id": doc_id})
+        args = {"status": "answered", "gap": "", "follow_up": ""}
+        wrong = evidence.finish({**args, "citations": [{"doc_id": "D07", "passage_id": "P2"}]})
+        self.assertFalse(wrong["ok"])
+        self.assertIn("D04/P2", wrong["message"])
+        correct = evidence.finish({**args, "citations": [{"doc_id": "D04", "passage_id": "P2"}]})
+        self.assertTrue(correct["ok"])
+
     def test_explicit_multi_field_question_rejects_incomplete_citations(self):
         evidence = Evidence(
             self.knowledge, question="请同时告诉我云盘单个上传文件的大小上限，以及外部分享链接多久失效。",
@@ -115,6 +128,35 @@ class KnowledgeTests(unittest.TestCase):
             "gap": "", "follow_up": "",
         })
         self.assertIn("同一规则存在不同数值", result["message"])
+
+    def test_numeric_conflict_is_detected_with_an_extra_sentence(self):
+        self.knowledge.documents["D02"]["passages"]["P1"] += "请保留报销凭证。"
+        evidence = Evidence(self.knowledge)
+        evidence.search({"query": "差旅报销"})
+        for doc_id in ("D01", "D02"):
+            evidence.execute("read_doc", {"doc_id": doc_id})
+        result = evidence.finish({
+            "status": "answered", "citations": [{"doc_id": "D02", "passage_id": "P1"}],
+            "gap": "", "follow_up": "",
+        })
+        self.assertIn("同一规则存在不同数值", result["message"])
+
+    def test_equal_numeric_values_accept_answer_and_reject_false_conflict(self):
+        first = self.knowledge.documents["D01"]["passages"]
+        first["P1"] = first["P1"].replace("30", "15.0")
+        evidence = Evidence(self.knowledge)
+        evidence.search({"query": "差旅报销"})
+        for doc_id in ("D01", "D02"):
+            evidence.execute("read_doc", {"doc_id": doc_id})
+        evidence.search({"query": "差旅报销制度优先级"})
+        refs = [{"doc_id": doc_id, "passage_id": "P1"} for doc_id in ("D01", "D02")]
+        result = evidence.finish({
+            "status": "conflict", "citations": refs, "gap": "数值不同", "follow_up": "哪份适用？",
+        })
+        self.assertIn("同一规则数值一致", result["message"])
+        self.assertTrue(evidence.finish({
+            "status": "answered", "citations": refs[:1], "gap": "", "follow_up": "",
+        })["ok"])
 
     def test_conflict_requires_a_new_query_after_both_passages_are_read(self):
         evidence = Evidence(self.knowledge)
@@ -180,6 +222,44 @@ class KnowledgeTests(unittest.TestCase):
         })
         self.assertEqual(result["unread_doc_ids"], ["D03"])
 
+    def test_narrow_search_replaces_broad_scope_and_discards_stale_candidates(self):
+        for doc_id in ("D01", "D02", "D03", "D04", "D05", "D06"):
+            self.knowledge.documents[doc_id]["terms"].append("制度")
+        self.knowledge.term_frequency["制度"] = 6
+        evidence = Evidence(self.knowledge, question="门禁开通需要几天？")
+        self.assertEqual(evidence.search({"query": "制度"})["next_offset"], 5)
+        evidence.execute("read_doc", {"doc_id": "D01"})
+        refined = evidence.search({"query": "门禁开通"})
+        self.assertEqual(refined["retired_queries"], ["制度"])
+        self.assertFalse(evidence.search({"query": "制度", "offset": 5})["ok"])
+        evidence.execute("read_doc", {"doc_id": "D03"})
+        args = {"status": "answered", "gap": "", "follow_up": ""}
+        self.assertFalse(evidence.finish({**args, "citations": [{"doc_id": "D01", "passage_id": "P1"}]})["ok"])
+        self.assertTrue(evidence.finish({**args, "citations": [{"doc_id": "D03", "passage_id": "P1"}]})["ok"])
+
+    def test_narrow_search_cannot_drop_other_question_matches(self):
+        self.knowledge.documents["D01"]["terms"].append("票据")
+        self.knowledge.term_frequency["票据"] = 1
+        evidence = Evidence(self.knowledge, question="差旅报销期限多久？")
+        evidence.search({"query": "差旅报销 云盘"})
+        refined = evidence.search({"query": "票据"})
+        self.assertEqual([hit["doc_id"] for hit in refined["hits"]], ["D01"])
+        self.assertNotIn("retired_queries", refined)
+        self.assertTrue({"D01", "D02"} <= evidence.candidates)
+
+    def test_search_failure_survives_unrelated_empty_search_until_same_query_recovers(self):
+        evidence = Evidence(self.knowledge, question="员工门禁多久开通？")
+        self.knowledge.fail_tool = "search_docs"
+        self.assertFalse(evidence.search({"query": "员工门禁"})["ok"])
+        self.knowledge.fail_tool = None
+        self.assertEqual(evidence.search({"query": "木星卫星"})["hits"], [])
+        args = {"status": "insufficient_evidence", "citations": [], "gap": "没有对应条款", "follow_up": ""}
+        blocked = evidence.finish(args)
+        self.assertEqual(blocked["failed_searches"], [{"query": "员工门禁", "offset": 0}])
+        self.assertTrue(evidence.finish({**args, "status": "tool_error"})["ok"])
+        self.assertTrue(evidence.search({"query": "员工 门禁"})["ok"])
+        self.assertEqual(evidence.finish(args)["unread_doc_ids"], ["D03"])
+
     def test_punctuation_only_is_rejected_as_input(self):
         with self.assertRaisesRegex(ValueError, "必须包含文字或数字"):
             load_input(SimpleNamespace(input=None, question="？"))
@@ -210,6 +290,27 @@ class KnowledgeTests(unittest.TestCase):
             result = KnowledgeAgent(model, self.knowledge, max_seconds=1).run("门禁", [])
         self.assertEqual(result["status"], "time_limit")
         self.assertEqual(result["run"]["tool_calls_used"], 0)
+
+    def test_time_budget_returns_while_model_is_still_blocked(self):
+        started, release, completed = Event(), Event(), Event()
+
+        class BlockingModel(ScriptedModel):
+            def choose(self, messages, *, deadline=None):
+                started.set()
+                release.wait(timeout=2)
+                completed.set()
+                return super().choose(messages, deadline=deadline)
+
+        model = BlockingModel(("search_docs", {"query": "门禁"}))
+        try:
+            result = KnowledgeAgent(model, self.knowledge, max_seconds=0.1).run("门禁", [])
+            self.assertTrue(started.is_set())
+            self.assertFalse(completed.is_set())
+            self.assertEqual(result["status"], "time_limit")
+            self.assertEqual(result["run"]["tool_calls_used"], 0)
+        finally:
+            release.set()
+            completed.wait(timeout=2)
 
     def test_transient_model_connection_is_retried_once(self):
         response = {

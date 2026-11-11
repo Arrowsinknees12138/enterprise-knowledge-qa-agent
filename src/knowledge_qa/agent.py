@@ -1,4 +1,6 @@
 import json
+from queue import Empty, Queue
+from threading import Thread
 from time import monotonic
 
 from .knowledge import normalize
@@ -27,6 +29,29 @@ class KnowledgeAgent:
         self.max_tool_calls = max_tool_calls
         self.max_seconds = max_seconds
 
+    def choose_before_deadline(self, messages, deadline):
+        remaining = deadline - monotonic()
+        if remaining <= 0:
+            raise TimeLimitError
+        outcome = Queue(maxsize=1)
+
+        def choose():
+            try:
+                outcome.put((self.model.choose(messages, deadline=deadline), None))
+            except Exception as error:
+                outcome.put((None, error))
+
+        Thread(target=choose, daemon=True).start()
+        try:
+            action, error = outcome.get(timeout=remaining)
+        except Empty:
+            raise TimeLimitError from None
+        if monotonic() >= deadline:
+            raise TimeLimitError
+        if error is not None:
+            raise error
+        return action
+
     def run(self, question, history):
         deadline = monotonic() + self.max_seconds
         time_gap = f"已用完 {self.max_seconds} 秒运行预算，问答未完成。"
@@ -38,11 +63,7 @@ class KnowledgeAgent:
         trace = []
         for step in range(1, self.max_steps + 1):
             try:
-                if monotonic() >= deadline:
-                    raise TimeLimitError
-                action = self.model.choose(messages, deadline=deadline)
-                if monotonic() >= deadline:
-                    raise TimeLimitError
+                action = self.choose_before_deadline(list(messages), deadline)
             except TimeLimitError:
                 return self.result("time_limit", trace, evidence, gap=time_gap)
             except ModelError as error:
@@ -132,11 +153,16 @@ class Evidence:
         self.tool_calls_used = 0
         self.search_cache = {}
         self.pending_pages = {}
-        self.candidates = set()
+        self.search_candidates = {}
+        self.retired_queries = {}
         self.reads = {}
         self.failed_reads = set()
         self.search_history = []
-        self.search_failed = False
+        self.failed_searches = {}
+
+    @property
+    def candidates(self):
+        return set().union(*self.search_candidates.values())
 
     @property
     def remaining(self):
@@ -181,7 +207,10 @@ class Evidence:
             return rejection("offset 必须是非负整数")
         normalized_query = normalize(query)
         key = normalized_query, offset
+        if normalized_query in self.retired_queries:
+            return rejection(f"该查询已由更精确的检索替代：{self.retired_queries[normalized_query]}")
         cached = key in self.search_cache
+        retired = []
         if cached:
             result = self.search_cache[key]
         else:
@@ -191,22 +220,36 @@ class Evidence:
                 return self.tool_limit()
             self.tool_calls_used += 1
             result = self.knowledge.search_docs(query, offset)
-            self.search_failed = not result["ok"]
             if not result["ok"]:
+                self.failed_searches[key] = {"query": query, "offset": offset}
                 return result
+            self.failed_searches.pop(key, None)
             self.search_cache[key] = result
-            self.candidates.update(hit["doc_id"] for hit in result["hits"])
+            hits = self.search_candidates.setdefault(normalized_query, set())
+            hits.update(hit["doc_id"] for hit in result["hits"])
             if not offset:
                 self.search_history.append((normalized_query, set(self.reads)))
             if result["next_offset"] is not None:
                 self.pending_pages[normalized_query] = (query, result["next_offset"])
             else:
                 self.pending_pages.pop(normalized_query, None)
+                failed_queries = {failed_query for failed_query, _ in self.failed_searches}
+                for previous, previous_hits in list(self.search_candidates.items()):
+                    if (
+                        not self.has_history and previous != normalized_query and previous not in failed_queries
+                        and not (previous_hits - hits) & self.failed_reads
+                        and self.knowledge.can_refine(previous, hits, self.question)
+                    ):
+                        self.retired_queries[previous] = query
+                        self.pending_pages.pop(previous, None)
+                        del self.search_candidates[previous]
+                        retired.append(previous)
         next_page = self.pending_pages.get(normalized_query)
         return {
             **result, "query": query, "cached": cached,
             "next_offset": next_page[1] if next_page else None,
             "unread_doc_ids": [hit["doc_id"] for hit in result["hits"] if hit["doc_id"] not in self.reads],
+            **({"retired_queries": retired} if retired else {}),
         }
 
     def finish(self, arguments):
@@ -224,14 +267,18 @@ class Evidence:
             return rejection("未解决的任务必须说明具体缺口")
         if status in ("conflict", "needs_clarification") and not follow_up.strip():
             return rejection("有待确认项时必须提出一个澄清问题")
-        if status == "tool_error" and not (self.search_failed or self.failed_reads):
+        if status == "tool_error" and not (self.failed_searches or self.failed_reads):
             return rejection("没有未恢复的业务工具错误")
-        if status in ("insufficient_evidence", "needs_clarification") and (self.search_failed or self.failed_reads):
-            return rejection("存在未恢复的业务工具错误，应先尝试恢复或明确返回 tool_error")
+        if status != "tool_error" and (self.failed_searches or self.failed_reads):
+            return {
+                **rejection("存在未恢复的业务工具错误，请重试失败的查询或读取，或返回 tool_error"),
+                "failed_searches": list(self.failed_searches.values()),
+                "failed_read_doc_ids": sorted(self.failed_reads),
+            }
+        candidates = self.candidates
+        active_reads = {doc_id: doc for doc_id, doc in self.reads.items() if doc_id in candidates}
         if status in ("answered", "insufficient_evidence", "conflict"):
-            if self.search_failed or self.failed_reads:
-                return rejection("存在未恢复的业务工具错误")
-            unread = sorted(self.candidates - self.reads.keys())
+            unread = sorted(candidates - self.reads.keys())
             if unread or self.pending_pages:
                 if not self.remaining:
                     return self.tool_limit()
@@ -247,8 +294,8 @@ class Evidence:
                 return rejection("资料不足需要成功完成至少一次检索")
             # Keep background passages in the trace, separate from answer citations.
             citations = []
-            if self.question and not self.has_history and len(self.reads) == 1:
-                observed_doc = next(iter(self.reads.values()))
+            if self.question and not self.has_history and len(active_reads) == 1:
+                observed_doc = next(iter(active_reads.values()))
                 citation = self.knowledge.explicit_deadline_citation(self.question, observed_doc)
                 if citation:
                     status = "answered"
@@ -262,7 +309,9 @@ class Evidence:
             doc_id, passage_id = citation["doc_id"], citation["passage_id"]
             if not isinstance(doc_id, str) or not isinstance(passage_id, str):
                 return rejection("引用 ID 必须为字符串")
-            doc = self.reads.get(doc_id)
+            if doc_id in self.reads and doc_id not in candidates:
+                return rejection(f"引用文档 {doc_id} 只属于已收窄的检索范围")
+            doc = active_reads.get(doc_id)
             if doc is None:
                 return rejection(f"尚未读取引用文档 {doc_id}")
             passage = next((item for item in doc["passages"] if item["passage_id"] == passage_id), None)
@@ -274,17 +323,25 @@ class Evidence:
         if status == "answered":
             if not refs:
                 return rejection("回答至少需要一个有效引用")
-            topic_error = self.knowledge.citation_topic_error(self.question, refs, self.reads)
+            topic_error = self.knowledge.citation_topic_error(self.question, refs, active_reads)
             if topic_error:
                 return rejection(topic_error)
-            for conflict in self.knowledge.conflicting_refs(self.reads):
-                if conflict.intersection(refs):
-                    pairs = ", ".join(f"{doc_id}/{passage_id}" for doc_id, passage_id in sorted(conflict))
+            for values in self.knowledge.policy_values(active_reads):
+                if len({doc_id for doc_id, _ in values}) < 2 or not values.keys() & refs.keys():
+                    continue
+                pairs = ", ".join(f"{doc_id}/{passage_id}" for doc_id, passage_id in sorted(values))
+                if len(set().union(*values.values())) > 1:
                     return rejection(f"已核对的同一规则存在不同数值：{pairs}。请查证适用依据后报告冲突。")
+                if not all(values.values()):
+                    return rejection(f"同一规则的部分原文无法按已登记格式核对数值：{pairs}。请说明资料缺口。")
         if status == "conflict":
             documents = {doc_id for doc_id, _ in refs}
             if len(documents) < 2:
                 return rejection("冲突状态至少需要引用两份不同文档")
+            for values in self.knowledge.policy_values(active_reads):
+                if refs.keys() <= values.keys() and all(values[ref] for ref in refs):
+                    if len(set().union(*(values[ref] for ref in refs))) == 1:
+                        return rejection("引用的同一规则数值一致，无法据此报告冲突。")
             if not any(
                 documents <= reads and self.knowledge.is_authority_query(query, documents)
                 for query, reads in self.search_history

@@ -3,6 +3,7 @@ import re
 import unicodedata
 from collections import Counter, defaultdict
 from datetime import date
+from decimal import Decimal
 from pathlib import Path
 
 
@@ -33,6 +34,10 @@ def matching_passage_ids(topics, normalized_question):
         passage_id for passage_id, terms in topics.items()
         if any(normalize(term) in normalized_question for term in terms)
     }
+
+
+def compact_clause(text):
+    return "".join(unicodedata.normalize("NFKC", text).split()).strip("。.!?;")
 
 
 class KnowledgeBase:
@@ -108,6 +113,20 @@ class KnowledgeBase:
             "next_offset": end if end < len(matches) else None,
         }
 
+    def can_refine(self, previous_query, refined_hits, question):
+        previous = {doc_id for doc_id, doc in self.documents.items() if any(
+            normalize(term) in previous_query for term in doc["terms"]
+        )}
+        # A refinement is only accepted once its complete, narrower result set is known.
+        if not refined_hits or not refined_hits < previous:
+            return False
+        question_terms = normalize(question)
+        related = {
+            doc_id for doc_id in previous
+            if any(normalize(term) in question_terms for term in self.documents[doc_id]["terms"])
+        }
+        return bool(related) and related <= refined_hits
+
     def read_doc(self, doc_id):
         if self.fail_tool == "read_doc":
             return {"ok": False, "error": "read_unavailable", "message": "模拟文档读取服务不可用"}
@@ -136,14 +155,17 @@ class KnowledgeBase:
         ]
         if wrong:
             return f"以下片段与问题所问字段不符：{', '.join(wrong)}"
+        expected = {(doc_id, passage_id) for doc_id, ids in matching.items() for passage_id in ids}
+        if expected and not expected.intersection(refs):
+            available = ", ".join(f"{doc_id}/{passage_id}" for doc_id, passage_id in sorted(expected))
+            return f"引用未覆盖问题已命中的证据片段：{available}"
         if any(marker in query for marker in MULTI_FIELD_REQUESTS):
-            expected = {(doc_id, passage_id) for doc_id, ids in matching.items() for passage_id in ids}
             missing = [f"{doc_id}/{passage_id}" for doc_id, passage_id in sorted(expected - refs.keys())]
             if missing:
                 return f"问题明确询问多项内容，请补充缺少的原文片段：{', '.join(missing)}"
         return ""
 
-    def conflicting_refs(self, reads):
+    def policy_values(self, reads):
         groups = defaultdict(dict)
         for doc_id, observed in reads.items():
             rule = self.documents[doc_id].get("conflict_check")
@@ -152,14 +174,14 @@ class KnowledgeBase:
             for passage in observed["passages"]:
                 if passage["passage_id"] != rule["passage_id"]:
                     continue
-                pattern = rf"{re.escape(normalize(rule['prefix']))}([0-9]+){re.escape(normalize(rule['suffix']))}"
-                match = re.fullmatch(pattern, normalize(passage["quote"]))
-                if match:
-                    groups[rule["key"]][doc_id, passage["passage_id"]] = int(match[1])
-        return [
-            set(values) for values in groups.values()
-            if len({doc_id for doc_id, _ in values}) > 1 and len(set(values.values())) > 1
-        ]
+                prefix = re.escape(compact_clause(rule["prefix"]))
+                suffix = re.escape(compact_clause(rule["suffix"]))
+                pattern = re.compile(rf"{prefix}([0-9]+(?:\.[0-9]+)?){suffix}")
+                clauses = re.split(r"[。!?;\n]|\.(?![0-9])", unicodedata.normalize("NFKC", passage["quote"]))
+                groups[rule["key"]][doc_id, passage["passage_id"]] = {
+                    Decimal(match[1]) for clause in clauses if (match := pattern.fullmatch(compact_clause(clause)))
+                }
+        return groups.values()
 
     def is_authority_query(self, query, doc_ids):
         if any(term in query for term in GENERAL_AUTHORITY_QUERIES):
