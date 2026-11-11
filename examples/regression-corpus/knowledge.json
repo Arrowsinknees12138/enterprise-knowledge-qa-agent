@@ -1,0 +1,62 @@
+[
+  {
+    "doc_id": "T01",
+    "title": "培训门户 FAQ",
+    "version_date": "2025-04-01",
+    "terms": ["培训门户", "培训平台", "课程证书"],
+    "passage_topics": {
+      "P1": ["班容量", "学员人数"],
+      "P2": ["证书", "可下载"]
+    },
+    "passages": {
+      "P1": "培训门户的单个班级最多可录入 80 名学员。",
+      "P2": "培训门户的课程证书在课程结束后 45 天内可下载。"
+    }
+  },
+  {
+    "doc_id": "T02",
+    "title": "外部培训报销规则",
+    "version_date": "2025-01-05",
+    "terms": ["外部培训报销", "培训报销", "外训报销", "课程报销"],
+    "conflict_check": {
+      "key": "training_reimbursement_deadline",
+      "passage_id": "P1",
+      "prefix": "员工应在外部培训结束后",
+      "suffix": "天内提交培训报销申请"
+    },
+    "passages": {
+      "P1": "员工应在外部培训结束后 20 天内提交培训报销申请。"
+    }
+  },
+  {
+    "doc_id": "T03",
+    "title": "培训费用报销办理说明",
+    "version_date": "2025-08-01",
+    "terms": ["外部培训报销", "培训报销", "外训报销", "课程报销"],
+    "conflict_check": {
+      "key": "training_reimbursement_deadline",
+      "passage_id": "P1",
+      "prefix": "员工应在外部培训结束后",
+      "suffix": "天内提交培训报销申请"
+    },
+    "passages": {
+      "P1": "员工应在外部培训结束后 40 天内提交培训报销申请。"
+    }
+  },
+  {
+    "doc_id": "T04",
+    "title": "投影仪借用办理规则",
+    "version_date": "2025-07-05",
+    "terms": ["投影仪", "投影仪借用", "设备借用"],
+    "deadline": {
+      "passage_id": "P1",
+      "audiences": ["员工", "新员工"],
+      "trigger": "员工提交完整的投影仪借用申请后",
+      "responsible": "资产组",
+      "outcome": "发放投影仪"
+    },
+    "passages": {
+      "P1": "员工提交完整的投影仪借用申请后，资产组会在 3 个工作日内发放投影仪。"
+    }
+  }
+]

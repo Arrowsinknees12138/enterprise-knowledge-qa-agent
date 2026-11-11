@@ -15,7 +15,7 @@ from run_examples import EXAMPLES, ROOT, run_cli
 
 CASES = EXAMPLES / "holdout" / "cases.json"
 EVIDENCE_STATUSES = {"answered", "conflict"}
-FAILURE_STATUSES = {"model_error", "step_limit", "tool_error", "tool_limit"}
+FAILURE_STATUSES = {"model_error", "step_limit", "tool_error", "tool_limit", "time_limit"}
 
 
 def next_after_read(trace, doc_ids):
@@ -117,6 +117,7 @@ def main():
     sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", type=Path, action="append", help="Frozen cases JSON file. Repeat to combine files.")
+    parser.add_argument("--corpus", type=Path, default=ROOT / "data" / "knowledge.json")
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--case", action="append", help="Run specific frozen case IDs.")
     args = parser.parse_args()
@@ -127,7 +128,8 @@ def main():
         cases, cases_sha256, inputs = load_cases(args.dataset or [CASES])
     except (OSError, ValueError) as error:
         parser.error(str(error))
-    corpus_bytes = (ROOT / "data" / "knowledge.json").read_bytes()
+    corpus_path = args.corpus.resolve()
+    corpus_bytes = corpus_path.read_bytes()
     base_corpus = json.loads(corpus_bytes)
     unknown = set(args.case or []) - {case["id"] for case in cases}
     if unknown:
@@ -142,8 +144,10 @@ def main():
             payload = {key: case[key] for key in ("question", "history") if key in case}
             input_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
             options = case_options(case, base_corpus, variant_path)
+            if "corpus_edit" not in case:
+                options.extend(["--data", str(corpus_path)])
             result, exit_code = run_cli("live", "deepseek", input_path, *options)
-            retried = result["status"] == "model_error" and result["gap"] == "模型连接失败、超时或返回格式无效"
+            retried = result["status"] == "model_error" and result["gap"] == "模型连接失败或超时"
             if retried:
                 print(f"RETRY {case['id']}: transport error", flush=True)
                 result, exit_code = run_cli("live", "deepseek", input_path, *options)

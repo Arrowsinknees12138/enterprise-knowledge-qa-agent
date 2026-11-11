@@ -1,0 +1,33 @@
+[
+  {
+    "id": "R01-training-certificate",
+    "question": "培训门户里的课程证书，从什么时间起算、最长多少天还能下载？",
+    "status": "answered",
+    "refs": ["T01/P2"],
+    "relevant_docs": ["T01"],
+    "answer_terms": ["课程结束后", "45 天"]
+  },
+  {
+    "id": "R02-training-reimbursement-conflict",
+    "question": "请按外部培训报销原文确认提交期限，规则和办理说明不一致时请补查适用依据。",
+    "status": "conflict",
+    "refs": ["T02/P1", "T03/P1"],
+    "relevant_docs": ["T02", "T03"]
+  },
+  {
+    "id": "R03-projector-deadline",
+    "question": "新员工办投影仪，从哪一步算起，资产组多久能发放？",
+    "status": "answered",
+    "refs": ["T04/P1"],
+    "relevant_docs": ["T04"],
+    "answer_terms": ["提交完整的投影仪借用申请后", "3 个工作日"]
+  },
+  {
+    "id": "R04-projector-calendar-gap",
+    "question": "投影仪借用有三个工作日的期限，提交申请当天是否计入第一个工作日？",
+    "status": "insufficient_evidence",
+    "refs": [],
+    "relevant_docs": ["T04"],
+    "required_reads": ["T04"]
+  }
+]

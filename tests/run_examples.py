@@ -43,7 +43,7 @@ def actions_after_reads(result, doc_ids):
 
 def verify(mode, result, exit_code, status, docs, snippet=None):
     assert result["status"] == status, (status, result["status"], result["gap"])
-    assert exit_code == int(status in {"step_limit", "tool_limit", "tool_error"})
+    assert exit_code == int(status in {"step_limit", "tool_limit", "time_limit", "tool_error"})
     cited = {ref["doc_id"] for ref in result["citations"]}
     if docs is not None:
         assert cited == set(docs)
@@ -63,7 +63,7 @@ def verify(mode, result, exit_code, status, docs, snippet=None):
     for ref in result["citations"]:
         assert (ref["doc_id"], ref["passage_id"], ref["quote"]) in observed
     assert result["run"]["mode"] == mode
-    assert result["run"]["api_requests"] == (len(trace) if mode == "live" else 0)
+    assert result["run"]["api_requests"] == (len(trace) + result["run"].get("api_retries", 0) if mode == "live" else 0)
     remaining = result["run"]["max_tool_calls"]
     for step in trace:
         observation = step["observation"]
@@ -122,7 +122,7 @@ def main():
             input_path = EXAMPLES / "inputs" / f"{input_name}.json"
             result, exit_code = run_cli(args.mode, provider, input_path, *options)
             if (args.mode == "live" and result["status"] == "model_error"
-                    and result["gap"] == "模型连接失败、超时或返回格式无效"):
+                    and result["gap"] == "模型连接失败或超时"):
                 print(f"RETRY {name}: model connection or timeout", flush=True)
                 result, exit_code = run_cli(args.mode, provider, input_path, *options)
             (output / f"{name}.json").write_text(

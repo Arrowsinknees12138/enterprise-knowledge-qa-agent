@@ -1,12 +1,16 @@
 import json
+import tempfile
 import unittest
 from io import BytesIO
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
+from urllib.error import HTTPError, URLError
 
 from src.knowledge_qa.agent import Evidence, KnowledgeAgent
+from src.knowledge_qa.__main__ import load_input, redact_trace
 from src.knowledge_qa.knowledge import KnowledgeBase
-from src.knowledge_qa.models import Action, LiveModel, MockModel
+from src.knowledge_qa.models import Action, LiveModel, MockModel, ModelError
 
 
 CORPUS = Path(__file__).resolve().parents[1] / "data" / "knowledge.json"
@@ -17,7 +21,7 @@ class ScriptedModel:
         self.decisions = iter(decisions)
         self.messages = []
 
-    def choose(self, messages):
+    def choose(self, messages, *, deadline=None):
         self.messages.append(list(messages))
         name, arguments = next(self.decisions)
         return Action(name, {"reason": "测试动作", **arguments}, str(len(self.messages)))
@@ -79,6 +83,27 @@ class KnowledgeTests(unittest.TestCase):
         })
         self.assertEqual(result["error"], "invalid_action")
 
+    def test_runtime_rejects_wrong_field_in_the_correct_document(self):
+        evidence = Evidence(self.knowledge, question="企业邮箱回收站保留多久？")
+        evidence.execute("search_docs", {"query": "企业邮箱"})
+        evidence.execute("read_doc", {"doc_id": "D04"})
+        args = {"status": "answered", "gap": "", "follow_up": ""}
+        wrong = evidence.finish({**args, "citations": [{"doc_id": "D04", "passage_id": "P3"}]})
+        self.assertIn("所问字段不符", wrong["message"])
+        correct = evidence.finish({**args, "citations": [{"doc_id": "D04", "passage_id": "P2"}]})
+        self.assertTrue(correct["ok"])
+
+    def test_runtime_rejects_single_answer_after_both_conflicting_versions_are_read(self):
+        evidence = Evidence(self.knowledge)
+        evidence.execute("search_docs", {"query": "差旅报销"})
+        for doc_id in ("D01", "D02"):
+            evidence.execute("read_doc", {"doc_id": doc_id})
+        result = evidence.finish({
+            "status": "answered", "citations": [{"doc_id": "D02", "passage_id": "P1"}],
+            "gap": "", "follow_up": "",
+        })
+        self.assertIn("同一规则存在不同数值", result["message"])
+
     def test_conflict_requires_a_new_query_after_both_passages_are_read(self):
         evidence = Evidence(self.knowledge)
         evidence.execute("search_docs", {"query": "差旅报销"})
@@ -93,9 +118,115 @@ class KnowledgeTests(unittest.TestCase):
         self.assertFalse(evidence.execute("finish", end)["ok"])
         evidence.execute("search_docs", {"query": "差旅 报销"})
         self.assertFalse(evidence.execute("finish", end)["ok"])
+        evidence.execute("search_docs", {"query": "木星卫星"})
+        self.assertFalse(evidence.execute("finish", end)["ok"])
         check = evidence.execute("search_docs", {"query": "差旅报销 制度适用范围"})
         self.assertEqual(check["unread_doc_ids"], [])
         self.assertTrue(evidence.execute("finish", end)["ok"])
+
+    def test_no_final_answer_before_remaining_candidate_pages_are_read(self):
+        records = [
+            {
+                "doc_id": f"X{index:02}", "title": "差旅报销制度", "version_date": "2025-01-01",
+                "terms": ["差旅报销"],
+                "passages": {"P1": f"员工应在出差结束后 {15 if index < 6 else 30} 天内提交差旅费用报销申请。"},
+                "conflict_check": {
+                    "key": "reimbursement", "passage_id": "P1", "prefix": "员工应在出差结束后",
+                    "suffix": "天内提交差旅费用报销申请",
+                },
+            }
+            for index in range(1, 7)
+        ]
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "corpus.json"
+            path.write_text(json.dumps(records, ensure_ascii=False), encoding="utf-8")
+            evidence = Evidence(KnowledgeBase(path), max_tool_calls=8)
+        first = evidence.execute("search_docs", {"query": "差旅报销"})
+        self.assertEqual(first["total"], 6)
+        self.assertEqual(first["next_offset"], 5)
+        for hit in first["hits"]:
+            evidence.execute("read_doc", {"doc_id": hit["doc_id"]})
+        answer = {
+            "status": "answered", "citations": [{"doc_id": "X01", "passage_id": "P1"}],
+            "gap": "", "follow_up": "",
+        }
+        self.assertEqual(evidence.finish(answer)["pending_searches"], [{"query": "差旅报销", "offset": 5}])
+        self.assertFalse(evidence.execute("search_docs", {"query": "差旅报销", "offset": 10})["ok"])
+        second = evidence.execute("search_docs", {"query": "差旅 报销", "offset": first["next_offset"]})
+        self.assertEqual([hit["doc_id"] for hit in second["hits"]], ["X06"])
+        self.assertIsNone(second["next_offset"])
+        self.assertEqual(evidence.finish(answer)["unread_doc_ids"], ["X06"])
+        evidence.execute("read_doc", {"doc_id": "X06"})
+        self.assertIn("同一规则存在不同数值", evidence.finish(answer)["message"])
+
+    def test_unread_candidates_prevent_insufficient_evidence(self):
+        evidence = Evidence(self.knowledge)
+        evidence.execute("search_docs", {"query": "门禁"})
+        result = evidence.finish({
+            "status": "insufficient_evidence", "citations": [],
+            "gap": "资料未说明办理时限", "follow_up": "",
+        })
+        self.assertEqual(result["unread_doc_ids"], ["D03"])
+
+    def test_punctuation_only_is_rejected_as_input(self):
+        with self.assertRaisesRegex(ValueError, "必须包含文字或数字"):
+            load_input(SimpleNamespace(input=None, question="？"))
+
+    def test_document_scope_applies_to_search_and_read(self):
+        knowledge = KnowledgeBase(CORPUS, allowed_docs={"D04"})
+        self.assertEqual([hit["doc_id"] for hit in knowledge.search_docs("邮箱 附件")["hits"]], ["D04"])
+        self.assertEqual(knowledge.read_doc("D07")["error"], "doc_not_found")
+        with self.assertRaisesRegex(ValueError, "未知文档"):
+            KnowledgeBase(CORPUS, allowed_docs={"unknown"})
+
+    def test_redacted_trace_omits_queries_and_read_text(self):
+        result = KnowledgeAgent(MockModel(), self.knowledge).run("门禁办理多久？", [])
+        trace = redact_trace(result["trace"])
+        self.assertEqual([step["action"] for step in trace], ["search_docs", "read_doc", "finish"])
+        self.assertEqual(trace[-1]["observation"]["status"], "answered")
+        encoded = json.dumps(trace, ensure_ascii=False)
+        self.assertNotIn("门禁", encoded)
+        self.assertNotIn("arguments", encoded)
+        self.assertNotIn("quote", encoded)
+
+    def test_time_budget_stops_before_executing_a_late_model_action(self):
+        model = ScriptedModel(("search_docs", {"query": "门禁"}))
+        with patch("src.knowledge_qa.agent.monotonic", side_effect=[0, 0.1, 1.1]):
+            result = KnowledgeAgent(model, self.knowledge, max_seconds=1).run("门禁", [])
+        self.assertEqual(result["status"], "time_limit")
+        self.assertEqual(result["run"]["tool_calls_used"], 0)
+
+    def test_transient_model_connection_is_retried_once(self):
+        response = {
+            "choices": [{"message": {"tool_calls": [
+                {"id": "a", "function": {"name": "search_docs", "arguments": '{"query":"门禁"}'}},
+                {"id": "b", "function": {"name": "read_doc", "arguments": '{"doc_id":"D03"}'}},
+            ]}}],
+        }
+        with (
+            patch.dict("os.environ", {"DEEPSEEK_API_KEY": "test-key"}),
+            patch("src.knowledge_qa.models.sleep"),
+            patch("src.knowledge_qa.models.urlopen", side_effect=[
+                URLError("unavailable"), BytesIO(json.dumps(response).encode()),
+            ]) as http,
+        ):
+            model = LiveModel("deepseek")
+            action = model.choose([])
+        self.assertEqual(http.call_count, 2)
+        self.assertEqual(model.metadata()["api_retries"], 1)
+        self.assertEqual(action.name, "search_docs")
+        self.assertEqual(action.skipped_tool_calls, ("read_doc",))
+
+    def test_model_authentication_errors_are_not_retried(self):
+        unauthorized = HTTPError("https://api.deepseek.com", 401, "unauthorized", None, BytesIO())
+        with (
+            patch.dict("os.environ", {"DEEPSEEK_API_KEY": "test-key"}),
+            patch("src.knowledge_qa.models.urlopen", side_effect=unauthorized) as http,
+        ):
+            model = LiveModel("deepseek")
+            with self.assertRaisesRegex(ModelError, "HTTP 401"):
+                model.choose([])
+        http.assert_called_once()
 
     def test_invalid_citation_is_observed_and_corrected(self):
         end = {"status": "answered", "gap": "", "follow_up": ""}
@@ -150,6 +281,7 @@ class KnowledgeTests(unittest.TestCase):
         for question in (
             "新员工的门禁办理时限是从什么时候开始算，行政最迟几个工作日开通？",
             "试用期员工的门禁办理期限何时起算，行政最迟多少个工作日内开通门禁？",
+            "新员工办门禁，从哪一步算起，行政多久能开通？",
         ):
             with self.subTest(question=question):
                 result = self.run_false_deadline_refusal(question)
