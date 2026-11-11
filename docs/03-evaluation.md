@@ -1,6 +1,21 @@
 # 评估与复现
 
-2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 47/47，Mock CLI 验收 12/12。常规回归在代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 53/53，Mock CLI 验收 12/12。常规回归在代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+
+## 引用范围与响应故障复测
+
+新增 6 个单元测试。每项修复均先重放失败路径，再通过全套单测后提交。[测试代码](../tests/test_agent.py)
+
+| 提交 | 验证内容 | 实际结果 |
+| --- | --- | --- |
+| `4d6a565` | 正确邮箱引用附带无关云盘引用。实习生或正式员工引用其他人群的条款 | 拒绝不匹配引用。原文改为实习生规则后允许引用 |
+| `bf26b7b` | 补查后把两个不同主题或人群的条款报告为冲突 | 拒绝这两种冲突。未标注政策组但共享原文主题的报销条款仍可报告冲突 |
+| `1094e22` | 两份冲突制度使用不同别名，收窄查询只返回一份 | 保留另一份制度，读取双方后阻断单一结论 |
+| `04b417b` | 注入响应截断，分别模拟重试成功和再次截断 | 重试成功后继续，耗尽后返回 `model_error`，实际业务工具调用为 0 |
+
+用 DeepSeek 官方 API 在 `04b417b` 上实跑原题集 50/50、替代语料 4/4。题集、语料和评分器沿用上轮版本。应引用题精确匹配 28/28 和 3/3，评分器未发现无依据作答。原题集首轮 Top 3 至少命中一份相关文档为 39/39，覆盖所有标注相关文档为 36/39。模型客户端有两次重试，评估器未整题重跑。[50 题逐步 Trace](../examples/scenarios-50/citation-scope-repair.json) · [替代语料逐步 Trace](../examples/regression-corpus/citation-scope-repair.json)
+
+S21 与 S22 仍展示了原文差异对决策的影响。期限不一致时，模型读取双方后继续补查并报告冲突。替换原文使期限一致后，模型读完双方即提交引用答案。S25 按用户自述的正式员工身份答复，S32 分别引用正式员工和外包人员规则。
 
 ## 本轮审阅回归
 

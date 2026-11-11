@@ -1,0 +1,748 @@
+{
+  "commit": "04b417baed899966a178959fda417d08ddb2adaa",
+  "cases_sha256": "caf14ba18ae24ff2e00428875265a05e8a47412690f5f5b3eb2a6045c221fc3f",
+  "datasets": [
+    {
+      "file": "cases.json",
+      "sha256": "caf14ba18ae24ff2e00428875265a05e8a47412690f5f5b3eb2a6045c221fc3f"
+    }
+  ],
+  "corpus_sha256": "4ebb7a9acbf59b9e18cff5a95c789b71b1c66c17448f216f9e407b83c7e41532",
+  "metrics": {
+    "cases": 4,
+    "passed": 4,
+    "status_matches": 4,
+    "citation_cases": 3,
+    "citation_exact_matches": 3,
+    "unsupported_answers": 0,
+    "first_search_cases": 4,
+    "first_search_hits_at_3": 4,
+    "first_search_all_relevant_at_3": 4
+  },
+  "groups": {
+    "holdout": {
+      "cases": 4,
+      "passed": 4
+    }
+  },
+  "results": [
+    {
+      "id": "R01-training-certificate",
+      "group": "holdout",
+      "expected_status": "answered",
+      "expected_refs": [
+        "T01/P2"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "T01/P2"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "read_match": true,
+        "answer_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "T01"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【T01/P2】培训门户的课程证书在课程结束后 45 天内可下载。",
+        "citations": [
+          {
+            "doc_id": "T01",
+            "title": "培训门户 FAQ",
+            "version_date": "2025-04-01",
+            "passage_id": "P2",
+            "quote": "培训门户的课程证书在课程结束后 45 天内可下载。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "api_retries": 0,
+          "usage": {
+            "prompt_tokens": 4928,
+            "completion_tokens": 254
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2,
+          "max_seconds": 120
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "培训门户 课程证书 下载 期限"
+            },
+            "reason": "检索课程证书下载时限相关制度条款",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "T01",
+                  "title": "培训门户 FAQ",
+                  "version_date": "2025-04-01",
+                  "matched_terms": [
+                    "培训门户",
+                    "课程证书"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "next_offset": null,
+              "query": "培训门户 课程证书 下载 期限",
+              "cached": false,
+              "unread_doc_ids": [
+                "T01"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "T01"
+            },
+            "reason": "读取培训门户FAQ中证书下载时限原文",
+            "observation": {
+              "ok": true,
+              "doc_id": "T01",
+              "title": "培训门户 FAQ",
+              "version_date": "2025-04-01",
+              "passage_topics": {
+                "P1": [
+                  "班容量",
+                  "学员人数"
+                ],
+                "P2": [
+                  "证书",
+                  "可下载"
+                ]
+              },
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "培训门户的单个班级最多可录入 80 名学员。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "培训门户的课程证书在课程结束后 45 天内可下载。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "T01",
+                  "passage_id": "P2"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "FAQ原文明确证书下载的起算事件为课程结束、期限为45天，直接回答问题。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "T01",
+                  "title": "培训门户 FAQ",
+                  "version_date": "2025-04-01",
+                  "passage_id": "P2",
+                  "quote": "培训门户的课程证书在课程结束后 45 天内可下载。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "R02-training-reimbursement-conflict",
+      "group": "holdout",
+      "expected_status": "conflict",
+      "expected_refs": [
+        "T02/P1",
+        "T03/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "T02/P1",
+          "T03/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "read_match": true,
+        "answer_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "T02",
+          "T03"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "conflict",
+        "answer": "找到相互冲突的原文，适用口径待确认。\n【T02/P1】员工应在外部培训结束后 20 天内提交培训报销申请。\n【T03/P1】员工应在外部培训结束后 40 天内提交培训报销申请。",
+        "citations": [
+          {
+            "doc_id": "T02",
+            "title": "外部培训报销规则",
+            "version_date": "2025-01-05",
+            "passage_id": "P1",
+            "quote": "员工应在外部培训结束后 20 天内提交培训报销申请。"
+          },
+          {
+            "doc_id": "T03",
+            "title": "培训费用报销办理说明",
+            "version_date": "2025-08-01",
+            "passage_id": "P1",
+            "quote": "员工应在外部培训结束后 40 天内提交培训报销申请。"
+          }
+        ],
+        "gap": "资料中缺少足以判定适用口径的依据，需要确认适用范围、优先级或废止关系。",
+        "follow_up": "外部培训报销的提交期限应以哪份文件为准：《外部培训报销规则》（20天）还是《培训费用报销办理说明》（40天）？请确认后者是否已替代前者或另有适用说明。",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 6,
+          "api_retries": 0,
+          "usage": {
+            "prompt_tokens": 11808,
+            "completion_tokens": 636
+          },
+          "max_steps": 8,
+          "steps_used": 6,
+          "max_tool_calls": 6,
+          "tool_calls_used": 5,
+          "max_seconds": 120
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "外部培训 报销 提交期限"
+            },
+            "reason": "检索外部培训报销提交期限相关制度原文",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "T02",
+                  "title": "外部培训报销规则",
+                  "version_date": "2025-01-05",
+                  "matched_terms": [
+                    "外部培训报销",
+                    "培训报销"
+                  ],
+                  "score": 1.0
+                },
+                {
+                  "doc_id": "T03",
+                  "title": "培训费用报销办理说明",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "外部培训报销",
+                    "培训报销"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "next_offset": null,
+              "query": "外部培训 报销 提交期限",
+              "cached": false,
+              "unread_doc_ids": [
+                "T02",
+                "T03"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "T02"
+            },
+            "reason": "读取外部培训报销规则原文核对提交期限",
+            "observation": {
+              "ok": true,
+              "doc_id": "T02",
+              "title": "外部培训报销规则",
+              "version_date": "2025-01-05",
+              "passage_topics": {},
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工应在外部培训结束后 20 天内提交培训报销申请。"
+                }
+              ],
+              "cached": false,
+              "skipped_tool_calls": [
+                "read_doc"
+              ]
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "T03"
+            },
+            "reason": "读取办理说明原文，核对是否与规则存在期限不一致",
+            "observation": {
+              "ok": true,
+              "doc_id": "T03",
+              "title": "培训费用报销办理说明",
+              "version_date": "2025-08-01",
+              "passage_topics": {},
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工应在外部培训结束后 40 天内提交培训报销申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 4,
+            "action": "search_docs",
+            "arguments": {
+              "query": "培训费用报销办理说明 适用范围 替代 废止 优先适用"
+            },
+            "reason": "两份原文期限冲突，补查适用范围与替代/废止依据",
+            "observation": {
+              "ok": true,
+              "total": 0,
+              "hits": [],
+              "next_offset": null,
+              "query": "培训费用报销办理说明 适用范围 替代 废止 优先适用",
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 2,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 5,
+            "action": "search_docs",
+            "arguments": {
+              "query": "外部培训报销 生效 废止 版本 适用"
+            },
+            "reason": "换主题词补查两份文件的效力与适用关系",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "T02",
+                  "title": "外部培训报销规则",
+                  "version_date": "2025-01-05",
+                  "matched_terms": [
+                    "外部培训报销",
+                    "培训报销"
+                  ],
+                  "score": 1.0
+                },
+                {
+                  "doc_id": "T03",
+                  "title": "培训费用报销办理说明",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "外部培训报销",
+                    "培训报销"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "next_offset": null,
+              "query": "外部培训报销 生效 废止 版本 适用",
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 1,
+            "next_action": "finish"
+          },
+          {
+            "step": 6,
+            "action": "finish",
+            "arguments": {
+              "status": "conflict",
+              "citations": [
+                {
+                  "doc_id": "T02",
+                  "passage_id": "P1"
+                },
+                {
+                  "doc_id": "T03",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "《外部培训报销规则》规定培训结束后20天内提交，《培训费用报销办理说明》规定40天内提交，两份原文期限冲突；补查后未找到任何关于适用范围、替代关系、废止或优先适用的条款，仅凭版本日期无法判断以哪份为准。",
+              "follow_up": "外部培训报销的提交期限应以哪份文件为准：《外部培训报销规则》（20天）还是《培训费用报销办理说明》（40天）？请确认后者是否已替代前者或另有适用说明。"
+            },
+            "reason": "两份原文对同一场景给出不同期限，且补查未找到适用或废止依据，需用户确认。",
+            "observation": {
+              "ok": true,
+              "status": "conflict",
+              "citations": [
+                {
+                  "doc_id": "T02",
+                  "title": "外部培训报销规则",
+                  "version_date": "2025-01-05",
+                  "passage_id": "P1",
+                  "quote": "员工应在外部培训结束后 20 天内提交培训报销申请。"
+                },
+                {
+                  "doc_id": "T03",
+                  "title": "培训费用报销办理说明",
+                  "version_date": "2025-08-01",
+                  "passage_id": "P1",
+                  "quote": "员工应在外部培训结束后 40 天内提交培训报销申请。"
+                }
+              ],
+              "gap": "资料中缺少足以判定适用口径的依据，需要确认适用范围、优先级或废止关系。"
+            },
+            "tool_calls_remaining": 1,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "R03-projector-deadline",
+      "group": "holdout",
+      "expected_status": "answered",
+      "expected_refs": [
+        "T04/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "T04/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "read_match": true,
+        "answer_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "T04"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【T04/P1】员工提交完整的投影仪借用申请后，资产组会在 3 个工作日内发放投影仪。",
+        "citations": [
+          {
+            "doc_id": "T04",
+            "title": "投影仪借用办理规则",
+            "version_date": "2025-07-05",
+            "passage_id": "P1",
+            "quote": "员工提交完整的投影仪借用申请后，资产组会在 3 个工作日内发放投影仪。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "api_retries": 0,
+          "usage": {
+            "prompt_tokens": 4903,
+            "completion_tokens": 273
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2,
+          "max_seconds": 120
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "投影仪 资产 领用 发放 时限"
+            },
+            "reason": "检索投影仪领用与资产组发放时限相关制度",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "T04",
+                  "title": "投影仪借用办理规则",
+                  "version_date": "2025-07-05",
+                  "matched_terms": [
+                    "投影仪"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "next_offset": null,
+              "query": "投影仪 资产 领用 发放 时限",
+              "cached": false,
+              "unread_doc_ids": [
+                "T04"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "T04"
+            },
+            "reason": "读取投影仪借用办理规则全文以核对起算步骤与发放时限",
+            "observation": {
+              "ok": true,
+              "doc_id": "T04",
+              "title": "投影仪借用办理规则",
+              "version_date": "2025-07-05",
+              "passage_topics": {},
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工提交完整的投影仪借用申请后，资产组会在 3 个工作日内发放投影仪。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "T04",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "原文明确以“提交完整的投影仪借用申请”为起算事件，资产组3个工作日内发放，直接回答所问。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "T04",
+                  "title": "投影仪借用办理规则",
+                  "version_date": "2025-07-05",
+                  "passage_id": "P1",
+                  "quote": "员工提交完整的投影仪借用申请后，资产组会在 3 个工作日内发放投影仪。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "R04-projector-calendar-gap",
+      "group": "holdout",
+      "expected_status": "insufficient_evidence",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "read_match": true,
+        "answer_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "T04"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "insufficient_evidence",
+        "answer": "",
+        "citations": [],
+        "gap": "现有《投影仪借用办理规则》只写明“提交完整的借用申请后，资产组会在3个工作日内发放投影仪”，给出了起算事件和期限长度，但没有关于提交当天是否计入第一个工作日、工作日如何计算（日历计数规则）的条款。",
+        "follow_up": "是否需要我按“提交申请当天不计入、自次一工作日起算”的通用口径答复，还是您能提供含工作日计算规则的制度文件？",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "api_retries": 0,
+          "usage": {
+            "prompt_tokens": 4887,
+            "completion_tokens": 352
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2,
+          "max_seconds": 120
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "投影仪借用 三个工作日 期限"
+            },
+            "reason": "检索投影仪借用期限相关制度条款",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "T04",
+                  "title": "投影仪借用办理规则",
+                  "version_date": "2025-07-05",
+                  "matched_terms": [
+                    "投影仪",
+                    "投影仪借用"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "next_offset": null,
+              "query": "投影仪借用 三个工作日 期限",
+              "cached": false,
+              "unread_doc_ids": [
+                "T04"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "T04"
+            },
+            "reason": "读取投影仪借用规则全文以核对期限起算与日历计数规则",
+            "observation": {
+              "ok": true,
+              "doc_id": "T04",
+              "title": "投影仪借用办理规则",
+              "version_date": "2025-07-05",
+              "passage_topics": {},
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工提交完整的投影仪借用申请后，资产组会在 3 个工作日内发放投影仪。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "insufficient_evidence",
+              "citations": [
+                {
+                  "doc_id": "T04",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "现有《投影仪借用办理规则》只写明“提交完整的借用申请后，资产组会在3个工作日内发放投影仪”，给出了起算事件和期限长度，但没有关于提交当天是否计入第一个工作日、工作日如何计算（日历计数规则）的条款。",
+              "follow_up": "是否需要我按“提交申请当天不计入、自次一工作日起算”的通用口径答复，还是您能提供含工作日计算规则的制度文件？"
+            },
+            "reason": "已读取唯一相关文档，其中仅有起算事件与期限，缺少当天是否计入的计数规则。",
+            "observation": {
+              "ok": true,
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "现有《投影仪借用办理规则》只写明“提交完整的借用申请后，资产组会在3个工作日内发放投影仪”，给出了起算事件和期限长度，但没有关于提交当天是否计入第一个工作日、工作日如何计算（日历计数规则）的条款。"
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    }
+  ]
+}
