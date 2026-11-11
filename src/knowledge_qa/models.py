@@ -1,6 +1,7 @@
 import json
 import os
 from dataclasses import dataclass
+from http.client import IncompleteRead
 from time import monotonic, sleep
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -197,7 +198,7 @@ class LiveModel:
                 message = f"模型服务返回 HTTP {error.code}"
                 retryable = error.code in {429, 500, 502, 503, 504}
                 error.close()
-            except (URLError, TimeoutError, OSError):
+            except (URLError, TimeoutError, OSError, IncompleteRead):
                 message = "模型连接失败或超时"
                 retryable = True
             except ValueError:

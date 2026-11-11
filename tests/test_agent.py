@@ -1,6 +1,7 @@
 import json
 import tempfile
 import unittest
+from http.client import IncompleteRead
 from io import BytesIO
 from pathlib import Path
 from threading import Event
@@ -432,6 +433,31 @@ class KnowledgeTests(unittest.TestCase):
             with self.assertRaisesRegex(ModelError, "HTTP 401"):
                 model.choose([])
         http.assert_called_once()
+
+    def test_truncated_model_response_retries_then_returns_structured_error(self):
+        response = {
+            "choices": [{"message": {"tool_calls": [
+                {"id": "a", "function": {"name": "search_docs", "arguments": '{"query":"门禁"}'}},
+            ]}}],
+        }
+        truncated = IncompleteRead(b'{"choices":', 30)
+        with (
+            patch.dict("os.environ", {"DEEPSEEK_API_KEY": "test-key"}),
+            patch("src.knowledge_qa.models.sleep"),
+            patch("src.knowledge_qa.models.urlopen", side_effect=[
+                truncated, BytesIO(json.dumps(response).encode()), truncated, truncated,
+            ]) as http,
+        ):
+            recovered = LiveModel("deepseek")
+            self.assertEqual(recovered.choose([]).name, "search_docs")
+            self.assertEqual(recovered.metadata()["api_retries"], 1)
+            failing = LiveModel("deepseek")
+            result = KnowledgeAgent(failing, self.knowledge).run("门禁", [])
+            self.assertEqual(result["status"], "model_error")
+            self.assertEqual(result["run"]["api_requests"], 2)
+            self.assertEqual(result["run"]["tool_calls_used"], 0)
+            self.assertEqual(result["trace"][0]["observation"]["error"], "model_error")
+        self.assertEqual(http.call_count, 4)
 
     def test_invalid_citation_is_observed_and_corrected(self):
         end = {"status": "answered", "gap": "", "follow_up": ""}
