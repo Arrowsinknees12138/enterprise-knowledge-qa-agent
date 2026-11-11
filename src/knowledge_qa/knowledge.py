@@ -153,7 +153,11 @@ class KnowledgeBase:
             doc_id for doc_id in previous
             if any(normalize(term) in question_terms for term in self.documents[doc_id]["terms"])
         }
-        return bool(related) and related <= refined_hits
+        if not related or not related <= refined_hits:
+            return False
+        # A renamed version of a retained policy may not match the question's keywords.
+        groups = {self.policy_group(doc_id) for doc_id in refined_hits} - {None}
+        return not any(self.policy_group(doc_id) in groups for doc_id in previous - refined_hits)
 
     def read_doc(self, doc_id):
         if self.fail_tool == "read_doc":

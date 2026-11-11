@@ -319,6 +319,23 @@ class KnowledgeTests(unittest.TestCase):
         self.assertNotIn("retired_queries", refined)
         self.assertTrue({"D01", "D02"} <= evidence.candidates)
 
+    def test_narrow_search_keeps_policy_versions_with_different_aliases(self):
+        self.knowledge.documents["D01"]["terms"] = ["差旅报销", "差旅制度"]
+        self.knowledge.documents["D02"]["terms"] = ["出差费用", "差旅制度"]
+        self.knowledge.term_frequency.update({"差旅报销": 1, "出差费用": 1, "差旅制度": 2})
+        evidence = Evidence(self.knowledge, question="差旅报销期限多久？")
+        evidence.search({"query": "差旅制度"})
+        refined = evidence.search({"query": "差旅报销"})
+        self.assertEqual([hit["doc_id"] for hit in refined["hits"]], ["D01"])
+        evidence.execute("read_doc", {"doc_id": "D01"})
+        answer = {
+            "status": "answered", "citations": [{"doc_id": "D01", "passage_id": "P1"}],
+            "gap": "", "follow_up": "",
+        }
+        self.assertEqual(evidence.finish(answer)["unread_doc_ids"], ["D02"])
+        evidence.execute("read_doc", {"doc_id": "D02"})
+        self.assertIn("同一规则存在不同数值", evidence.finish(answer)["message"])
+
     def test_search_failure_survives_unrelated_empty_search_until_same_query_recovers(self):
         evidence = Evidence(self.knowledge, question="员工门禁多久开通？")
         self.knowledge.fail_tool = "search_docs"
