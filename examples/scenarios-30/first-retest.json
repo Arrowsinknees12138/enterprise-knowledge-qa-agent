@@ -1,0 +1,4948 @@
+{
+  "commit": "01ab1508328a0e33353280663f996f8566178b7f",
+  "cases_sha256": "91958c4e79bd1ad0056161d01e2df33bc72ef57d74ba18441a5b449a4f78da6e",
+  "corpus_sha256": "9526f1b39ff8def0c5f792ddee2c820996bf7879824171cd844c03b9bf51097d",
+  "metrics": {
+    "cases": 30,
+    "passed": 29,
+    "status_matches": 29,
+    "citation_cases": 17,
+    "citation_exact_matches": 17,
+    "unsupported_answers": 1,
+    "first_search_cases": 23,
+    "first_search_hits_at_3": 23,
+    "first_search_all_relevant_at_3": 23
+  },
+  "groups": {
+    "direct": {
+      "cases": 6,
+      "passed": 6
+    },
+    "context": {
+      "cases": 5,
+      "passed": 5
+    },
+    "gap": {
+      "cases": 6,
+      "passed": 6
+    },
+    "clarification": {
+      "cases": 3,
+      "passed": 2
+    },
+    "policy": {
+      "cases": 5,
+      "passed": 5
+    },
+    "operations": {
+      "cases": 5,
+      "passed": 5
+    }
+  },
+  "results": [
+    {
+      "id": "S01-visitor-lead-time",
+      "group": "direct",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D06/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D06/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D06"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D06/P1】外部访客到访前，由接待员工至少提前 1 个工作日提交临时通行申请。",
+        "citations": [
+          {
+            "doc_id": "D06",
+            "title": "访客临时通行须知",
+            "version_date": "2025-06-10",
+            "passage_id": "P1",
+            "quote": "外部访客到访前，由接待员工至少提前 1 个工作日提交临时通行申请。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "usage": {
+            "prompt_tokens": 4266,
+            "completion_tokens": 267
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "临时通行 申请 提前 工作日 外部来访 接待"
+            },
+            "reason": "检索外部来访接待临时通行申请的时限规定",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D06",
+                  "title": "访客临时通行须知",
+                  "version_date": "2025-06-10",
+                  "matched_terms": [
+                    "来访",
+                    "临时通行"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D06"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D06"
+            },
+            "reason": "读取访客临时通行须知全文以核对申请提前时限",
+            "observation": {
+              "ok": true,
+              "doc_id": "D06",
+              "title": "访客临时通行须知",
+              "version_date": "2025-06-10",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "外部访客到访前，由接待员工至少提前 1 个工作日提交临时通行申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D06",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "《访客临时通行须知》明确由接待员工至少提前1个工作日提交临时通行申请，直接回答所问。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D06",
+                  "title": "访客临时通行须知",
+                  "version_date": "2025-06-10",
+                  "passage_id": "P1",
+                  "quote": "外部访客到访前，由接待员工至少提前 1 个工作日提交临时通行申请。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S02-mail-recipient-cap",
+      "group": "direct",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D04/P3"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D04/P3"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D04"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D04/P3】企业邮箱单封邮件最多可填写 50 个收件人。",
+        "citations": [
+          {
+            "doc_id": "D04",
+            "title": "企业邮箱产品 FAQ",
+            "version_date": "2025-05-20",
+            "passage_id": "P3",
+            "quote": "企业邮箱单封邮件最多可填写 50 个收件人。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "usage": {
+            "prompt_tokens": 4321,
+            "completion_tokens": 259
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "企业邮箱 群发 收件人 数量限制"
+            },
+            "reason": "检索企业邮箱群发收件人上限相关制度",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D04",
+                  "title": "企业邮箱产品 FAQ",
+                  "version_date": "2025-05-20",
+                  "matched_terms": [
+                    "企业邮箱",
+                    "邮箱"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D04"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D04"
+            },
+            "reason": "读取唯一候选文档以核对群发收件人上限条款",
+            "observation": {
+              "ok": true,
+              "doc_id": "D04",
+              "title": "企业邮箱产品 FAQ",
+              "version_date": "2025-05-20",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业邮箱回收站中的邮件自删除起保留 30 天。"
+                },
+                {
+                  "passage_id": "P3",
+                  "quote": "企业邮箱单封邮件最多可填写 50 个收件人。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D04",
+                  "passage_id": "P3"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "FAQ 原文明确给出单封邮件收件人上限，直接回答问题",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D04",
+                  "title": "企业邮箱产品 FAQ",
+                  "version_date": "2025-05-20",
+                  "passage_id": "P3",
+                  "quote": "企业邮箱单封邮件最多可填写 50 个收件人。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S03-drive-two-fields",
+      "group": "direct",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D07/P1",
+        "D07/P2"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D07/P1",
+          "D07/P2"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D07"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D07/P1】企业云盘的单个文件上传大小上限为 2 GB。\n【D07/P2】企业云盘的外部分享链接默认在 7 天后失效。",
+        "citations": [
+          {
+            "doc_id": "D07",
+            "title": "企业云盘上传与分享",
+            "version_date": "2025-06-12",
+            "passage_id": "P1",
+            "quote": "企业云盘的单个文件上传大小上限为 2 GB。"
+          },
+          {
+            "doc_id": "D07",
+            "title": "企业云盘上传与分享",
+            "version_date": "2025-06-12",
+            "passage_id": "P2",
+            "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "usage": {
+            "prompt_tokens": 4292,
+            "completion_tokens": 330
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "企业云盘 上传文件大小上限"
+            },
+            "reason": "先检索云盘上传限制相关制度",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "matched_terms": [
+                    "云盘",
+                    "上传"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D07"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D07"
+            },
+            "reason": "该文档同时涉及上传与分享，可覆盖两个问题",
+            "observation": {
+              "ok": true,
+              "doc_id": "D07",
+              "title": "企业云盘上传与分享",
+              "version_date": "2025-06-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业云盘的单个文件上传大小上限为 2 GB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D07",
+                  "passage_id": "P1"
+                },
+                {
+                  "doc_id": "D07",
+                  "passage_id": "P2"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "同一制度文档明确给出上传上限与外部分享链接默认失效期，无冲突",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "passage_id": "P1",
+                  "quote": "企业云盘的单个文件上传大小上限为 2 GB。"
+                },
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "passage_id": "P2",
+                  "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S04-new-access-clock",
+      "group": "direct",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D03/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D03/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D03"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D03/P1】员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。",
+        "citations": [
+          {
+            "doc_id": "D03",
+            "title": "门禁权限申请 FAQ",
+            "version_date": "2025-03-12",
+            "passage_id": "P1",
+            "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "usage": {
+            "prompt_tokens": 4261,
+            "completion_tokens": 266
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "新员工 门禁 办理 时限 开通 工作日"
+            },
+            "reason": "检索门禁办理时限相关制度条款",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D03",
+                  "title": "门禁权限申请 FAQ",
+                  "version_date": "2025-03-12",
+                  "matched_terms": [
+                    "门禁"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D03"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D03"
+            },
+            "reason": "读取门禁权限申请FAQ全文以核对时限条款",
+            "observation": {
+              "ok": true,
+              "doc_id": "D03",
+              "title": "门禁权限申请 FAQ",
+              "version_date": "2025-03-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D03",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "FAQ明确以“提交完整的门禁权限申请”为起算事件，行政2个工作日内开通，直接回答所问。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D03",
+                  "title": "门禁权限申请 FAQ",
+                  "version_date": "2025-03-12",
+                  "passage_id": "P1",
+                  "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S05-card-loss-prerequisite",
+      "group": "direct",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D05/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D05/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D05",
+          "D03"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D05/P1】员工完成门禁卡挂失后，可提交补办申请。行政在收到完整补办申请后 1 个工作日内制发新卡。",
+        "citations": [
+          {
+            "doc_id": "D05",
+            "title": "员工门禁卡遗失补办指引",
+            "version_date": "2025-05-10",
+            "passage_id": "P1",
+            "quote": "员工完成门禁卡挂失后，可提交补办申请。行政在收到完整补办申请后 1 个工作日内制发新卡。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 4,
+          "usage": {
+            "prompt_tokens": 6273,
+            "completion_tokens": 386
+          },
+          "max_steps": 8,
+          "steps_used": 4,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "门禁卡 遗失 补办 挂失"
+            },
+            "reason": "检索门禁卡遗失补办流程相关制度条款",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D05",
+                  "title": "员工门禁卡遗失补办指引",
+                  "version_date": "2025-05-10",
+                  "matched_terms": [
+                    "门禁卡",
+                    "补办",
+                    "挂失",
+                    "卡遗失"
+                  ],
+                  "score": 4.0
+                },
+                {
+                  "doc_id": "D03",
+                  "title": "门禁权限申请 FAQ",
+                  "version_date": "2025-03-12",
+                  "matched_terms": [
+                    "门禁"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D05",
+                "D03"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D05"
+            },
+            "reason": "该文档标题直接对应门禁卡遗失补办流程",
+            "observation": {
+              "ok": true,
+              "doc_id": "D05",
+              "title": "员工门禁卡遗失补办指引",
+              "version_date": "2025-05-10",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工完成门禁卡挂失后，可提交补办申请。行政在收到完整补办申请后 1 个工作日内制发新卡。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D03"
+            },
+            "reason": "核对FAQ中是否有关于遗失补办前置步骤的不同口径",
+            "observation": {
+              "ok": true,
+              "doc_id": "D03",
+              "title": "门禁权限申请 FAQ",
+              "version_date": "2025-03-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 4,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D05",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "补办指引明确挂失是提交补办申请的前置步骤；FAQ仅涉及权限开通，不构成冲突。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D05",
+                  "title": "员工门禁卡遗失补办指引",
+                  "version_date": "2025-05-10",
+                  "passage_id": "P1",
+                  "quote": "员工完成门禁卡挂失后，可提交补办申请。行政在收到完整补办申请后 1 个工作日内制发新卡。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S06-reset-link-validity",
+      "group": "direct",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D12/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D12/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D12"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D12/P1】通过企业账号服务台生成的密码重置链接在 15 分钟后失效。",
+        "citations": [
+          {
+            "doc_id": "D12",
+            "title": "企业账号密码重置 FAQ",
+            "version_date": "2025-09-10",
+            "passage_id": "P1",
+            "quote": "通过企业账号服务台生成的密码重置链接在 15 分钟后失效。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "usage": {
+            "prompt_tokens": 4238,
+            "completion_tokens": 247
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "密码重置链接 有效期"
+            },
+            "reason": "检索密码重置链接有效期的制度条款",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D12",
+                  "title": "企业账号密码重置 FAQ",
+                  "version_date": "2025-09-10",
+                  "matched_terms": [
+                    "密码",
+                    "重置"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D12"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D12"
+            },
+            "reason": "读取该FAQ全文以确认重置链接有效期条款",
+            "observation": {
+              "ok": true,
+              "doc_id": "D12",
+              "title": "企业账号密码重置 FAQ",
+              "version_date": "2025-09-10",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "通过企业账号服务台生成的密码重置链接在 15 分钟后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D12",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "FAQ原文明确说明服务台生成的密码重置链接15分钟后失效，直接回答问题。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D12",
+                  "title": "企业账号密码重置 FAQ",
+                  "version_date": "2025-09-10",
+                  "passage_id": "P1",
+                  "quote": "通过企业账号服务台生成的密码重置链接在 15 分钟后失效。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S07-paraphrase-building-access",
+      "group": "context",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D03/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D03/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D03"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D03/P1】员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。",
+        "citations": [
+          {
+            "doc_id": "D03",
+            "title": "门禁权限申请 FAQ",
+            "version_date": "2025-03-12",
+            "passage_id": "P1",
+            "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "usage": {
+            "prompt_tokens": 4311,
+            "completion_tokens": 290
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "工牌 办理 领取 门禁 办公楼 申请"
+            },
+            "reason": "用户问新同事办完进办公楼申请后何时能拿到工牌刷卡，需检索工牌办理与门禁相关制度。",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D03",
+                  "title": "门禁权限申请 FAQ",
+                  "version_date": "2025-03-12",
+                  "matched_terms": [
+                    "门禁"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D03"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D03"
+            },
+            "reason": "唯一候选文档涉及门禁权限申请，需读取原文确认工牌发放时限。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D03",
+              "title": "门禁权限申请 FAQ",
+              "version_date": "2025-03-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D03",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "FAQ 明确写明提交完整门禁申请后行政在 2 个工作日内开通门禁，直接回答时限问题。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D03",
+                  "title": "门禁权限申请 FAQ",
+                  "version_date": "2025-03-12",
+                  "passage_id": "P1",
+                  "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S08-switch-drive-to-mail",
+      "group": "context",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D04/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D04/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D04",
+          "D07"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D04/P1】企业邮箱单封邮件的附件总大小上限为 25 MB。",
+        "citations": [
+          {
+            "doc_id": "D04",
+            "title": "企业邮箱产品 FAQ",
+            "version_date": "2025-05-20",
+            "passage_id": "P1",
+            "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 5,
+          "usage": {
+            "prompt_tokens": 8644,
+            "completion_tokens": 533
+          },
+          "max_steps": 8,
+          "steps_used": 5,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "公司邮箱 附件大小限制"
+            },
+            "reason": "用户改问公司邮箱发信的附件大小上限，需检索邮件附件相关制度。",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D04",
+                  "title": "企业邮箱产品 FAQ",
+                  "version_date": "2025-05-20",
+                  "matched_terms": [
+                    "邮箱",
+                    "附件"
+                  ],
+                  "score": 1.5
+                },
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "matched_terms": [
+                    "附件"
+                  ],
+                  "score": 0.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D04",
+                "D07"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D04"
+            },
+            "reason": "D04 是企业邮箱 FAQ，最可能载明附件大小上限。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D04",
+              "title": "企业邮箱产品 FAQ",
+              "version_date": "2025-05-20",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业邮箱回收站中的邮件自删除起保留 30 天。"
+                },
+                {
+                  "passage_id": "P3",
+                  "quote": "企业邮箱单封邮件最多可填写 50 个收件人。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D04",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "企业邮箱 FAQ 明确给出单封邮件附件总大小上限，直接回答用户所问。",
+            "observation": {
+              "ok": false,
+              "error": "invalid_action",
+              "message": "存在未核对的候选文档或未恢复的检索失败"
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 4,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D07"
+            },
+            "reason": "D07 也命中“附件”，需读取确认是否涉及邮箱附件口径或替代关系。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D07",
+              "title": "企业云盘上传与分享",
+              "version_date": "2025-06-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业云盘的单个文件上传大小上限为 2 GB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 5,
+            "action": "finish",
+            "arguments": {
+              "citations": [
+                {
+                  "doc_id": "D04",
+                  "passage_id": "P1"
+                }
+              ],
+              "follow_up": "",
+              "gap": "",
+              "status": "answered"
+            },
+            "reason": "D07 仅涉及云盘上传，与邮箱附件无关；D04 明确给出邮箱附件上限，冲突已排除。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D04",
+                  "title": "企业邮箱产品 FAQ",
+                  "version_date": "2025-05-20",
+                  "passage_id": "P1",
+                  "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S09-follow-up-project-approval",
+      "group": "context",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D11/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D11/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D10",
+          "D11"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D11/P1】外包人员须至少提前 1 个工作日提交远程办公申请，并取得项目负责人的确认。",
+        "citations": [
+          {
+            "doc_id": "D11",
+            "title": "外包人员远程办公申请",
+            "version_date": "2025-08-01",
+            "passage_id": "P1",
+            "quote": "外包人员须至少提前 1 个工作日提交远程办公申请，并取得项目负责人的确认。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 5,
+          "usage": {
+            "prompt_tokens": 8439,
+            "completion_tokens": 517
+          },
+          "max_steps": 8,
+          "steps_used": 5,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "远程办公 申请 审批 项目负责人确认"
+            },
+            "reason": "用户追问远程办公申请是否还需项目负责人确认，需检索相关审批条款。",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D10",
+                  "title": "正式员工远程办公申请",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "远程办公"
+                  ],
+                  "score": 0.5
+                },
+                {
+                  "doc_id": "D11",
+                  "title": "外包人员远程办公申请",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "远程办公"
+                  ],
+                  "score": 0.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D10",
+                "D11"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D11"
+            },
+            "reason": "用户为外包驻场人员，优先读取外包人员远程办公申请条款。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D11",
+              "title": "外包人员远程办公申请",
+              "version_date": "2025-08-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "外包人员须至少提前 1 个工作日提交远程办公申请，并取得项目负责人的确认。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D11",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "外包人员远程办公申请条款明确要求取得项目负责人确认，直接回答追问。",
+            "observation": {
+              "ok": false,
+              "error": "invalid_action",
+              "message": "存在未核对的候选文档或未恢复的检索失败"
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 4,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D10"
+            },
+            "reason": "需核对另一候选文档以排除适用对象差异。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D10",
+              "title": "正式员工远程办公申请",
+              "version_date": "2025-08-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "正式员工须至少提前 2 个工作日提交远程办公申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 5,
+            "action": "finish",
+            "arguments": {
+              "citations": [
+                {
+                  "doc_id": "D11",
+                  "passage_id": "P1"
+                }
+              ],
+              "follow_up": "",
+              "gap": "",
+              "status": "answered"
+            },
+            "reason": "外包人员条款明确要求项目负责人确认；正式员工条款仅规定提交时限，适用对象不同，故采用外包条款。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D11",
+                  "title": "外包人员远程办公申请",
+                  "version_date": "2025-08-01",
+                  "passage_id": "P1",
+                  "quote": "外包人员须至少提前 1 个工作日提交远程办公申请，并取得项目负责人的确认。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S10-correct-false-history",
+      "group": "context",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D12/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D12/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D12"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D12/P1】通过企业账号服务台生成的密码重置链接在 15 分钟后失效。",
+        "citations": [
+          {
+            "doc_id": "D12",
+            "title": "企业账号密码重置 FAQ",
+            "version_date": "2025-09-10",
+            "passage_id": "P1",
+            "quote": "通过企业账号服务台生成的密码重置链接在 15 分钟后失效。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "usage": {
+            "prompt_tokens": 4386,
+            "completion_tokens": 265
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "密码重置链接 有效期"
+            },
+            "reason": "用户询问重置链接作废时限，需检索产品 FAQ 中相关条款。",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D12",
+                  "title": "企业账号密码重置 FAQ",
+                  "version_date": "2025-09-10",
+                  "matched_terms": [
+                    "密码",
+                    "重置"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D12"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D12"
+            },
+            "reason": "唯一候选文档即产品 FAQ，需读取原文核对链接有效期。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D12",
+              "title": "企业账号密码重置 FAQ",
+              "version_date": "2025-09-10",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "通过企业账号服务台生成的密码重置链接在 15 分钟后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D12",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "产品 FAQ 原文明确写明服务台生成的重置链接 15 分钟后失效，直接回答所问时限。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D12",
+                  "title": "企业账号密码重置 FAQ",
+                  "version_date": "2025-09-10",
+                  "passage_id": "P1",
+                  "quote": "通过企业账号服务台生成的密码重置链接在 15 分钟后失效。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S11-paraphrase-external-share",
+      "group": "context",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D07/P2"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D07/P2"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D07"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D07/P2】企业云盘的外部分享链接默认在 7 天后失效。",
+        "citations": [
+          {
+            "doc_id": "D07",
+            "title": "企业云盘上传与分享",
+            "version_date": "2025-06-12",
+            "passage_id": "P2",
+            "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "usage": {
+            "prompt_tokens": 4315,
+            "completion_tokens": 270
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "网盘 分享 外链 有效期"
+            },
+            "reason": "用户询问网盘分享给外部人员的默认有效期，先检索相关制度主题词。",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "matched_terms": [
+                    "网盘",
+                    "分享"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D07"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D07"
+            },
+            "reason": "唯一候选文档涉及云盘分享，需读取原文确认外部分享的默认有效期。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D07",
+              "title": "企业云盘上传与分享",
+              "version_date": "2025-06-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业云盘的单个文件上传大小上限为 2 GB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D07",
+                  "passage_id": "P2"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "原文明确外部分享链接默认 7 天后失效，直接回答所问期限。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "passage_id": "P2",
+                  "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S12-lost-card-fee",
+      "group": "gap",
+      "expected_status": "insufficient_evidence",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D05",
+          "D03"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "insufficient_evidence",
+        "answer": "",
+        "citations": [],
+        "gap": "已检索到的门禁卡遗失补办指引仅规定挂失后1个工作日内制发新卡，门禁权限FAQ仅规定2个工作日内开通，均未载明补办工本费金额；以“工本费/收费标准/押金”补查无结果。",
+        "follow_up": "请问您指的是员工门禁卡还是访客/外包人员卡片的补办？另外是否知道收费规定可能出自哪份制度（如行政收费或资产管理制度）？",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 5,
+          "usage": {
+            "prompt_tokens": 8255,
+            "completion_tokens": 543
+          },
+          "max_steps": 8,
+          "steps_used": 5,
+          "max_tool_calls": 6,
+          "tool_calls_used": 4
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "门禁卡 补办 工本费"
+            },
+            "reason": "检索门禁卡补办收费相关制度条款",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D05",
+                  "title": "员工门禁卡遗失补办指引",
+                  "version_date": "2025-05-10",
+                  "matched_terms": [
+                    "门禁卡",
+                    "补办"
+                  ],
+                  "score": 2.0
+                },
+                {
+                  "doc_id": "D03",
+                  "title": "门禁权限申请 FAQ",
+                  "version_date": "2025-03-12",
+                  "matched_terms": [
+                    "门禁"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D05",
+                "D03"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D05"
+            },
+            "reason": "该文档主题为门禁卡遗失补办，最可能载明工本费",
+            "observation": {
+              "ok": true,
+              "doc_id": "D05",
+              "title": "员工门禁卡遗失补办指引",
+              "version_date": "2025-05-10",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工完成门禁卡挂失后，可提交补办申请。行政在收到完整补办申请后 1 个工作日内制发新卡。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D03"
+            },
+            "reason": "D05未载明费用，查看门禁FAQ是否涉及补办收费",
+            "observation": {
+              "ok": true,
+              "doc_id": "D03",
+              "title": "门禁权限申请 FAQ",
+              "version_date": "2025-03-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 4,
+            "action": "search_docs",
+            "arguments": {
+              "query": "工本费 收费标准 卡片 押金"
+            },
+            "reason": "两份门禁文档均未涉及费用，换主题词补查收费规定",
+            "observation": {
+              "ok": true,
+              "total": 0,
+              "hits": [],
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 2,
+            "next_action": "finish"
+          },
+          {
+            "step": 5,
+            "action": "finish",
+            "arguments": {
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "已检索到的门禁卡遗失补办指引仅规定挂失后1个工作日内制发新卡，门禁权限FAQ仅规定2个工作日内开通，均未载明补办工本费金额；以“工本费/收费标准/押金”补查无结果。",
+              "follow_up": "请问您指的是员工门禁卡还是访客/外包人员卡片的补办？另外是否知道收费规定可能出自哪份制度（如行政收费或资产管理制度）？"
+            },
+            "reason": "现有门禁相关原文均未涉及补办费用，无法给出金额。",
+            "observation": {
+              "ok": true,
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "已检索到的门禁卡遗失补办指引仅规定挂失后1个工作日内制发新卡，门禁权限FAQ仅规定2个工作日内开通，均未载明补办工本费金额；以“工本费/收费标准/押金”补查无结果。"
+            },
+            "tool_calls_remaining": 2,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S13-out-of-scope-parcel",
+      "group": "gap",
+      "expected_status": "insufficient_evidence",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [],
+        "first_search_hit_at_3": null,
+        "first_search_all_relevant_at_3": null
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "insufficient_evidence",
+        "answer": "",
+        "citations": [],
+        "gap": "以“前台代收快递 保管期限 逾期处理”“快递 收发 代收 管理规定”“前台 物品寄存 保管”等主题词检索均无命中，制度库中未找到关于前台代收私人快递保管天数及逾期处理方式的条款。",
+        "follow_up": "请问您指的是哪份制度（如《快递收发管理规定》《前台管理制度》）？或该规定发布/编号是什么，以便我定位对应条款？",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 4,
+          "usage": {
+            "prompt_tokens": 5764,
+            "completion_tokens": 410
+          },
+          "max_steps": 8,
+          "steps_used": 4,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "前台代收快递 保管期限 逾期处理"
+            },
+            "reason": "检索与前台代收快递保管期限和逾期处理相关的制度条款。",
+            "observation": {
+              "ok": true,
+              "total": 0,
+              "hits": [],
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 2,
+            "action": "search_docs",
+            "arguments": {
+              "query": "快递 收发 代收 管理规定"
+            },
+            "reason": "首次检索无结果，换用更宽泛的主题词补查快递收发管理制度。",
+            "observation": {
+              "ok": true,
+              "total": 0,
+              "hits": [],
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 3,
+            "action": "search_docs",
+            "arguments": {
+              "query": "前台 物品寄存 保管"
+            },
+            "reason": "快递主题词均无结果，尝试前台物品寄存保管相关制度。",
+            "observation": {
+              "ok": true,
+              "total": 0,
+              "hits": [],
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 4,
+            "action": "finish",
+            "arguments": {
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "以“前台代收快递 保管期限 逾期处理”“快递 收发 代收 管理规定”“前台 物品寄存 保管”等主题词检索均无命中，制度库中未找到关于前台代收私人快递保管天数及逾期处理方式的条款。",
+              "follow_up": "请问您指的是哪份制度（如《快递收发管理规定》《前台管理制度》）？或该规定发布/编号是什么，以便我定位对应条款？"
+            },
+            "reason": "三次不同主题词检索均无候选文档，缺乏可引用的原文依据。",
+            "observation": {
+              "ok": true,
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "以“前台代收快递 保管期限 逾期处理”“快递 收发 代收 管理规定”“前台 物品寄存 保管”等主题词检索均无命中，制度库中未找到关于前台代收私人快递保管天数及逾期处理方式的条款。"
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S14-remote-weekly-quota",
+      "group": "gap",
+      "expected_status": "insufficient_evidence",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D10",
+          "D11"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "insufficient_evidence",
+        "answer": "",
+        "citations": [],
+        "gap": "检索到的《正式员工远程办公申请》仅规定须至少提前 2 个工作日提交申请，未规定每周在家办公的天数配额；换主题词补查后无新文档可读。",
+        "follow_up": "制度中是否有其他文件（如考勤或办公管理规定）规定远程办公的每周天数上限？如有，请提供文件名或编号。",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 5,
+          "usage": {
+            "prompt_tokens": 8268,
+            "completion_tokens": 515
+          },
+          "max_steps": 8,
+          "steps_used": 5,
+          "max_tool_calls": 6,
+          "tool_calls_used": 4
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "在家办公 每周 配额 远程办公"
+            },
+            "reason": "检索与在家办公每周配额相关的制度条款。",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D10",
+                  "title": "正式员工远程办公申请",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "远程办公",
+                    "在家办公"
+                  ],
+                  "score": 1.0
+                },
+                {
+                  "doc_id": "D11",
+                  "title": "外包人员远程办公申请",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "远程办公",
+                    "在家办公"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D10",
+                "D11"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D10"
+            },
+            "reason": "该文档标题对应正式员工远程办公申请，需读取配额条款。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D10",
+              "title": "正式员工远程办公申请",
+              "version_date": "2025-08-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "正式员工须至少提前 2 个工作日提交远程办公申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D11"
+            },
+            "reason": "另一候选为外包人员版本，需确认是否含每周配额条款。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D11",
+              "title": "外包人员远程办公申请",
+              "version_date": "2025-08-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "外包人员须至少提前 1 个工作日提交远程办公申请，并取得项目负责人的确认。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 4,
+            "action": "search_docs",
+            "arguments": {
+              "query": "远程办公 每周天数 上限 频次"
+            },
+            "reason": "已读两份文档均无配额条款，换主题词补查每周天数上限。",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D10",
+                  "title": "正式员工远程办公申请",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "远程办公"
+                  ],
+                  "score": 0.5
+                },
+                {
+                  "doc_id": "D11",
+                  "title": "外包人员远程办公申请",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "远程办公"
+                  ],
+                  "score": 0.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 2,
+            "next_action": "finish"
+          },
+          {
+            "step": 5,
+            "action": "finish",
+            "arguments": {
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "检索到的《正式员工远程办公申请》仅规定须至少提前 2 个工作日提交申请，未规定每周在家办公的天数配额；换主题词补查后无新文档可读。",
+              "follow_up": "制度中是否有其他文件（如考勤或办公管理规定）规定远程办公的每周天数上限？如有，请提供文件名或编号。"
+            },
+            "reason": "现有文档只涉及申请提前期，未包含每周配额条款，无法回答所问字段。",
+            "observation": {
+              "ok": true,
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "检索到的《正式员工远程办公申请》仅规定须至少提前 2 个工作日提交申请，未规定每周在家办公的天数配额；换主题词补查后无新文档可读。"
+            },
+            "tool_calls_remaining": 2,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S15-repair-prepayment",
+      "group": "gap",
+      "expected_status": "insufficient_evidence",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D08",
+          "D09"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "insufficient_evidence",
+        "answer": "",
+        "citations": [],
+        "gap": "已检索并读取设备维修相关文件（《设备维修办理细则》及其替代版《设备维修办理规范（替代版）》），两份原文仅规定维修申请的提交时限，均未涉及维修费是否需员工垫付、付款方式或结算流程；差旅报销办法也只涉及差旅费用报销时限，与维修费无关。",
+        "follow_up": "请问您报修的是哪类设备（如办公电脑、生产设备、车辆等），以及维修是由公司统一安排还是员工自行联系维修方？以便定位适用的费用结算制度。",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 6,
+          "usage": {
+            "prompt_tokens": 10826,
+            "completion_tokens": 659
+          },
+          "max_steps": 8,
+          "steps_used": 6,
+          "max_tool_calls": 6,
+          "tool_calls_used": 5
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "设备报修 维修费 垫付 付款方式"
+            },
+            "reason": "检索报修与维修费用付款方式的制度条款",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D08",
+                  "title": "设备维修办理细则",
+                  "version_date": "2025-01-02",
+                  "matched_terms": [
+                    "维修",
+                    "报修",
+                    "设备"
+                  ],
+                  "score": 1.5
+                },
+                {
+                  "doc_id": "D09",
+                  "title": "设备维修办理规范（替代版）",
+                  "version_date": "2025-07-01",
+                  "matched_terms": [
+                    "维修",
+                    "报修",
+                    "设备"
+                  ],
+                  "score": 1.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D08",
+                "D09"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D08"
+            },
+            "reason": "读取设备维修细则原文核对付款方式",
+            "observation": {
+              "ok": true,
+              "doc_id": "D08",
+              "title": "设备维修办理细则",
+              "version_date": "2025-01-02",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "设备维修申请须在发现设备故障后 10 个工作日内提交。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D09"
+            },
+            "reason": "读取替代版规范核对付款方式与替代关系",
+            "observation": {
+              "ok": true,
+              "doc_id": "D09",
+              "title": "设备维修办理规范（替代版）",
+              "version_date": "2025-07-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "自 2025-07-01 起，本规范替代《设备维修办理细则》。设备维修申请须在发现设备故障后 5 个工作日内提交。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 4,
+            "action": "search_docs",
+            "arguments": {
+              "query": "维修费用 报销 结算 财务 付款"
+            },
+            "reason": "两份维修文件均未涉及付款方式，换主题词补查费用结算规定",
+            "observation": {
+              "ok": true,
+              "total": 4,
+              "hits": [
+                {
+                  "doc_id": "D01",
+                  "title": "差旅费用报销办法",
+                  "version_date": "2025-01-15",
+                  "matched_terms": [
+                    "报销"
+                  ],
+                  "score": 0.5
+                },
+                {
+                  "doc_id": "D02",
+                  "title": "差旅报销操作指引",
+                  "version_date": "2025-06-01",
+                  "matched_terms": [
+                    "报销"
+                  ],
+                  "score": 0.5
+                },
+                {
+                  "doc_id": "D08",
+                  "title": "设备维修办理细则",
+                  "version_date": "2025-01-02",
+                  "matched_terms": [
+                    "维修"
+                  ],
+                  "score": 0.5
+                },
+                {
+                  "doc_id": "D09",
+                  "title": "设备维修办理规范（替代版）",
+                  "version_date": "2025-07-01",
+                  "matched_terms": [
+                    "维修"
+                  ],
+                  "score": 0.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D01",
+                "D02"
+              ]
+            },
+            "tool_calls_remaining": 2,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 5,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D01"
+            },
+            "reason": "确认差旅报销办法是否涉及维修费垫付",
+            "observation": {
+              "ok": true,
+              "doc_id": "D01",
+              "title": "差旅费用报销办法",
+              "version_date": "2025-01-15",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工应在出差结束后 30 天内提交差旅费用报销申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 1,
+            "next_action": "finish"
+          },
+          {
+            "step": 6,
+            "action": "finish",
+            "arguments": {
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "已检索并读取设备维修相关文件（《设备维修办理细则》及其替代版《设备维修办理规范（替代版）》），两份原文仅规定维修申请的提交时限，均未涉及维修费是否需员工垫付、付款方式或结算流程；差旅报销办法也只涉及差旅费用报销时限，与维修费无关。",
+              "follow_up": "请问您报修的是哪类设备（如办公电脑、生产设备、车辆等），以及维修是由公司统一安排还是员工自行联系维修方？以便定位适用的费用结算制度。"
+            },
+            "reason": "现有制度原文均未规定维修费垫付与付款方式，属资料缺口。",
+            "observation": {
+              "ok": true,
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "已检索并读取设备维修相关文件（《设备维修办理细则》及其替代版《设备维修办理规范（替代版）》），两份原文仅规定维修申请的提交时限，均未涉及维修费是否需员工垫付、付款方式或结算流程；差旅报销办法也只涉及差旅费用报销时限，与维修费无关。"
+            },
+            "tool_calls_remaining": 1,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S16-drive-custom-expiry",
+      "group": "gap",
+      "expected_status": "insufficient_evidence",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D07"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "insufficient_evidence",
+        "answer": "",
+        "citations": [],
+        "gap": "现有制度仅写明外部分享链接默认 7 天后失效，未规定普通员工能否将有效期改为永久（是否允许修改、需何种审批或权限）。",
+        "follow_up": "制度中是否有关于外链有效期可设置范围（如最长有效期、是否允许永久有效）及修改权限的条款？",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 5,
+          "usage": {
+            "prompt_tokens": 8034,
+            "completion_tokens": 473
+          },
+          "max_steps": 8,
+          "steps_used": 5,
+          "max_tool_calls": 6,
+          "tool_calls_used": 4
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "企业云盘 外链分享 有效期"
+            },
+            "reason": "检索企业云盘对外分享外链有效期的制度条款",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "matched_terms": [
+                    "云盘",
+                    "分享"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D07"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D07"
+            },
+            "reason": "读取该云盘分享制度全文以核对普通员工外链有效期规定",
+            "observation": {
+              "ok": true,
+              "doc_id": "D07",
+              "title": "企业云盘上传与分享",
+              "version_date": "2025-06-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业云盘的单个文件上传大小上限为 2 GB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 3,
+            "action": "search_docs",
+            "arguments": {
+              "query": "外链 永久有效 权限 审批"
+            },
+            "reason": "现有文档仅说明默认7天失效，需补查是否允许改为永久有效及权限限制",
+            "observation": {
+              "ok": true,
+              "total": 0,
+              "hits": [],
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 4,
+            "action": "search_docs",
+            "arguments": {
+              "query": "分享链接 有效期 设置 员工"
+            },
+            "reason": "换用其他主题词补查外链有效期设置权限的规定",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "matched_terms": [
+                    "分享"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 2,
+            "next_action": "finish"
+          },
+          {
+            "step": 5,
+            "action": "finish",
+            "arguments": {
+              "status": "insufficient_evidence",
+              "citations": [
+                {
+                  "doc_id": "D07",
+                  "passage_id": "P2"
+                }
+              ],
+              "gap": "现有制度仅写明外部分享链接默认 7 天后失效，未规定普通员工能否将有效期改为永久（是否允许修改、需何种审批或权限）。",
+              "follow_up": "制度中是否有关于外链有效期可设置范围（如最长有效期、是否允许永久有效）及修改权限的条款？"
+            },
+            "reason": "已读取唯一相关文档，仅有默认7天失效条款，缺少永久有效设置权限的依据。",
+            "observation": {
+              "ok": true,
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "现有制度仅写明外部分享链接默认 7 天后失效，未规定普通员工能否将有效期改为永久（是否允许修改、需何种审批或权限）。"
+            },
+            "tool_calls_remaining": 2,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S17-attachment-count-not-size",
+      "group": "gap",
+      "expected_status": "insufficient_evidence",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D04",
+          "D07"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "insufficient_evidence",
+        "answer": "",
+        "citations": [],
+        "gap": "已检索到的企业邮箱 FAQ 只规定单封邮件附件总大小上限 25 MB、收件人上限 50 个，未规定附件个数上限；企业云盘文档也不涉及邮件附件个数。",
+        "follow_up": "您问的是企业邮箱单封邮件的附件个数上限，还是附件总大小上限（现有资料只写了 25 MB）？",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 4,
+          "usage": {
+            "prompt_tokens": 6351,
+            "completion_tokens": 449
+          },
+          "max_steps": 8,
+          "steps_used": 4,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "企业邮箱 附件 个数 上限"
+            },
+            "reason": "用户询问企业邮箱单封邮件附件个数上限，需检索相关制度条款。",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D04",
+                  "title": "企业邮箱产品 FAQ",
+                  "version_date": "2025-05-20",
+                  "matched_terms": [
+                    "企业邮箱",
+                    "邮箱",
+                    "附件"
+                  ],
+                  "score": 2.5
+                },
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "matched_terms": [
+                    "附件"
+                  ],
+                  "score": 0.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D04",
+                "D07"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D04"
+            },
+            "reason": "D04 为企业邮箱 FAQ，最可能载明附件个数上限。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D04",
+              "title": "企业邮箱产品 FAQ",
+              "version_date": "2025-05-20",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业邮箱回收站中的邮件自删除起保留 30 天。"
+                },
+                {
+                  "passage_id": "P3",
+                  "quote": "企业邮箱单封邮件最多可填写 50 个收件人。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D07"
+            },
+            "reason": "D07 也命中“附件”，需确认是否含附件个数上限条款。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D07",
+              "title": "企业云盘上传与分享",
+              "version_date": "2025-06-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业云盘的单个文件上传大小上限为 2 GB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 4,
+            "action": "finish",
+            "arguments": {
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "已检索到的企业邮箱 FAQ 只规定单封邮件附件总大小上限 25 MB、收件人上限 50 个，未规定附件个数上限；企业云盘文档也不涉及邮件附件个数。",
+              "follow_up": "您问的是企业邮箱单封邮件的附件个数上限，还是附件总大小上限（现有资料只写了 25 MB）？"
+            },
+            "reason": "两份候选原文均未给出附件个数上限，仅能确认附件总大小限制。",
+            "observation": {
+              "ok": true,
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "已检索到的企业邮箱 FAQ 只规定单封邮件附件总大小上限 25 MB、收件人上限 50 个，未规定附件个数上限；企业云盘文档也不涉及邮件附件个数。"
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S18-unspecified-link",
+      "group": "clarification",
+      "expected_status": "needs_clarification",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [],
+        "first_search_hit_at_3": null,
+        "first_search_all_relevant_at_3": null
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "needs_clarification",
+        "answer": "",
+        "citations": [],
+        "gap": "用户未说明“那个链接”指哪类链接；检索到的唯一相关制度为企业云盘外部分享链接，无法确认是否即用户所指。",
+        "follow_up": "您指的是企业云盘的外部分享链接吗？如果是，制度规定默认 7 天后失效。",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 4,
+          "usage": {
+            "prompt_tokens": 5901,
+            "completion_tokens": 377
+          },
+          "max_steps": 8,
+          "steps_used": 4,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "链接有效期"
+            },
+            "reason": "用户问“那个链接”的有效期，但无历史上下文，先检索链接有效期相关制度。",
+            "observation": {
+              "ok": true,
+              "total": 0,
+              "hits": [],
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 2,
+            "action": "search_docs",
+            "arguments": {
+              "query": "分享链接 访问链接 有效期限"
+            },
+            "reason": "首次检索无结果，换用“分享链接/访问链接”等同义表达补查。",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "matched_terms": [
+                    "分享"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D07"
+              ]
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D07"
+            },
+            "reason": "唯一候选文档涉及分享链接，读取全文确认是否有有效期条款。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D07",
+              "title": "企业云盘上传与分享",
+              "version_date": "2025-06-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业云盘的单个文件上传大小上限为 2 GB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 4,
+            "action": "finish",
+            "arguments": {
+              "status": "needs_clarification",
+              "citations": [],
+              "gap": "用户未说明“那个链接”指哪类链接；检索到的唯一相关制度为企业云盘外部分享链接，无法确认是否即用户所指。",
+              "follow_up": "您指的是企业云盘的外部分享链接吗？如果是，制度规定默认 7 天后失效。"
+            },
+            "reason": "无历史上下文，无法确定“那个链接”的对象，需先确认链接类型再引用条款。",
+            "observation": {
+              "ok": true,
+              "status": "needs_clarification",
+              "citations": [],
+              "gap": "用户未说明“那个链接”指哪类链接；检索到的唯一相关制度为企业云盘外部分享链接，无法确认是否即用户所指。"
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S19-ambiguous-history-reference",
+      "group": "clarification",
+      "expected_status": "needs_clarification",
+      "expected_refs": [],
+      "checks": {
+        "passed": false,
+        "status_match": false,
+        "actual_refs": [
+          "D04/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": false,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": true,
+        "first_search_top3": [
+          "D04",
+          "D07"
+        ],
+        "first_search_hit_at_3": null,
+        "first_search_all_relevant_at_3": null
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D04/P1】企业邮箱单封邮件的附件总大小上限为 25 MB。",
+        "citations": [
+          {
+            "doc_id": "D04",
+            "title": "企业邮箱产品 FAQ",
+            "version_date": "2025-05-20",
+            "passage_id": "P1",
+            "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 5,
+          "usage": {
+            "prompt_tokens": 8712,
+            "completion_tokens": 611
+          },
+          "max_steps": 8,
+          "steps_used": 5,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "企业邮箱附件大小上限"
+            },
+            "reason": "用户追问“刚才那个文件大小上限”，历史中比较了邮箱附件与云盘上传，需先检索邮箱附件限制。",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D04",
+                  "title": "企业邮箱产品 FAQ",
+                  "version_date": "2025-05-20",
+                  "matched_terms": [
+                    "企业邮箱",
+                    "邮箱",
+                    "附件"
+                  ],
+                  "score": 2.5
+                },
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "matched_terms": [
+                    "附件"
+                  ],
+                  "score": 0.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D04",
+                "D07"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D04"
+            },
+            "reason": "D04 是企业邮箱 FAQ，最可能载明附件大小上限。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D04",
+              "title": "企业邮箱产品 FAQ",
+              "version_date": "2025-05-20",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业邮箱回收站中的邮件自删除起保留 30 天。"
+                },
+                {
+                  "passage_id": "P3",
+                  "quote": "企业邮箱单封邮件最多可填写 50 个收件人。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D04",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "D04 原文明确给出企业邮箱单封邮件附件总大小上限，直接回答所问字段。",
+            "observation": {
+              "ok": false,
+              "error": "invalid_action",
+              "message": "存在未核对的候选文档或未恢复的检索失败"
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 4,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D07"
+            },
+            "reason": "D07 也命中“附件”，需读取以确认是否涉及邮箱附件上限或替代关系。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D07",
+              "title": "企业云盘上传与分享",
+              "version_date": "2025-06-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "企业云盘的单个文件上传大小上限为 2 GB。"
+                },
+                {
+                  "passage_id": "P2",
+                  "quote": "企业云盘的外部分享链接默认在 7 天后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 5,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D04",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "D04 明确给出企业邮箱附件上限；D07 仅涉及云盘上传，与所问邮箱附件无关。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D04",
+                  "title": "企业邮箱产品 FAQ",
+                  "version_date": "2025-05-20",
+                  "passage_id": "P1",
+                  "quote": "企业邮箱单封邮件的附件总大小上限为 25 MB。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S20-unconfirmed-worker-type",
+      "group": "clarification",
+      "expected_status": "needs_clarification",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D10",
+          "D11"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "needs_clarification",
+        "answer": "",
+        "citations": [],
+        "gap": "制度对正式员工与外包人员的提前时限不同（分别为至少提前2个工作日、至少提前1个工作日），但用户未说明本人属于哪类人员。",
+        "follow_up": "您本人是正式员工还是外包人员？",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 4,
+          "usage": {
+            "prompt_tokens": 6353,
+            "completion_tokens": 413
+          },
+          "max_steps": 8,
+          "steps_used": 4,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "在家办公 申请 提前 工作日"
+            },
+            "reason": "用户追问本人提交在家办公申请需提前几个工作日，需检索远程办公申请时限条款。",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D10",
+                  "title": "正式员工远程办公申请",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "在家办公"
+                  ],
+                  "score": 0.5
+                },
+                {
+                  "doc_id": "D11",
+                  "title": "外包人员远程办公申请",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "在家办公"
+                  ],
+                  "score": 0.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D10",
+                "D11"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D10"
+            },
+            "reason": "需核对正式员工远程办公申请的提前时限。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D10",
+              "title": "正式员工远程办公申请",
+              "version_date": "2025-08-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "正式员工须至少提前 2 个工作日提交远程办公申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D11"
+            },
+            "reason": "用户身份未明确，需核对外包人员条款以区分适用对象。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D11",
+              "title": "外包人员远程办公申请",
+              "version_date": "2025-08-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "外包人员须至少提前 1 个工作日提交远程办公申请，并取得项目负责人的确认。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 4,
+            "action": "finish",
+            "arguments": {
+              "status": "needs_clarification",
+              "citations": [],
+              "gap": "制度对正式员工与外包人员的提前时限不同（分别为至少提前2个工作日、至少提前1个工作日），但用户未说明本人属于哪类人员。",
+              "follow_up": "您本人是正式员工还是外包人员？"
+            },
+            "reason": "两类人员适用不同提前时限，需确认用户身份才能给出对应条款。",
+            "observation": {
+              "ok": true,
+              "status": "needs_clarification",
+              "citations": [],
+              "gap": "制度对正式员工与外包人员的提前时限不同（分别为至少提前2个工作日、至少提前1个工作日），但用户未说明本人属于哪类人员。"
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S21-unresolved-deadline",
+      "group": "policy",
+      "expected_status": "conflict",
+      "expected_refs": [
+        "D01/P1",
+        "D02/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D01/P1",
+          "D02/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D01",
+          "D02"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "conflict",
+        "answer": "找到相互冲突的原文，适用口径待确认。\n【D01/P1】员工应在出差结束后 30 天内提交差旅费用报销申请。\n【D02/P1】员工应在出差结束后 15 天内提交差旅费用报销申请。",
+        "citations": [
+          {
+            "doc_id": "D01",
+            "title": "差旅费用报销办法",
+            "version_date": "2025-01-15",
+            "passage_id": "P1",
+            "quote": "员工应在出差结束后 30 天内提交差旅费用报销申请。"
+          },
+          {
+            "doc_id": "D02",
+            "title": "差旅报销操作指引",
+            "version_date": "2025-06-01",
+            "passage_id": "P1",
+            "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+          }
+        ],
+        "gap": "资料中缺少足以判定适用口径的依据，需要确认适用范围、优先级或废止关系。",
+        "follow_up": "请问贵单位是否已明确《差旅报销操作指引》替代或优先于《差旅费用报销办法》适用（例如以哪份文件为准的发布通知）？",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 5,
+          "usage": {
+            "prompt_tokens": 8302,
+            "completion_tokens": 573
+          },
+          "max_steps": 8,
+          "steps_used": 5,
+          "max_tool_calls": 6,
+          "tool_calls_used": 4
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "差旅报销 提交时限"
+            },
+            "reason": "检索差旅报销提交期限相关制度条款",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D01",
+                  "title": "差旅费用报销办法",
+                  "version_date": "2025-01-15",
+                  "matched_terms": [
+                    "差旅",
+                    "报销"
+                  ],
+                  "score": 1.0
+                },
+                {
+                  "doc_id": "D02",
+                  "title": "差旅报销操作指引",
+                  "version_date": "2025-06-01",
+                  "matched_terms": [
+                    "差旅",
+                    "报销"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D01",
+                "D02"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D01"
+            },
+            "reason": "读取报销办法原文核对提交期限",
+            "observation": {
+              "ok": true,
+              "doc_id": "D01",
+              "title": "差旅费用报销办法",
+              "version_date": "2025-01-15",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工应在出差结束后 30 天内提交差旅费用报销申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D02"
+            },
+            "reason": "读取操作指引原文，核对是否存在不同期限及适用关系",
+            "observation": {
+              "ok": true,
+              "doc_id": "D02",
+              "title": "差旅报销操作指引",
+              "version_date": "2025-06-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 4,
+            "action": "search_docs",
+            "arguments": {
+              "query": "差旅报销办法 操作指引 适用范围 废止 优先适用"
+            },
+            "reason": "两份文件期限冲突，需补查适用范围与废止/优先适用依据",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D01",
+                  "title": "差旅费用报销办法",
+                  "version_date": "2025-01-15",
+                  "matched_terms": [
+                    "差旅",
+                    "报销"
+                  ],
+                  "score": 1.0
+                },
+                {
+                  "doc_id": "D02",
+                  "title": "差旅报销操作指引",
+                  "version_date": "2025-06-01",
+                  "matched_terms": [
+                    "差旅",
+                    "报销"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 2,
+            "next_action": "finish"
+          },
+          {
+            "step": 5,
+            "action": "finish",
+            "arguments": {
+              "status": "conflict",
+              "citations": [
+                {
+                  "doc_id": "D01",
+                  "passage_id": "P1"
+                },
+                {
+                  "doc_id": "D02",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "两份现行文件对同一事项规定不同期限：《差旅费用报销办法》（2025-01-15）为出差结束后30天内，《差旅报销操作指引》（2025-06-01）为15天内；原文均未写明适用范围、替代关系或废止依据，仅凭版本日期无法判断优先适用。",
+              "follow_up": "请问贵单位是否已明确《差旅报销操作指引》替代或优先于《差旅费用报销办法》适用（例如以哪份文件为准的发布通知）？"
+            },
+            "reason": "两份文件对差旅报销提交期限分别规定30天与15天，且无适用范围或废止依据，冲突无法排除。",
+            "observation": {
+              "ok": true,
+              "status": "conflict",
+              "citations": [
+                {
+                  "doc_id": "D01",
+                  "title": "差旅费用报销办法",
+                  "version_date": "2025-01-15",
+                  "passage_id": "P1",
+                  "quote": "员工应在出差结束后 30 天内提交差旅费用报销申请。"
+                },
+                {
+                  "doc_id": "D02",
+                  "title": "差旅报销操作指引",
+                  "version_date": "2025-06-01",
+                  "passage_id": "P1",
+                  "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+                }
+              ],
+              "gap": "资料中缺少足以判定适用口径的依据，需要确认适用范围、优先级或废止关系。"
+            },
+            "tool_calls_remaining": 2,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S22-align-deadline-to-fifteen",
+      "group": "policy",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D01/P1",
+        "D02/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D01/P1",
+          "D02/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D01",
+          "D02"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D01/P1】员工应在出差结束后 15 天内提交差旅费用报销申请。\n【D02/P1】员工应在出差结束后 15 天内提交差旅费用报销申请。",
+        "citations": [
+          {
+            "doc_id": "D01",
+            "title": "差旅费用报销办法",
+            "version_date": "2025-01-15",
+            "passage_id": "P1",
+            "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+          },
+          {
+            "doc_id": "D02",
+            "title": "差旅报销操作指引",
+            "version_date": "2025-06-01",
+            "passage_id": "P1",
+            "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 4,
+          "usage": {
+            "prompt_tokens": 6233,
+            "completion_tokens": 390
+          },
+          "max_steps": 8,
+          "steps_used": 4,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "差旅报销 提交时限"
+            },
+            "reason": "检索差旅报销申请提交期限的制度条款",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D01",
+                  "title": "差旅费用报销办法",
+                  "version_date": "2025-01-15",
+                  "matched_terms": [
+                    "差旅",
+                    "报销"
+                  ],
+                  "score": 1.0
+                },
+                {
+                  "doc_id": "D02",
+                  "title": "差旅报销操作指引",
+                  "version_date": "2025-06-01",
+                  "matched_terms": [
+                    "差旅",
+                    "报销"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D01",
+                "D02"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D01"
+            },
+            "reason": "读取差旅费用报销办法原文核对提交期限",
+            "observation": {
+              "ok": true,
+              "doc_id": "D01",
+              "title": "差旅费用报销办法",
+              "version_date": "2025-01-15",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D02"
+            },
+            "reason": "读取操作指引原文，核对是否另有30天口径及适用关系",
+            "observation": {
+              "ok": true,
+              "doc_id": "D02",
+              "title": "差旅报销操作指引",
+              "version_date": "2025-06-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 4,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D01",
+                  "passage_id": "P1"
+                },
+                {
+                  "doc_id": "D02",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "两份差旅报销文件原文均为出差结束后15天内提交，口径一致，未见30天规定。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D01",
+                  "title": "差旅费用报销办法",
+                  "version_date": "2025-01-15",
+                  "passage_id": "P1",
+                  "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+                },
+                {
+                  "doc_id": "D02",
+                  "title": "差旅报销操作指引",
+                  "version_date": "2025-06-01",
+                  "passage_id": "P1",
+                  "quote": "员工应在出差结束后 15 天内提交差旅费用报销申请。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S23-on-effective-date",
+      "group": "policy",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D09/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D09/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D08",
+          "D09"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D09/P1】自 2025-07-01 起，本规范替代《设备维修办理细则》。设备维修申请须在发现设备故障后 5 个工作日内提交。",
+        "citations": [
+          {
+            "doc_id": "D09",
+            "title": "设备维修办理规范（替代版）",
+            "version_date": "2025-07-01",
+            "passage_id": "P1",
+            "quote": "自 2025-07-01 起，本规范替代《设备维修办理细则》。设备维修申请须在发现设备故障后 5 个工作日内提交。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 4,
+          "usage": {
+            "prompt_tokens": 6277,
+            "completion_tokens": 381
+          },
+          "max_steps": 8,
+          "steps_used": 4,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "设备故障维修申请 工作日内提交"
+            },
+            "reason": "检索设备维修申请时限相关制度",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D08",
+                  "title": "设备维修办理细则",
+                  "version_date": "2025-01-02",
+                  "matched_terms": [
+                    "维修",
+                    "故障",
+                    "设备"
+                  ],
+                  "score": 1.5
+                },
+                {
+                  "doc_id": "D09",
+                  "title": "设备维修办理规范（替代版）",
+                  "version_date": "2025-07-01",
+                  "matched_terms": [
+                    "维修",
+                    "故障",
+                    "设备"
+                  ],
+                  "score": 1.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D08",
+                "D09"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D08"
+            },
+            "reason": "读取旧版细则确认时限与生效范围",
+            "observation": {
+              "ok": true,
+              "doc_id": "D08",
+              "title": "设备维修办理细则",
+              "version_date": "2025-01-02",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "设备维修申请须在发现设备故障后 10 个工作日内提交。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D09"
+            },
+            "reason": "读取替代版确认其生效时间与时限规定",
+            "observation": {
+              "ok": true,
+              "doc_id": "D09",
+              "title": "设备维修办理规范（替代版）",
+              "version_date": "2025-07-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "自 2025-07-01 起，本规范替代《设备维修办理细则》。设备维修申请须在发现设备故障后 5 个工作日内提交。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 4,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D09",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "替代版规范自 2025-07-01 起替代旧细则，故障发现日当天适用该版本，其规定为 5 个工作日内提交。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D09",
+                  "title": "设备维修办理规范（替代版）",
+                  "version_date": "2025-07-01",
+                  "passage_id": "P1",
+                  "quote": "自 2025-07-01 起，本规范替代《设备维修办理细则》。设备维修申请须在发现设备故障后 5 个工作日内提交。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S24-day-before-effective-date",
+      "group": "policy",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D08/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D08/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D08",
+          "D09"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D08/P1】设备维修申请须在发现设备故障后 10 个工作日内提交。",
+        "citations": [
+          {
+            "doc_id": "D08",
+            "title": "设备维修办理细则",
+            "version_date": "2025-01-02",
+            "passage_id": "P1",
+            "quote": "设备维修申请须在发现设备故障后 10 个工作日内提交。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 4,
+          "usage": {
+            "prompt_tokens": 6302,
+            "completion_tokens": 399
+          },
+          "max_steps": 8,
+          "steps_used": 4,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "设备故障维修申请 工作日内提交"
+            },
+            "reason": "检索设备故障维修申请时限相关制度",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D08",
+                  "title": "设备维修办理细则",
+                  "version_date": "2025-01-02",
+                  "matched_terms": [
+                    "维修",
+                    "故障",
+                    "设备"
+                  ],
+                  "score": 1.5
+                },
+                {
+                  "doc_id": "D09",
+                  "title": "设备维修办理规范（替代版）",
+                  "version_date": "2025-07-01",
+                  "matched_terms": [
+                    "维修",
+                    "故障",
+                    "设备"
+                  ],
+                  "score": 1.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D08",
+                "D09"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D08"
+            },
+            "reason": "读取2025-01-02版本细则以核对故障发现后的申请时限",
+            "observation": {
+              "ok": true,
+              "doc_id": "D08",
+              "title": "设备维修办理细则",
+              "version_date": "2025-01-02",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "设备维修申请须在发现设备故障后 10 个工作日内提交。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D09"
+            },
+            "reason": "读取替代版规范以确认其生效时间及是否适用于2025-06-30",
+            "observation": {
+              "ok": true,
+              "doc_id": "D09",
+              "title": "设备维修办理规范（替代版）",
+              "version_date": "2025-07-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "自 2025-07-01 起，本规范替代《设备维修办理细则》。设备维修申请须在发现设备故障后 5 个工作日内提交。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 4,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D08",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "替代版自2025-07-01起才生效，2025-06-30适用原细则，其规定为发现故障后10个工作日内提交。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D08",
+                  "title": "设备维修办理细则",
+                  "version_date": "2025-01-02",
+                  "passage_id": "P1",
+                  "quote": "设备维修申请须在发现设备故障后 10 个工作日内提交。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S25-formal-worker-false-premise",
+      "group": "policy",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D10/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D10/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D10",
+          "D11"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D10/P1】正式员工须至少提前 2 个工作日提交远程办公申请。",
+        "citations": [
+          {
+            "doc_id": "D10",
+            "title": "正式员工远程办公申请",
+            "version_date": "2025-08-01",
+            "passage_id": "P1",
+            "quote": "正式员工须至少提前 2 个工作日提交远程办公申请。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 5,
+          "usage": {
+            "prompt_tokens": 8266,
+            "completion_tokens": 519
+          },
+          "max_steps": 8,
+          "steps_used": 5,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "远程办公 申请 提前 工作日"
+            },
+            "reason": "检索远程办公申请提前时限的制度条款",
+            "observation": {
+              "ok": true,
+              "total": 2,
+              "hits": [
+                {
+                  "doc_id": "D10",
+                  "title": "正式员工远程办公申请",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "远程办公"
+                  ],
+                  "score": 0.5
+                },
+                {
+                  "doc_id": "D11",
+                  "title": "外包人员远程办公申请",
+                  "version_date": "2025-08-01",
+                  "matched_terms": [
+                    "远程办公"
+                  ],
+                  "score": 0.5
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D10",
+                "D11"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D10"
+            },
+            "reason": "用户为正式员工，需读取正式员工远程办公申请条款",
+            "observation": {
+              "ok": true,
+              "doc_id": "D10",
+              "title": "正式员工远程办公申请",
+              "version_date": "2025-08-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "正式员工须至少提前 2 个工作日提交远程办公申请。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D10",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "正式员工远程办公申请条款明确要求至少提前2个工作日，直接回答所问对象。",
+            "observation": {
+              "ok": false,
+              "error": "invalid_action",
+              "message": "存在未核对的候选文档或未恢复的检索失败"
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 4,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D11"
+            },
+            "reason": "需核对另一候选文档，确认其适用人群为外包人员而非正式员工",
+            "observation": {
+              "ok": true,
+              "doc_id": "D11",
+              "title": "外包人员远程办公申请",
+              "version_date": "2025-08-01",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "外包人员须至少提前 1 个工作日提交远程办公申请，并取得项目负责人的确认。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 5,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D10",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "D11 明确限定为外包人员（提前1个工作日），D10 适用于正式员工，故按 D10 的2个工作日回答。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D10",
+                  "title": "正式员工远程办公申请",
+                  "version_date": "2025-08-01",
+                  "passage_id": "P1",
+                  "quote": "正式员工须至少提前 2 个工作日提交远程办公申请。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S26-search-unavailable",
+      "group": "operations",
+      "expected_status": "tool_error",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [],
+        "first_search_hit_at_3": null,
+        "first_search_all_relevant_at_3": null
+      },
+      "retried": false,
+      "exit_code": 1,
+      "result": {
+        "status": "tool_error",
+        "answer": "",
+        "citations": [],
+        "gap": "检索服务连续三次不可用，无法获取企业邮箱附件大小上限的制度原文。",
+        "follow_up": "检索服务当前不可用，请稍后重试；或告知该规定所在的制度名称/文件编号，以便直接定位。",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 4,
+          "usage": {
+            "prompt_tokens": 5667,
+            "completion_tokens": 347
+          },
+          "max_steps": 8,
+          "steps_used": 4,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "企业邮箱 附件大小 上限"
+            },
+            "reason": "检索企业邮箱附件大小限制相关制度条款",
+            "observation": {
+              "ok": false,
+              "error": "search_unavailable",
+              "message": "模拟检索服务不可用"
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 2,
+            "action": "search_docs",
+            "arguments": {
+              "query": "邮箱 附件 容量 限制"
+            },
+            "reason": "检索服务失败，换用更宽泛的主题词重试",
+            "observation": {
+              "ok": false,
+              "error": "search_unavailable",
+              "message": "模拟检索服务不可用"
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 3,
+            "action": "search_docs",
+            "arguments": {
+              "query": "邮件系统 使用规范"
+            },
+            "reason": "再次重试检索，确认检索服务是否持续不可用",
+            "observation": {
+              "ok": false,
+              "error": "search_unavailable",
+              "message": "模拟检索服务不可用"
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 4,
+            "action": "finish",
+            "arguments": {
+              "status": "tool_error",
+              "citations": [],
+              "gap": "检索服务连续三次不可用，无法获取企业邮箱附件大小上限的制度原文。",
+              "follow_up": "检索服务当前不可用，请稍后重试；或告知该规定所在的制度名称/文件编号，以便直接定位。"
+            },
+            "reason": "三次不同主题词检索均返回服务不可用，关键证据无法读取。",
+            "observation": {
+              "ok": true,
+              "status": "tool_error",
+              "citations": [],
+              "gap": "检索服务连续三次不可用，无法获取企业邮箱附件大小上限的制度原文。"
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S27-read-unavailable",
+      "group": "operations",
+      "expected_status": "tool_error",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D07"
+        ],
+        "first_search_hit_at_3": null,
+        "first_search_all_relevant_at_3": null
+      },
+      "retried": false,
+      "exit_code": 1,
+      "result": {
+        "status": "tool_error",
+        "answer": "",
+        "citations": [],
+        "gap": "唯一相关文档 D07《企业云盘上传与分享》读取服务不可用，两次重试均失败，无法获得外部分享链接默认有效期的原文。",
+        "follow_up": "是否可以在文档服务恢复后重试，或由您提供《企业云盘上传与分享》中关于外部分享链接有效期的条款原文？",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 5,
+          "usage": {
+            "prompt_tokens": 7746,
+            "completion_tokens": 440
+          },
+          "max_steps": 8,
+          "steps_used": 5,
+          "max_tool_calls": 6,
+          "tool_calls_used": 4
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "企业云盘 外部分享链接 有效期"
+            },
+            "reason": "检索企业云盘外部分享链接有效期的制度条款",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "matched_terms": [
+                    "云盘",
+                    "分享"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D07"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D07"
+            },
+            "reason": "唯一候选文档，需读取原文确认外部分享链接默认有效期",
+            "observation": {
+              "ok": false,
+              "error": "read_unavailable",
+              "message": "模拟文档读取服务不可用",
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 3,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D07"
+            },
+            "reason": "读取失败后重试一次以获取原文",
+            "observation": {
+              "ok": false,
+              "error": "read_unavailable",
+              "message": "模拟文档读取服务不可用",
+              "cached": false
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 4,
+            "action": "search_docs",
+            "arguments": {
+              "query": "分享链接 过期 默认 期限"
+            },
+            "reason": "读取服务不可用，换主题词补查是否有其他相关文档",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D07",
+                  "title": "企业云盘上传与分享",
+                  "version_date": "2025-06-12",
+                  "matched_terms": [
+                    "分享"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D07"
+              ]
+            },
+            "tool_calls_remaining": 2,
+            "next_action": "finish"
+          },
+          {
+            "step": 5,
+            "action": "finish",
+            "arguments": {
+              "status": "tool_error",
+              "citations": [],
+              "gap": "唯一相关文档 D07《企业云盘上传与分享》读取服务不可用，两次重试均失败，无法获得外部分享链接默认有效期的原文。",
+              "follow_up": "是否可以在文档服务恢复后重试，或由您提供《企业云盘上传与分享》中关于外部分享链接有效期的条款原文？"
+            },
+            "reason": "检索仅命中 D07，但读取接口持续不可用，关键证据无法获取。",
+            "observation": {
+              "ok": true,
+              "status": "tool_error",
+              "citations": [],
+              "gap": "唯一相关文档 D07《企业云盘上传与分享》读取服务不可用，两次重试均失败，无法获得外部分享链接默认有效期的原文。"
+            },
+            "tool_calls_remaining": 2,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S28-step-budget",
+      "group": "operations",
+      "expected_status": "step_limit",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D12"
+        ],
+        "first_search_hit_at_3": null,
+        "first_search_all_relevant_at_3": null
+      },
+      "retried": false,
+      "exit_code": 1,
+      "result": {
+        "status": "step_limit",
+        "answer": "",
+        "citations": [],
+        "gap": "已用完 1 步，问答未完成。",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 1,
+          "usage": {
+            "prompt_tokens": 1227,
+            "completion_tokens": 61
+          },
+          "max_steps": 1,
+          "steps_used": 1,
+          "max_tool_calls": 6,
+          "tool_calls_used": 1
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "密码重置链接 有效期"
+            },
+            "reason": "检索与密码重置链接有效期相关的制度条款",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D12",
+                  "title": "企业账号密码重置 FAQ",
+                  "version_date": "2025-09-10",
+                  "matched_terms": [
+                    "密码",
+                    "重置"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D12"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "step_limit"
+          }
+        ]
+      }
+    },
+    {
+      "id": "S29-zero-tool-budget",
+      "group": "operations",
+      "expected_status": "tool_limit",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [],
+        "first_search_hit_at_3": null,
+        "first_search_all_relevant_at_3": null
+      },
+      "retried": false,
+      "exit_code": 1,
+      "result": {
+        "status": "tool_limit",
+        "answer": "",
+        "citations": [],
+        "gap": "已用完 0 次实际工具调用，当前证据不足以完成问答。",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 1,
+          "usage": {
+            "prompt_tokens": 1227,
+            "completion_tokens": 60
+          },
+          "max_steps": 8,
+          "steps_used": 1,
+          "max_tool_calls": 0,
+          "tool_calls_used": 0
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "账号密码重置链接有效期"
+            },
+            "reason": "检索密码重置链接有效期的制度条款",
+            "observation": {
+              "ok": false,
+              "error": "tool_limit",
+              "message": "已用完 0 次实际工具调用，当前证据不足以完成问答。"
+            },
+            "tool_calls_remaining": 0,
+            "next_action": "tool_limit"
+          }
+        ]
+      }
+    },
+    {
+      "id": "S30-finish-at-tool-budget",
+      "group": "operations",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D12/P1"
+      ],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [
+          "D12/P1"
+        ],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D12"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "answered",
+        "answer": "【D12/P1】通过企业账号服务台生成的密码重置链接在 15 分钟后失效。",
+        "citations": [
+          {
+            "doc_id": "D12",
+            "title": "企业账号密码重置 FAQ",
+            "version_date": "2025-09-10",
+            "passage_id": "P1",
+            "quote": "通过企业账号服务台生成的密码重置链接在 15 分钟后失效。"
+          }
+        ],
+        "gap": "",
+        "follow_up": "",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "usage": {
+            "prompt_tokens": 4236,
+            "completion_tokens": 251
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 2,
+          "tool_calls_used": 2
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "密码重置链接 有效期"
+            },
+            "reason": "检索密码重置链接有效期的制度条款",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D12",
+                  "title": "企业账号密码重置 FAQ",
+                  "version_date": "2025-09-10",
+                  "matched_terms": [
+                    "密码",
+                    "重置"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D12"
+              ]
+            },
+            "tool_calls_remaining": 1,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D12"
+            },
+            "reason": "读取该 FAQ 全文以核对重置链接有效期条款",
+            "observation": {
+              "ok": true,
+              "doc_id": "D12",
+              "title": "企业账号密码重置 FAQ",
+              "version_date": "2025-09-10",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "通过企业账号服务台生成的密码重置链接在 15 分钟后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 0,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D12",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "",
+              "follow_up": ""
+            },
+            "reason": "FAQ 原文明确写明服务台生成的密码重置链接 15 分钟后失效，直接回答问题。",
+            "observation": {
+              "ok": true,
+              "status": "answered",
+              "citations": [
+                {
+                  "doc_id": "D12",
+                  "title": "企业账号密码重置 FAQ",
+                  "version_date": "2025-09-10",
+                  "passage_id": "P1",
+                  "quote": "通过企业账号服务台生成的密码重置链接在 15 分钟后失效。"
+                }
+              ],
+              "gap": ""
+            },
+            "tool_calls_remaining": 0,
+            "next_action": null
+          }
+        ]
+      }
+    }
+  ]
+}

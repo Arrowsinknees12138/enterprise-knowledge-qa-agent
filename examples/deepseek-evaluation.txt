@@ -1,9 +1,9 @@
 PASS 01-answer: answered | search_docs -> read_doc -> finish
 PASS 02-conflict: conflict | search_docs -> read_doc -> read_doc -> search_docs -> finish
 PASS 03-outside: insufficient_evidence | search_docs -> search_docs -> search_docs -> finish
-PASS 04-paraphrase: answered | search_docs -> read_doc -> read_doc -> finish
+PASS 04-paraphrase: answered | search_docs -> read_doc -> finish -> read_doc -> finish
 PASS 05-follow-up: answered | search_docs -> read_doc -> finish
-PASS 06-tool-failure: tool_error | search_docs -> read_doc -> read_doc -> search_docs -> finish
+PASS 06-tool-failure: tool_error | search_docs -> read_doc -> read_doc -> search_docs -> read_doc -> finish
 PASS 07-updated-source: answered | search_docs -> read_doc -> finish
 PASS 08-step-limit: step_limit | search_docs
 PASS 09-resolved-conflict: answered | search_docs -> read_doc -> read_doc -> finish
@@ -13,10 +13,9 @@ PASS 12-multipassage: answered | search_docs -> read_doc -> finish
 PASS 13-explicit-supersession: answered | search_docs -> read_doc -> read_doc -> finish
 PASS 14-audience-scope: answered | search_docs -> read_doc -> finish -> read_doc -> finish
 PASS 15-ambiguous: needs_clarification | finish
-RETRY 16-search-failure: model connection or timeout
 PASS 16-search-failure: tool_error | search_docs -> search_docs -> search_docs -> finish
 PASS 17-tool-limit: tool_limit | search_docs -> read_doc
 PASS 18-finish-at-limit: answered | search_docs -> read_doc -> finish
 PASS 19-password: answered | search_docs -> read_doc -> finish
-Live provider tokens: {"prompt_tokens": 95196, "completion_tokens": 6215}
+Live provider tokens: {"prompt_tokens": 107152, "completion_tokens": 6362}
 19/19 live example checks passed

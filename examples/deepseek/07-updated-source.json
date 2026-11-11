@@ -18,8 +18,8 @@
     "model": "deepseek-flash",
     "api_requests": 3,
     "usage": {
-      "prompt_tokens": 4047,
-      "completion_tokens": 251
+      "prompt_tokens": 4407,
+      "completion_tokens": 257
     },
     "max_steps": 8,
     "steps_used": 3,
@@ -93,7 +93,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "FAQ 原文明确给出提交完整申请后的开通时限，可直接回答。",
+      "reason": "FAQ 原文明确给出提交完整申请后的开通时限为 4 个工作日，可直接回答。",
       "observation": {
         "ok": true,
         "status": "answered",

@@ -18,8 +18,8 @@
     "model": "deepseek-flash",
     "api_requests": 3,
     "usage": {
-      "prompt_tokens": 4174,
-      "completion_tokens": 271
+      "prompt_tokens": 4528,
+      "completion_tokens": 262
     },
     "max_steps": 8,
     "steps_used": 3,
@@ -33,7 +33,7 @@
       "arguments": {
         "query": "门禁权限申请 开通时间"
       },
-      "reason": "用户追问门禁权限申请后需等待几天，检索门禁权限办理时限相关制度。",
+      "reason": "用户追问门禁权限申请需要等几天，检索门禁权限办理时限相关制度。",
       "observation": {
         "ok": true,
         "total": 1,
@@ -62,7 +62,7 @@
       "arguments": {
         "doc_id": "D03"
       },
-      "reason": "唯一候选文档为门禁权限申请FAQ，需读取原文确认开通时限。",
+      "reason": "唯一候选文档，读取全文核对门禁权限开通时限。",
       "observation": {
         "ok": true,
         "doc_id": "D03",
@@ -93,7 +93,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "FAQ原文明确员工提交完整申请后行政在2个工作日内开通门禁，直接回答等待时长。",
+      "reason": "FAQ 原文明确给出提交完整申请后 2 个工作日内开通门禁。",
       "observation": {
         "ok": true,
         "status": "answered",

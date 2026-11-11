@@ -71,7 +71,14 @@ python tests/run_examples.py --mode live --provider deepseek --case 02-conflict 
 python tests/run_holdout.py --output holdout-replay.json
 ```
 
+30 题场景集可以单独复跑。报告会列出六类场景的通过情况、逐题状态和 Trace。
+
+```text
+python tests/run_holdout.py --dataset examples/scenarios-30/cases.json --output scenarios-30-replay.json
+```
+
 - [验收矩阵与复现方法](docs/03-evaluation.md)
+- [30 题场景集与标准答案](examples/scenarios-30/cases.json) · [最终实跑报告](examples/scenarios-30/after.json)
 - [冻结对照题与标准答案](examples/holdout/cases.json) · [改动前记录](examples/holdout/baseline.json) · [改动后记录](examples/holdout/after.json)
 - [DeepSeek 官方 API 实跑记录](examples/deepseek-evaluation.txt)
 - [真实模型正常路径](examples/live/01-answer.json)和[冲突补查路径](examples/live/02-conflict.json)

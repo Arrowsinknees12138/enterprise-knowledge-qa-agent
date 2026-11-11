@@ -17,10 +17,13 @@ test_tool_failures_consume_budget_and_are_not_cached (test_agent.KnowledgeTests.
 test_tool_limit_blocks_actual_read_before_it_runs (test_agent.KnowledgeTests.test_tool_limit_blocks_actual_read_before_it_runs) ... ok
 test_unknown_document_and_search_failure_are_explicit (test_agent.KnowledgeTests.test_unknown_document_and_search_failure_are_explicit) ... ok
 test_answering_an_insufficient_evidence_case_is_unsupported (test_holdout.HoldoutScoringTests.test_answering_an_insufficient_evidence_case_is_unsupported) ... ok
+test_expected_tool_limit_checks_exit_observation_and_budget (test_holdout.HoldoutScoringTests.test_expected_tool_limit_checks_exit_observation_and_budget) ... ok
 test_later_retrieval_does_not_count_as_a_first_search_hit (test_holdout.HoldoutScoringTests.test_later_retrieval_does_not_count_as_a_first_search_hit) ... ok
 test_matching_ids_with_changed_quote_do_not_support_answer (test_holdout.HoldoutScoringTests.test_matching_ids_with_changed_quote_do_not_support_answer) ... ok
+test_transition_checked_after_required_read (test_holdout.HoldoutScoringTests.test_transition_checked_after_required_read) ... ok
+test_variant_changes_one_passage_without_mutating_base (test_holdout.HoldoutScoringTests.test_variant_changes_one_passage_without_mutating_base) ... ok
 
 ----------------------------------------------------------------------
-Ran 21 tests in 0.010s
+Ran 24 tests in 0.019s
 
 OK

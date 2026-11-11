@@ -1,6 +1,34 @@
 # 评估与复现
 
-2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 21/21，Mock CLI 验收 12/12，DeepSeek 常规回归 19/19。DeepSeek 官方 API 另用于冻结对照评估，改动前 11/12，改动后 12/12。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 24/24，Mock CLI 验收 12/12，最新一轮 DeepSeek 场景评估 30/30。常规回归在第二次场景复测的代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+
+## 30 题场景评估
+
+在首次调用模型前提交题集与评分器，冻结提交为 `ba9bf9d`。问题和可选历史会传给 CLI，标准答案由本地评分器使用。S22 用临时语料替换一条原文。故障与预算场景通过 CLI 的公开参数运行，评分还核对工具观察、退出码与用量。[题集和标准答案](../examples/scenarios-30/cases.json) · [基线报告](../examples/scenarios-30/baseline.json) · [首次复测](../examples/scenarios-30/first-retest.json) · [第二次复测](../examples/scenarios-30/second-retest.json)
+
+| 场景 | 题量 | 基线通过 | 最终通过 |
+| --- | ---: | ---: | ---: |
+| 直接事实和多字段问答 | 6 | 5/6 | 6/6 |
+| 同义改写、上下文切换和历史纠错 | 5 | 5/5 | 5/5 |
+| 资料外和命中但所问字段缺失 | 6 | 6/6 | 6/6 |
+| 缺对象、指代歧义和适用人群不明 | 3 | 3/3 | 3/3 |
+| 冲突、替换原文、版本日期和适用范围 | 5 | 5/5 | 5/5 |
+| 工具故障、步数与工具预算 | 5 | 5/5 | 5/5 |
+
+基线唯一失败是 S04。首轮已检索到 D03，读取的原文明确写有“提交完整的门禁权限申请后”。模型正确复述了这句话，但把起算事件和具体的计日规则混在一起，最后返回 `insufficient_evidence`。提示词改为分别核对起算事件、期限长度和日历计数规则。原文已给出起算事件时，可以回答从何时开始。若用户追问当天是否计入，则单独核对是否有对应条款。
+
+首次全量复测 S04 通过，S19 新出现误答。对话历史同时提到邮箱和云盘，问题未说清“那个文件大小上限”指哪项。模型根据自己生成的邮箱查询读取了两份文档，最后引用邮箱上限。引用可追溯，但对象未经用户确认。随后明确要求，多对象指代无法唯一确定时使用 `needs_clarification`，并在明确切换主题的用例中验证仍能直接回答。
+
+第二次全量复测中 S19 正确追问，S04 再次误判。Trace 显示模型在找一条新员工专属的规定，虽然原文是面向员工的普通规则且未写例外。第三次改动明确了范围包含关系。用户属于原文所覆盖的人群时，可用普通规则回答，存在明示例外或询问特殊待遇时再查对应规则。
+
+最终在 `e987607` 上一次完整运行通过 30/30。S04 引用 D03/P1，S19 先追问。应引用题的片段集合完全匹配从 16/17 到 17/17。首轮检索 Hit@3 前后均为 23/23，最终无依据或不适用的回答为 0。四份报告的题集和基础语料哈希相同。第二次复测记录了 4 次连接类重跑，最终一轮无需重跑。结果来自 AI 拟定的合成场景及同题对照，模型行为仍可能随运行变化。[最终报告和 Trace](../examples/scenarios-30/after.json)
+
+设置 `DEEPSEEK_API_KEY` 后，可复跑全部 30 题或单独复跑 S04。
+
+```text
+python tests/run_holdout.py --dataset examples/scenarios-30/cases.json --output scenarios-30-replay.json
+python tests/run_holdout.py --dataset examples/scenarios-30/cases.json --case S04-new-access-clock --output scenarios-30-s04.json
+```
 
 ## 冻结对照评估
 
@@ -76,7 +104,7 @@ python tests/run_examples.py --mode live
 
 DeepSeek 官方 API 首轮通过 9 组用例。第 10 组正确返回 `insufficient_evidence`，但将只说明申请方式的段落放进了引用列表，未通过验收。修复后，该状态的背景片段保留在 Trace，最终答案与引用均为空，并增加了回归单测。[首轮第 10 组输出](../examples/deepseek-initial-missing-detail.json)
 
-本次常规回归中的检索失败场景遇到一次模型连接或超时类错误，评估器重跑该用例后通过。也可用 `--case` 定向复跑。该重跑属于评估脚本，单次 Agent 请求的工具与步数预算独立计量。[本轮实跑日志](../examples/deepseek-evaluation.txt)
+评估器遇到连接或超时类错误时会重跑该用例一次，也可用 `--case` 定向复跑。重跑属于评估脚本，单次 Agent 请求的工具与步数预算独立计量。[常规回归日志](../examples/deepseek-evaluation.txt)
 
 全量命令为 `python tests/run_examples.py --mode live --provider deepseek`，输出位于 `examples/deepseek/`。
 

@@ -18,8 +18,8 @@
     "model": "deepseek-flash",
     "api_requests": 3,
     "usage": {
-      "prompt_tokens": 4136,
-      "completion_tokens": 261
+      "prompt_tokens": 4497,
+      "completion_tokens": 262
     },
     "max_steps": 8,
     "steps_used": 3,
@@ -66,7 +66,7 @@
       "arguments": {
         "doc_id": "D04"
       },
-      "reason": "读取唯一候选文档以核对回收站保留期限原文",
+      "reason": "读取该 FAQ 全文以核对回收站保留期限条款",
       "observation": {
         "ok": true,
         "doc_id": "D04",

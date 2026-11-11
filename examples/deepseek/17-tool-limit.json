@@ -10,7 +10,7 @@
     "model": "deepseek-flash",
     "api_requests": 2,
     "usage": {
-      "prompt_tokens": 2517,
+      "prompt_tokens": 2757,
       "completion_tokens": 124
     },
     "max_steps": 8,
@@ -54,7 +54,7 @@
       "arguments": {
         "doc_id": "D03"
       },
-      "reason": "唯一候选文档，需读取原文确认开通时限",
+      "reason": "唯一候选文档，需读取原文核对开通时限",
       "observation": {
         "ok": false,
         "error": "tool_limit",

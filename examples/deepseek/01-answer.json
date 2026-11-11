@@ -18,8 +18,8 @@
     "model": "deepseek-flash",
     "api_requests": 3,
     "usage": {
-      "prompt_tokens": 4045,
-      "completion_tokens": 259
+      "prompt_tokens": 4407,
+      "completion_tokens": 254
     },
     "max_steps": 8,
     "steps_used": 3,
@@ -62,7 +62,7 @@
       "arguments": {
         "doc_id": "D03"
       },
-      "reason": "唯一候选文档，需读取原文确认开通时限",
+      "reason": "读取门禁权限申请 FAQ 全文以核对开通时限",
       "observation": {
         "ok": true,
         "doc_id": "D03",
@@ -93,7 +93,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "FAQ 原文明确说明提交完整申请后行政在 2 个工作日内开通门禁，直接回答时限问题。",
+      "reason": "FAQ 原文明确给出提交完整申请后 2 个工作日内开通门禁。",
       "observation": {
         "ok": true,
         "status": "answered",

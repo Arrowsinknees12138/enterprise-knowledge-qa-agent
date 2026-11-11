@@ -18,8 +18,8 @@
     "model": "deepseek-flash",
     "api_requests": 5,
     "usage": {
-      "prompt_tokens": 7891,
-      "completion_tokens": 506
+      "prompt_tokens": 8494,
+      "completion_tokens": 514
     },
     "max_steps": 8,
     "steps_used": 5,
@@ -33,7 +33,7 @@
       "arguments": {
         "query": "远程办公 申请 提前 工作日"
       },
-      "reason": "检索远程办公申请提前期的制度条款",
+      "reason": "检索远程办公申请提前期限的制度条款",
       "observation": {
         "ok": true,
         "total": 2,
@@ -72,7 +72,7 @@
       "arguments": {
         "doc_id": "D11"
       },
-      "reason": "用户为外包驻场人员，优先读取外包人员远程办公申请条款",
+      "reason": "用户为外包驻场人员，优先读取外包人员远程办公申请制度",
       "observation": {
         "ok": true,
         "doc_id": "D11",
@@ -103,7 +103,7 @@
         "gap": "",
         "follow_up": ""
       },
-      "reason": "外包人员远程办公申请条款明确规定了提前期，直接适用于用户身份。",
+      "reason": "外包人员远程办公制度明确规定了提前期限，直接适用于用户身份。",
       "observation": {
         "ok": false,
         "error": "invalid_action",
@@ -118,7 +118,7 @@
       "arguments": {
         "doc_id": "D10"
       },
-      "reason": "需核对另一候选（正式员工版）以确认适用人群区分",
+      "reason": "核对正式员工版本是否含适用人群或替代关系说明，以确认外包人员适用条款",
       "observation": {
         "ok": true,
         "doc_id": "D10",
@@ -149,7 +149,7 @@
         "gap": "",
         "status": "answered"
       },
-      "reason": "两份文件分别限定正式员工与外包人员，用户为外包驻场人员，适用外包版条款。",
+      "reason": "两份文件分别限定正式员工与外包人员，用户为外包驻场人员，适用外包人员条款的1个工作日。",
       "observation": {
         "ok": true,
         "status": "answered",

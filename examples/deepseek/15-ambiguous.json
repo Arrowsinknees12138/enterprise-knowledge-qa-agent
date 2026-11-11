@@ -2,16 +2,16 @@
   "status": "needs_clarification",
   "answer": "",
   "citations": [],
-  "gap": "用户仅问\"需要提前多久\"，未说明所指事项（如请假、报销、用印、采购申请等）及适用人群。",
-  "follow_up": "请问您问的是哪项事项需要提前多久申请（例如请假、报销、用印或采购）？",
+  "gap": "用户未说明所指事项（如请假、用印、采购、出差等），无法确定需要检索的制度主题。",
+  "follow_up": "请问您问的是哪项事项需要提前多久（例如请假、用印、采购申请、出差报备等）？",
   "run": {
     "mode": "live",
     "provider": "deepseek",
     "model": "deepseek-flash",
     "api_requests": 1,
     "usage": {
-      "prompt_tokens": 1160,
-      "completion_tokens": 161
+      "prompt_tokens": 1280,
+      "completion_tokens": 165
     },
     "max_steps": 8,
     "steps_used": 1,
@@ -25,15 +25,15 @@
       "arguments": {
         "status": "needs_clarification",
         "citations": [],
-        "gap": "用户仅问\"需要提前多久\"，未说明所指事项（如请假、报销、用印、采购申请等）及适用人群。",
-        "follow_up": "请问您问的是哪项事项需要提前多久申请（例如请假、报销、用印或采购）？"
+        "gap": "用户未说明所指事项（如请假、用印、采购、出差等），无法确定需要检索的制度主题。",
+        "follow_up": "请问您问的是哪项事项需要提前多久（例如请假、用印、采购申请、出差报备等）？"
       },
-      "reason": "问题缺少所指制度事项，无法确定检索主题词。",
+      "reason": "问题缺少所指事项，且无历史上下文可定位制度主题，需先澄清。",
       "observation": {
         "ok": true,
         "status": "needs_clarification",
         "citations": [],
-        "gap": "用户仅问\"需要提前多久\"，未说明所指事项（如请假、报销、用印、采购申请等）及适用人群。"
+        "gap": "用户未说明所指事项（如请假、用印、采购、出差等），无法确定需要检索的制度主题。"
       },
       "tool_calls_remaining": 6,
       "next_action": null
