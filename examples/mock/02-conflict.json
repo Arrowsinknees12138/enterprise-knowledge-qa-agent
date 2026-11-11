@@ -26,14 +26,15 @@
     "max_steps": 8,
     "steps_used": 4,
     "max_tool_calls": 6,
-    "tool_calls_used": 3
+    "tool_calls_used": 3,
+    "max_seconds": 120
   },
   "trace": [
     {
       "step": 1,
       "action": "search_docs",
       "arguments": {
-        "query": "出差结束后，差旅报销最晚要在多久内提交？"
+        "query": "出差结束后差旅报销最晚要在多久内提交"
       },
       "reason": "先检索当前问题",
       "observation": {
@@ -63,6 +64,8 @@
             "score": 1.5
           }
         ],
+        "next_offset": null,
+        "query": "出差结束后差旅报销最晚要在多久内提交",
         "cached": false,
         "unread_doc_ids": [
           "D01",
@@ -84,6 +87,7 @@
         "doc_id": "D01",
         "title": "差旅费用报销办法",
         "version_date": "2025-01-15",
+        "passage_topics": {},
         "passages": [
           {
             "passage_id": "P1",
@@ -107,6 +111,7 @@
         "doc_id": "D02",
         "title": "差旅报销操作指引",
         "version_date": "2025-06-01",
+        "passage_topics": {},
         "passages": [
           {
             "passage_id": "P1",

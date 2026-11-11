@@ -19,14 +19,15 @@
     "max_steps": 8,
     "steps_used": 3,
     "max_tool_calls": 6,
-    "tool_calls_used": 2
+    "tool_calls_used": 2,
+    "max_seconds": 120
   },
   "trace": [
     {
       "step": 1,
       "action": "search_docs",
       "arguments": {
-        "query": "新入职的同事交完申请后，要等多久才能刷卡进楼？"
+        "query": "新入职的同事交完申请后要等多久才能刷卡进楼"
       },
       "reason": "先检索当前问题",
       "observation": {
@@ -44,6 +45,8 @@
             "score": 2.0
           }
         ],
+        "next_offset": null,
+        "query": "新入职的同事交完申请后要等多久才能刷卡进楼",
         "cached": false,
         "unread_doc_ids": [
           "D03"
@@ -64,6 +67,7 @@
         "doc_id": "D03",
         "title": "门禁权限申请 FAQ",
         "version_date": "2025-03-12",
+        "passage_topics": {},
         "passages": [
           {
             "passage_id": "P1",

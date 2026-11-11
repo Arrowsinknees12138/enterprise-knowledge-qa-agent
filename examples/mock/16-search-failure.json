@@ -11,14 +11,15 @@
     "max_steps": 8,
     "steps_used": 2,
     "max_tool_calls": 6,
-    "tool_calls_used": 1
+    "tool_calls_used": 1,
+    "max_seconds": 120
   },
   "trace": [
     {
       "step": 1,
       "action": "search_docs",
       "arguments": {
-        "query": "新员工申请门禁权限后，多久能开通？"
+        "query": "新员工申请门禁权限后多久能开通"
       },
       "reason": "先检索当前问题",
       "observation": {

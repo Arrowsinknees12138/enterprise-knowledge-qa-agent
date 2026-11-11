@@ -11,20 +11,23 @@
     "max_steps": 8,
     "steps_used": 2,
     "max_tool_calls": 6,
-    "tool_calls_used": 1
+    "tool_calls_used": 1,
+    "max_seconds": 120
   },
   "trace": [
     {
       "step": 1,
       "action": "search_docs",
       "arguments": {
-        "query": "公司允许员工带宠物到办公室吗？"
+        "query": "公司允许员工带宠物到办公室吗"
       },
       "reason": "先检索当前问题",
       "observation": {
         "ok": true,
         "total": 0,
         "hits": [],
+        "next_offset": null,
+        "query": "公司允许员工带宠物到办公室吗",
         "cached": false,
         "unread_doc_ids": []
       },

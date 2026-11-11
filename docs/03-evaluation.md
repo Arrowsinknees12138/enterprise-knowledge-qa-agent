@@ -1,6 +1,16 @@
 # 评估与复现
 
-2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 29/29，Mock CLI 验收 12/12。常规回归在代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 40/40，Mock CLI 验收 12/12。常规回归在代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+
+## 审阅修复回归
+
+单元测试复现并覆盖了同文档错引、读完冲突文档后给出单一结论、无关冲突补查、命中第六条后漏读、提前报告资料不足和门禁时限改写。运行边界测试覆盖纯标点输入、时间预算、临时连接重试、文档范围和 Trace 脱敏。[回归测试代码](../tests/test_agent.py)
+
+在 `a69109c` 上，原 50 题基线的首轮复测为 49/50。唯一失败 S03 只引用了云盘分享链接，漏了用户同时询问的文件大小上限。随后增加了明确多项提问的引用覆盖校验。[首轮 49/50 报告](../examples/scenarios-50/audit-first-run.json)
+
+另用 4 份新合成文档验证证书条款选择、培训报销冲突、投影仪借用期限改写和计日规则缺口。两组测试可以分别使用默认语料和 `--corpus` 参数复跑。[替代语料](../examples/regression-corpus/knowledge.json) · [4 道题](../examples/regression-corpus/cases.json)
+
+最终在 `27ac751` 上实跑通过原有 50/50 和替代语料 4/4。原有题的应引用片段 28/28 精确匹配。S03 引用了云盘文件上限和外部链接有效期，单测验证了漏引一项时执行器拒绝结束。S07 首轮未命中，后续补查后答对。首轮 Top 3 命中至少一份相关文档为 38/39，覆盖所有标注相关文档为 35/39。原有 50 题实跑中，模型客户端发生两次请求重试。[50 题最终实跑](../examples/scenarios-50/hardened.json) · [替代语料最终实跑](../examples/regression-corpus/live.json)
 
 ## 50 题场景评估
 
@@ -130,4 +140,4 @@ DeepSeek 官方 API 首轮通过 9 组用例。第 10 组正确返回 `insuffici
 
 ## 限制
 
-评估覆盖 12 份合成文档和两类本地故障。词表外表达可能漏检，宽泛词可能带来无关候选。当前会要求模型核对所有返回候选，这在多候选时会增加调用量。引用校验保证逐字可溯源，证据与问题的语义匹配以及冲突判断仍取决于模型。不同模型或重跑可能选用不同的查询和步骤。
+评估使用合成语料。词表外表达可能漏检，宽泛词可能带来无关候选。要求核对所有返回候选会增加调用量。已标注的字段和数值冲突组有程序校验，其他语义相关性和制度适用判断仍依赖模型。不同模型或重跑可能选择不同查询和步骤。

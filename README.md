@@ -42,17 +42,20 @@ python -m src.knowledge_qa --mode live --input examples/inputs/06-tool-failure.j
 python tests/run_examples.py --mode live
 ```
 
-可用 `--question` 输入单条问题，用 `--input` 提供带可选 `history` 的 JSON，用 `--data` 替换知识库。`--max-steps` 设置决策轮次（默认 8），`--max-tool-calls` 设置实际检索和读取的总次数（默认 6）。`--fail-tool search_docs` 或 `--fail-tool read_doc` 可模拟持续故障。未指定 `--mode` 时使用 Mock。
+可用 `--question` 输入单条问题，用 `--input` 提供带可选 `history` 的 JSON，用 `--data` 替换知识库。`--max-steps` 设置决策轮次（默认 8），`--max-tool-calls` 设置实际检索和读取的总次数（默认 6），`--max-seconds` 设置运行时间预算（默认 120 秒）。`--fail-tool search_docs` 或 `--fail-tool read_doc` 可模拟持续故障。未指定 `--mode` 时使用 Mock。
 
 每条 Trace 记录剩余工具预算，成功结果在本轮重用时标记 `cached: true`。预算为零后仍可以用已取得的证据结束。若继续请求一个需要实际执行的工具，则返回 `tool_limit`。
 
-输出为 UTF-8 JSON。业务状态包括 `answered`、`conflict`、`insufficient_evidence` 和 `needs_clarification`，退出码为 0。`tool_error`、`model_error`、`step_limit`、`tool_limit` 的退出码为 1，输入或配置文件格式错误为 2。
+输出为 UTF-8 JSON。业务状态包括 `answered`、`conflict`、`insufficient_evidence` 和 `needs_clarification`，退出码为 0。`tool_error`、`model_error`、`step_limit`、`tool_limit`、`time_limit` 的退出码为 1，输入或配置文件格式错误为 2。
+
+`--allow-doc D04` 将本次检索和读取限制到指定文档，可重复传入。`--redact-trace` 仅输出 Trace 的动作、状态和用量。正常答复仍展示引用，真实模型处理允许范围内的原文。
 
 可以单独复跑用例，也可以直接调低工具预算查看限额行为。
 
 ```text
 python tests/run_examples.py --mode live --provider deepseek --case 12-multipassage
 python -m src.knowledge_qa --mode mock --input examples/inputs/01-answer.json --max-tool-calls 1
+python -m src.knowledge_qa --mode mock --question "邮箱回收站保留多久？" --allow-doc D04 --redact-trace
 ```
 
 ## 评审入口
@@ -75,10 +78,11 @@ python tests/run_holdout.py --output holdout-replay.json
 
 ```text
 python tests/run_holdout.py --dataset examples/scenarios-30/cases.json --dataset examples/scenarios-50/additional-cases.json --output scenarios-50-replay.json
+python tests/run_holdout.py --dataset examples/regression-corpus/cases.json --corpus examples/regression-corpus/knowledge.json --output alternate-corpus-replay.json
 ```
 
 - [验收矩阵与复现方法](docs/03-evaluation.md)
-- [新增 20 题与标准答案](examples/scenarios-50/additional-cases.json) · [最新 50/50 实跑](examples/scenarios-50/fixed.json) · [评估和复核](docs/03-evaluation.md#50-题场景评估)
+- [新增 20 题与标准答案](examples/scenarios-50/additional-cases.json) · [最新 50/50 实跑](examples/scenarios-50/hardened.json) · [替代语料实跑](examples/regression-corpus/live.json) · [评估和复核](docs/03-evaluation.md#审阅修复回归)
 - [30 题场景集与标准答案](examples/scenarios-30/cases.json) · [最终实跑报告](examples/scenarios-30/after.json)
 - [冻结对照题与标准答案](examples/holdout/cases.json) · [改动前记录](examples/holdout/baseline.json) · [改动后记录](examples/holdout/after.json)
 - [DeepSeek 官方 API 实跑记录](examples/deepseek-evaluation.txt)
