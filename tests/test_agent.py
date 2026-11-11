@@ -106,6 +106,44 @@ class KnowledgeTests(unittest.TestCase):
         correct = evidence.finish({**args, "citations": [{"doc_id": "D04", "passage_id": "P2"}]})
         self.assertTrue(correct["ok"])
 
+    def test_runtime_rejects_an_unrelated_extra_citation(self):
+        evidence = Evidence(self.knowledge, question="企业邮箱回收站保留多久？")
+        evidence.search({"query": "企业邮箱 云盘"})
+        for doc_id in ("D04", "D07"):
+            evidence.execute("read_doc", {"doc_id": doc_id})
+        refs = [{"doc_id": doc_id, "passage_id": "P2"} for doc_id in ("D04", "D07")]
+        result = evidence.finish({"status": "answered", "citations": refs, "gap": "", "follow_up": ""})
+        self.assertFalse(result["ok"])
+        self.assertIn("D07/P2", result["message"])
+
+    def test_runtime_checks_cited_audience_against_the_question(self):
+        questions = (
+            ("实习生能居家办公吗？", "D10", False),
+            ("我是正式员工，听外包同事说能提前一天。按我的规则应提前多久？", "D11", False),
+            ("我是正式员工，听外包同事说能提前一天。按我的规则应提前多久？", "D10", True),
+        )
+        for question, doc_id, expected in questions:
+            with self.subTest(question=question, doc_id=doc_id):
+                evidence = Evidence(self.knowledge, question=question)
+                evidence.search({"query": "居家办公"})
+                for candidate in ("D10", "D11"):
+                    evidence.execute("read_doc", {"doc_id": candidate})
+                result = evidence.finish({
+                    "status": "answered", "citations": [{"doc_id": doc_id, "passage_id": "P1"}],
+                    "gap": "", "follow_up": "",
+                })
+                self.assertEqual(result["ok"], expected)
+        self.knowledge.documents["D10"]["passages"]["P1"] = "实习生须至少提前 3 个工作日提交远程办公申请。"
+        evidence = Evidence(self.knowledge, question="实习生能居家办公吗？")
+        evidence.search({"query": "居家办公"})
+        for candidate in ("D10", "D11"):
+            evidence.execute("read_doc", {"doc_id": candidate})
+        result = evidence.finish({
+            "status": "answered", "citations": [{"doc_id": "D10", "passage_id": "P1"}],
+            "gap": "", "follow_up": "",
+        })
+        self.assertTrue(result["ok"])
+
     def test_explicit_multi_field_question_rejects_incomplete_citations(self):
         evidence = Evidence(
             self.knowledge, question="请同时告诉我云盘单个上传文件的大小上限，以及外部分享链接多久失效。",

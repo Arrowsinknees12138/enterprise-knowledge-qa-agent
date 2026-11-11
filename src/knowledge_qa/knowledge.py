@@ -11,6 +11,13 @@ SEARCH_PAGE_SIZE = 5
 AUTHORITY_TERMS = ("适用", "优先", "废止", "替代", "生效", "效力", "层级", "口径", "现行", "适用对象")
 GENERAL_AUTHORITY_QUERIES = ("制度效力", "制度优先", "制度层级", "政策优先", "规章效力", "政策冲突处理")
 MULTI_FIELD_REQUESTS = ("分别", "同时告诉", "请同时", "两项都", "两个期限都", "两个规则都", "两种链接")
+AUDIENCE_ALIASES = {
+    "正式员工": ("正式员工", "正式职工"),
+    "外包人员": ("外包人员", "外包员工", "外包同事", "外包"),
+    "实习生": ("实习生", "实习员工", "实习人员"),
+}
+AUDIENCE_COMPARISONS = ("分别", "对比", "两类", "各自", "各要")
+SCOPE_VERBS = ("须", "应", "必须", "需要", "可", "仅", "至少", "不得")
 
 
 # Match a self-contained question that asks only for a start event and a deadline.
@@ -38,6 +45,27 @@ def matching_passage_ids(topics, normalized_question):
 
 def compact_clause(text):
     return "".join(unicodedata.normalize("NFKC", text).split()).strip("。.!?;")
+
+
+def question_audiences(query):
+    mentioned = {
+        audience for audience, aliases in AUDIENCE_ALIASES.items() if any(alias in query for alias in aliases)
+    }
+    if len(mentioned) > 1 and not any(marker in query for marker in AUDIENCE_COMPARISONS):
+        for intro in ("我是", "本人是", "作为"):
+            _, _, description = query.partition(intro)
+            for audience, aliases in AUDIENCE_ALIASES.items():
+                if description.startswith(aliases):
+                    return {audience}
+    return mentioned
+
+
+def clause_audience(quote):
+    clause = normalize(quote)
+    for audience, aliases in AUDIENCE_ALIASES.items():
+        if clause.startswith(tuple(alias + verb for alias in aliases for verb in SCOPE_VERBS)):
+            return audience
+    return None
 
 
 class KnowledgeBase:
@@ -159,10 +187,29 @@ class KnowledgeBase:
         if expected and not expected.intersection(refs):
             available = ", ".join(f"{doc_id}/{passage_id}" for doc_id, passage_id in sorted(expected))
             return f"引用未覆盖问题已命中的证据片段：{available}"
+        if expected:
+            anchor_terms = {
+                normalize(term) for doc_id, ids in matching.items() if ids for term in self.documents[doc_id]["terms"]
+            }
+            unrelated = [
+                f"{doc_id}/{passage_id}" for doc_id, passage_id in refs
+                if not matching[doc_id] and not any(
+                    (term := normalize(alias)) in query and term not in anchor_terms
+                    for alias in self.documents[doc_id]["terms"]
+                )
+            ]
+            if unrelated:
+                return f"以下额外引用缺少与所问对象或字段的匹配依据：{', '.join(unrelated)}"
         if any(marker in query for marker in MULTI_FIELD_REQUESTS):
             missing = [f"{doc_id}/{passage_id}" for doc_id, passage_id in sorted(expected - refs.keys())]
             if missing:
                 return f"问题明确询问多项内容，请补充缺少的原文片段：{', '.join(missing)}"
+        audiences = question_audiences(query)
+        if audiences:
+            for (doc_id, passage_id), ref in refs.items():
+                scope = clause_audience(ref["quote"])
+                if scope and scope not in audiences:
+                    return f"{doc_id}/{passage_id} 明示适用于{scope}，请核对问题所问人群或说明缺口。"
         return ""
 
     def policy_values(self, reads):
