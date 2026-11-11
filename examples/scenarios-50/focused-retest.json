@@ -1,0 +1,320 @@
+{
+  "commit": "1c2fc7f1217465f28eedbcc1d0438895afda0526",
+  "cases_sha256": "c3212b5246266f76a2a1dde49928cd0f5934c26577f8d8046049fff0c6e40e88",
+  "datasets": [
+    {
+      "file": "cases.json",
+      "sha256": "91958c4e79bd1ad0056161d01e2df33bc72ef57d74ba18441a5b449a4f78da6e"
+    },
+    {
+      "file": "additional-cases.json",
+      "sha256": "3e4f7dfbc4684c2bd536e3f52d127641a3e98e869f0c0f040b729e8ac1f670b1"
+    }
+  ],
+  "corpus_sha256": "9526f1b39ff8def0c5f792ddee2c820996bf7879824171cd844c03b9bf51097d",
+  "metrics": {
+    "cases": 2,
+    "passed": 1,
+    "status_matches": 1,
+    "citation_cases": 1,
+    "citation_exact_matches": 0,
+    "unsupported_answers": 0,
+    "first_search_cases": 2,
+    "first_search_hits_at_3": 2,
+    "first_search_all_relevant_at_3": 2
+  },
+  "groups": {
+    "direct": {
+      "cases": 1,
+      "passed": 0
+    },
+    "context": {
+      "cases": 1,
+      "passed": 1
+    }
+  },
+  "results": [
+    {
+      "id": "S04-new-access-clock",
+      "group": "direct",
+      "expected_status": "answered",
+      "expected_refs": [
+        "D03/P1"
+      ],
+      "checks": {
+        "passed": false,
+        "status_match": false,
+        "actual_refs": [],
+        "citation_match": false,
+        "follow_up_match": true,
+        "observation_match": true,
+        "read_match": true,
+        "answer_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D03"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "insufficient_evidence",
+        "answer": "",
+        "citations": [],
+        "gap": "现有资料只规定“员工提交完整的门禁权限申请后，行政会在2个工作日内开通门禁”，未针对新员工单独规定办理时限的起算事件（如入职日、报到日或提交申请日）。",
+        "follow_up": "新员工的门禁办理时限是否以“提交完整的门禁权限申请”为起算点，还是另有以入职/报到日起算的专门规定？",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 4,
+          "usage": {
+            "prompt_tokens": 6514,
+            "completion_tokens": 435
+          },
+          "max_steps": 8,
+          "steps_used": 4,
+          "max_tool_calls": 6,
+          "tool_calls_used": 3
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "新员工 门禁 办理 时限 开通 工作日"
+            },
+            "reason": "检索新员工门禁办理与开通时限的制度条款",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D03",
+                  "title": "门禁权限申请 FAQ",
+                  "version_date": "2025-03-12",
+                  "matched_terms": [
+                    "门禁"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D03"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D03"
+            },
+            "reason": "读取门禁权限申请FAQ以核对新员工办理时限与开通时限",
+            "observation": {
+              "ok": true,
+              "doc_id": "D03",
+              "title": "门禁权限申请 FAQ",
+              "version_date": "2025-03-12",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "员工提交完整的门禁权限申请后，行政会在 2 个工作日内开通门禁。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "search_docs"
+          },
+          {
+            "step": 3,
+            "action": "search_docs",
+            "arguments": {
+              "query": "新员工入职 门禁权限申请 提交 起算"
+            },
+            "reason": "FAQ仅给出开通时限，需补查新员工门禁申请起算事件的条款",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D03",
+                  "title": "门禁权限申请 FAQ",
+                  "version_date": "2025-03-12",
+                  "matched_terms": [
+                    "门禁"
+                  ],
+                  "score": 1.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": []
+            },
+            "tool_calls_remaining": 3,
+            "next_action": "finish"
+          },
+          {
+            "step": 4,
+            "action": "finish",
+            "arguments": {
+              "status": "insufficient_evidence",
+              "citations": [
+                {
+                  "doc_id": "D03",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "现有资料只规定“员工提交完整的门禁权限申请后，行政会在2个工作日内开通门禁”，未针对新员工单独规定办理时限的起算事件（如入职日、报到日或提交申请日）。",
+              "follow_up": "新员工的门禁办理时限是否以“提交完整的门禁权限申请”为起算点，还是另有以入职/报到日起算的专门规定？"
+            },
+            "reason": "FAQ仅明确开通时限为提交完整申请后2个工作日，未规定新员工起算事件，故资料不足。",
+            "observation": {
+              "ok": true,
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "现有资料只规定“员工提交完整的门禁权限申请后，行政会在2个工作日内开通门禁”，未针对新员工单独规定办理时限的起算事件（如入职日、报到日或提交申请日）。"
+            },
+            "tool_calls_remaining": 3,
+            "next_action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "S45-password-link-generation-clock",
+      "group": "context",
+      "expected_status": "insufficient_evidence",
+      "expected_refs": [],
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "read_match": true,
+        "answer_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D12"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      },
+      "retried": false,
+      "exit_code": 0,
+      "result": {
+        "status": "insufficient_evidence",
+        "answer": "",
+        "citations": [],
+        "gap": "FAQ 只写明链接在 15 分钟后失效，未说明起算点是服务台生成链接时还是用户首次打开时。",
+        "follow_up": "FAQ 未写起算点，是否需要我按“生成后 15 分钟失效”这一表述理解，或向服务台确认起算时间？",
+        "run": {
+          "mode": "live",
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "api_requests": 3,
+          "usage": {
+            "prompt_tokens": 4758,
+            "completion_tokens": 334
+          },
+          "max_steps": 8,
+          "steps_used": 3,
+          "max_tool_calls": 6,
+          "tool_calls_used": 2
+        },
+        "trace": [
+          {
+            "step": 1,
+            "action": "search_docs",
+            "arguments": {
+              "query": "密码重置链接 有效期 FAQ"
+            },
+            "reason": "用户要核对重置链接有效期的起算点与失效时长，先检索相关FAQ。",
+            "observation": {
+              "ok": true,
+              "total": 1,
+              "hits": [
+                {
+                  "doc_id": "D12",
+                  "title": "企业账号密码重置 FAQ",
+                  "version_date": "2025-09-10",
+                  "matched_terms": [
+                    "密码",
+                    "重置"
+                  ],
+                  "score": 2.0
+                }
+              ],
+              "cached": false,
+              "unread_doc_ids": [
+                "D12"
+              ]
+            },
+            "tool_calls_remaining": 5,
+            "next_action": "read_doc"
+          },
+          {
+            "step": 2,
+            "action": "read_doc",
+            "arguments": {
+              "doc_id": "D12"
+            },
+            "reason": "唯一候选即密码重置FAQ，读取全文核对起算事件与失效时长。",
+            "observation": {
+              "ok": true,
+              "doc_id": "D12",
+              "title": "企业账号密码重置 FAQ",
+              "version_date": "2025-09-10",
+              "passages": [
+                {
+                  "passage_id": "P1",
+                  "quote": "通过企业账号服务台生成的密码重置链接在 15 分钟后失效。"
+                }
+              ],
+              "cached": false
+            },
+            "tool_calls_remaining": 4,
+            "next_action": "finish"
+          },
+          {
+            "step": 3,
+            "action": "finish",
+            "arguments": {
+              "status": "insufficient_evidence",
+              "citations": [
+                {
+                  "doc_id": "D12",
+                  "passage_id": "P1"
+                }
+              ],
+              "gap": "FAQ 只写明链接在 15 分钟后失效，未说明起算点是服务台生成链接时还是用户首次打开时。",
+              "follow_up": "FAQ 未写起算点，是否需要我按“生成后 15 分钟失效”这一表述理解，或向服务台确认起算时间？"
+            },
+            "reason": "已读唯一相关FAQ，仅能确认失效时长为15分钟，起算事件无原文依据。",
+            "observation": {
+              "ok": true,
+              "status": "insufficient_evidence",
+              "citations": [],
+              "gap": "FAQ 只写明链接在 15 分钟后失效，未说明起算点是服务台生成链接时还是用户首次打开时。"
+            },
+            "tool_calls_remaining": 4,
+            "next_action": null
+          }
+        ]
+      }
+    }
+  ]
+}

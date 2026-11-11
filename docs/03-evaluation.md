@@ -1,6 +1,22 @@
 # 评估与复现
 
-2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 24/24，Mock CLI 验收 12/12，最新一轮 DeepSeek 场景评估 30/30。常规回归在第二次场景复测的代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+2026 年 11 月 11 日在 Windows / Python 3.13.2 上运行。单元测试 26/26，Mock CLI 验收 12/12。常规回归在代码提交 `091ed8d` 上通过 19/19。DashScope 日志保存早期版本的 10 组真实模型记录。[单测输出](../examples/unit-tests.txt) · [Mock 验收输出](../examples/mock-evaluation.txt) · [DeepSeek 常规回归](../examples/deepseek-evaluation.txt) · [早期 DashScope 验收](../examples/live-evaluation.txt)
+
+## 50 题场景评估
+
+在原有 30 题上增加 S31 至 S50。新增题和评分器在实跑前提交为 `5a432ff`。题集包括跨文档双问、适用人群、日期与计日细节、原文改动、上下文和执行预算。评分检查正确的引用、所需的原文读取、答案值和运行状态。报告记录两个题集文件和合并后的 SHA-256。[原有 30 题](../examples/scenarios-30/cases.json) · [新增 20 题](../examples/scenarios-50/additional-cases.json)
+
+DeepSeek 官方 API 完成 50 题全量运行，其中两题遇到连接类错误并各重跑一次。按首轮冻结的标注通过 48/50。S45 的原标注把“通过服务台生成的链接”当成了明确的起算规则，原文只给出链接失效时长。修订标注为资料不足，并要求实际读取 D12。用修订后的标准复核同一批 Trace，总分为 49/50，新增题 20/20。[首轮完整 Trace](../examples/scenarios-50/baseline.json) · [修订后的复评分](../examples/scenarios-50/review.json)
+
+复评分中，需要作答或报告冲突的 28 题有 27 题精确匹配应引用的片段。首轮检索的前三条在 39/39 道有相关资料的题中至少命中一份，在 36/39 道题中覆盖所有标注相关文档。四道跨文档题、三道语料改动题和八道执行边界题均通过。S41 与 S42 只改变原文中的有效期，回答由 15 分钟变为 45 分钟。
+
+全量运行中，S04 读取了写明“提交完整的门禁权限申请后”的 D03/P1，仍返回资料不足。定向复测复现了 S04 的误判，并验证 S45 返回资料不足且实际读取了 D12。先前的 30 题运行中，S04 曾通过，也曾失败。[两题定向复测](../examples/scenarios-50/focused-retest.json)
+
+设置 `DEEPSEEK_API_KEY` 后复跑全部题目。可用 `--case S42-reset-link-updated-value` 只验证修改后的重置链接时效。
+
+```text
+python tests/run_holdout.py --dataset examples/scenarios-30/cases.json --dataset examples/scenarios-50/additional-cases.json --output scenarios-50-replay.json
+```
 
 ## 30 题场景评估
 

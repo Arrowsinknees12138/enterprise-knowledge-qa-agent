@@ -1,0 +1,89 @@
+{
+  "source_report": "baseline.json",
+  "model_run_commit": "5a432ff170be18d01f0b5f32920f294836740559",
+  "scoring_commit": "1c2fc7f1217465f28eedbcc1d0438895afda0526",
+  "datasets": [
+    {
+      "file": "cases.json",
+      "sha256": "91958c4e79bd1ad0056161d01e2df33bc72ef57d74ba18441a5b449a4f78da6e"
+    },
+    {
+      "file": "additional-cases.json",
+      "sha256": "3e4f7dfbc4684c2bd536e3f52d127641a3e98e869f0c0f040b729e8ac1f670b1"
+    }
+  ],
+  "cases_sha256": "c3212b5246266f76a2a1dde49928cd0f5934c26577f8d8046049fff0c6e40e88",
+  "metrics": {
+    "cases": 50,
+    "passed": 49,
+    "status_matches": 49,
+    "citation_cases": 28,
+    "citation_exact_matches": 27,
+    "unsupported_answers": 0,
+    "first_search_cases": 39,
+    "first_search_hits_at_3": 39,
+    "first_search_all_relevant_at_3": 36
+  },
+  "groups": {
+    "direct": {
+      "cases": 7,
+      "passed": 6
+    },
+    "context": {
+      "cases": 7,
+      "passed": 7
+    },
+    "gap": {
+      "cases": 9,
+      "passed": 9
+    },
+    "clarification": {
+      "cases": 4,
+      "passed": 4
+    },
+    "policy": {
+      "cases": 8,
+      "passed": 8
+    },
+    "operations": {
+      "cases": 8,
+      "passed": 8
+    },
+    "cross_document": {
+      "cases": 4,
+      "passed": 4
+    },
+    "corpus_changes": {
+      "cases": 3,
+      "passed": 3
+    }
+  },
+  "failed_case_ids": [
+    "S04-new-access-clock"
+  ],
+  "changed_cases": [
+    {
+      "id": "S45-password-link-generation-clock",
+      "expected_status": "insufficient_evidence",
+      "checks": {
+        "passed": true,
+        "status_match": true,
+        "actual_refs": [],
+        "citation_match": true,
+        "follow_up_match": true,
+        "observation_match": true,
+        "read_match": true,
+        "answer_match": true,
+        "budget_match": true,
+        "action_match": true,
+        "exit_match": true,
+        "unsupported_answer": false,
+        "first_search_top3": [
+          "D12"
+        ],
+        "first_search_hit_at_3": true,
+        "first_search_all_relevant_at_3": true
+      }
+    }
+  ]
+}

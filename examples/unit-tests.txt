@@ -16,7 +16,9 @@ test_search_supports_local_aliases_and_unicode_normalization (test_agent.Knowled
 test_tool_failures_consume_budget_and_are_not_cached (test_agent.KnowledgeTests.test_tool_failures_consume_budget_and_are_not_cached) ... ok
 test_tool_limit_blocks_actual_read_before_it_runs (test_agent.KnowledgeTests.test_tool_limit_blocks_actual_read_before_it_runs) ... ok
 test_unknown_document_and_search_failure_are_explicit (test_agent.KnowledgeTests.test_unknown_document_and_search_failure_are_explicit) ... ok
+test_answer_terms_and_required_read_are_checked (test_holdout.HoldoutScoringTests.test_answer_terms_and_required_read_are_checked) ... ok
 test_answering_an_insufficient_evidence_case_is_unsupported (test_holdout.HoldoutScoringTests.test_answering_an_insufficient_evidence_case_is_unsupported) ... ok
+test_datasets_combine_in_order_and_reject_duplicate_case_ids (test_holdout.HoldoutScoringTests.test_datasets_combine_in_order_and_reject_duplicate_case_ids) ... ok
 test_expected_tool_limit_checks_exit_observation_and_budget (test_holdout.HoldoutScoringTests.test_expected_tool_limit_checks_exit_observation_and_budget) ... ok
 test_later_retrieval_does_not_count_as_a_first_search_hit (test_holdout.HoldoutScoringTests.test_later_retrieval_does_not_count_as_a_first_search_hit) ... ok
 test_matching_ids_with_changed_quote_do_not_support_answer (test_holdout.HoldoutScoringTests.test_matching_ids_with_changed_quote_do_not_support_answer) ... ok
@@ -24,6 +26,6 @@ test_transition_checked_after_required_read (test_holdout.HoldoutScoringTests.te
 test_variant_changes_one_passage_without_mutating_base (test_holdout.HoldoutScoringTests.test_variant_changes_one_passage_without_mutating_base) ... ok
 
 ----------------------------------------------------------------------
-Ran 24 tests in 0.019s
+Ran 26 tests in 0.030s
 
 OK
