@@ -1,0 +1,138 @@
+[
+  {
+    "id": "S31-card-and-visitor-timing", "group": "cross_document",
+    "question": "我已挂失门禁卡，同一天还要接待外部访客。交齐补办申请后多久制发新卡？访客临时通行又至少要提前多久申请？请分别给出两个规则。",
+    "status": "answered", "refs": ["D05/P1", "D06/P1"], "relevant_docs": ["D05", "D06"]
+  },
+  {
+    "id": "S32-compare-remote-work-scopes", "group": "cross_document",
+    "question": "同一个团队的正式员工和外包人员都要申请远程办公，两类人各要提前几个工作日？哪一类还需要项目负责人确认？",
+    "status": "answered", "refs": ["D10/P1", "D11/P1"], "relevant_docs": ["D10", "D11"]
+  },
+  {
+    "id": "S33-compare-link-expiries", "group": "cross_document",
+    "question": "我手上有企业账号密码重置链接和企业云盘对外分享链接。请分别查两种链接默认多久失效，保留各自的时间单位。",
+    "status": "answered", "refs": ["D07/P2", "D12/P1"], "relevant_docs": ["D07", "D12"]
+  },
+  {
+    "id": "S34-mail-retention-and-drive-expiry", "group": "cross_document",
+    "question": "已删除的公司邮件在邮箱回收站留几天？发给外部人的企业云盘分享链接又默认几天失效？两个期限都需要。",
+    "status": "answered", "refs": ["D04/P2", "D07/P2"], "relevant_docs": ["D04", "D07"]
+  },
+  {
+    "id": "S35-upload-approval-gap", "group": "gap",
+    "question": "我已知道企业云盘上传的大小上限。单问审批规则：上传一个符合大小要求的文件前必须经过管理员批准吗？",
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": ["D07"],
+    "required_reads": ["D07"]
+  },
+  {
+    "id": "S36-probation-covered-by-employee-rule", "group": "policy",
+    "question": "我是已经入职的试用期员工，完整的门禁权限申请已经提交。按员工通用规定，行政最晚几个工作日开通？",
+    "status": "answered", "refs": ["D03/P1"], "relevant_docs": ["D03"]
+  },
+  {
+    "id": "S37-contractor-access-gap", "group": "gap",
+    "question": "我是供应商的外包驻场人员，不属于本公司员工。我问的是外包人员首次开通门禁的办理时限，资料里有明确规定吗？",
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": ["D03"],
+    "required_reads": ["D03"]
+  },
+  {
+    "id": "S38-compare-repair-policy-versions", "group": "policy",
+    "question": "做制度变更记录，请对比设备维修旧细则和替代版各规定几个工作日，以及新版从哪天开始替代。两个版本的期限都需要。",
+    "status": "answered", "refs": ["D08/P1", "D09/P1"], "relevant_docs": ["D08", "D09"]
+  },
+  {
+    "id": "S39-first-working-day-counting-gap", "group": "gap",
+    "question": "我知道完整门禁申请提交后是两个工作日。只想确认：提交当天算第一个工作日，还是要从下一个工作日算？",
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": ["D03"],
+    "required_reads": ["D03"]
+  },
+  {
+    "id": "S40-mail-retention-trigger", "group": "direct",
+    "question": "邮箱回收站的 30 天从邮件发送时算，还是从删掉那封邮件时算？请用原文确认。",
+    "status": "answered", "refs": ["D04/P2"], "relevant_docs": ["D04"],
+    "answer_terms": ["自删除起"]
+  },
+  {
+    "id": "S41-reset-link-base-value", "group": "corpus_changes",
+    "question": "按企业账号服务台的 FAQ，系统刚生成的密码重置链接在多少分钟后失效？",
+    "status": "answered", "refs": ["D12/P1"], "relevant_docs": ["D12"],
+    "answer_terms": ["15 分钟"]
+  },
+  {
+    "id": "S42-reset-link-updated-value", "group": "corpus_changes",
+    "question": "按企业账号服务台的 FAQ，系统刚生成的密码重置链接在多少分钟后失效？",
+    "status": "answered", "refs": ["D12/P1"], "relevant_docs": ["D12"],
+    "answer_terms": ["45 分钟"],
+    "corpus_edit": {
+      "doc_id": "D12", "passage_id": "P1",
+      "text": "通过企业账号服务台生成的密码重置链接在 45 分钟后失效。"
+    }
+  },
+  {
+    "id": "S43-visitor-lead-time-removed", "group": "corpus_changes",
+    "question": "接待员工最晚要提前几个工作日提交访客的临时通行申请？",
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": ["D06"],
+    "required_reads": ["D06"],
+    "corpus_edit": {
+      "doc_id": "D06", "passage_id": "P1",
+      "text": "外部访客到访时应出示有效证件，并由接待员工陪同。"
+    }
+  },
+  {
+    "id": "S44-publication-date-does-not-settle-conflict", "group": "policy",
+    "question": "差旅报销操作指引的版本日期更新，能否据此确认它已经替代费用报销办法，以及现在的报销申请期限？",
+    "status": "conflict", "refs": ["D01/P1", "D02/P1"], "relevant_docs": ["D01", "D02"],
+    "next_after_read": {"docs": ["D01", "D02"], "action": "search_docs"}
+  },
+  {
+    "id": "S45-password-link-generation-clock", "group": "context",
+    "question": "请查 FAQ 核对：有效期从服务台生成链接时算，还是从我第一次打开时算？多少分钟后失效？",
+    "history": [
+      {"role": "user", "content": "服务台发了企业账号密码重置链接，我还没打开。"},
+      {"role": "assistant", "content": "我猜第一次打开后才开始计时。"}
+    ],
+    "status": "answered", "refs": ["D12/P1"], "relevant_docs": ["D12"],
+    "answer_terms": ["生成", "15 分钟"]
+  },
+  {
+    "id": "S46-switch-from-recycle-bin-to-external-link", "group": "context",
+    "question": "换个问题，发给公司外合作方的企业云盘分享链接，按默认设置几天后失效？",
+    "history": [
+      {"role": "user", "content": "已删除邮件在企业邮箱回收站保留多久？"},
+      {"role": "assistant", "content": "回收站保留 30 天。"}
+    ],
+    "status": "answered", "refs": ["D07/P2"], "relevant_docs": ["D07"]
+  },
+  {
+    "id": "S47-unresolved-link-reference", "group": "clarification",
+    "question": "我只需要其中一条的有效期。下班后再开那个链接，多久会失效？",
+    "history": [
+      {"role": "user", "content": "我刚拿到账号密码重置链接，同时有人发了企业云盘外部分享链接。"},
+      {"role": "assistant", "content": "这两条链接有不同的失效规则。"}
+    ],
+    "status": "needs_clarification", "refs": [], "relevant_docs": [],
+    "allowed_context_refs": ["D07/P2", "D12/P1"]
+  },
+  {
+    "id": "S48-tool-cap-before-conflict-check", "group": "operations",
+    "question": "两份差旅报销资料写了 15 天和 30 天，请确认该用哪个期限；有冲突时请补查适用依据。",
+    "status": "tool_limit", "refs": [], "relevant_docs": [],
+    "max_tool_calls": 3, "observation_error": "tool_limit",
+    "required_reads": ["D01", "D02"], "expected_run": {"tool_calls_used": 3}
+  },
+  {
+    "id": "S49-step-cap-after-evidence-read", "group": "operations",
+    "question": "通过企业账号服务台生成密码重置链接后，多久会失效？",
+    "status": "step_limit", "refs": [], "relevant_docs": [],
+    "max_steps": 2, "required_reads": ["D12"],
+    "expected_run": {"steps_used": 2, "tool_calls_used": 2}
+  },
+  {
+    "id": "S50-tool-cap-before-second-scope", "group": "operations",
+    "question": "正式员工与外包人员申请远程办公分别要提前几个工作日？我需要两类人的完整规则。",
+    "status": "tool_limit", "refs": [], "relevant_docs": [],
+    "max_tool_calls": 2, "observation_error": "tool_limit",
+    "expected_run": {"tool_calls_used": 2}
+  }
+]

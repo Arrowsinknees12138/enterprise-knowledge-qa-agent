@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from run_holdout import case_options, score
+from run_holdout import case_options, load_cases, score
 
 
 class HoldoutScoringTests(unittest.TestCase):
@@ -60,6 +60,26 @@ class HoldoutScoringTests(unittest.TestCase):
         self.assertFalse(score(self.case, self.result, 0)["action_match"])
         self.result["trace"].append({"action": "finish", "observation": {"ok": True}})
         self.assertTrue(score(self.case, self.result, 0)["passed"])
+
+    def test_answer_terms_and_required_read_are_checked(self):
+        self.case.update(answer_terms=["45 分钟"], required_reads=["D07"])
+        self.result["answer"] = "链接在 15 分钟后失效。"
+        checks = score(self.case, self.result, 0)
+        self.assertFalse(checks["answer_match"])
+        self.assertFalse(checks["read_match"])
+        self.assertTrue(checks["unsupported_answer"])
+
+    def test_datasets_combine_in_order_and_reject_duplicate_case_ids(self):
+        with tempfile.TemporaryDirectory() as temp:
+            first = Path(temp) / "first.json"
+            second = Path(temp) / "second.json"
+            first.write_text('[{"id": "S01"}]', encoding="utf-8")
+            second.write_text('[{"id": "S31"}]', encoding="utf-8")
+            cases, _, inputs = load_cases([first, second])
+            self.assertEqual([case["id"] for case in cases], ["S01", "S31"])
+            self.assertEqual([entry["file"] for entry in inputs], ["first.json", "second.json"])
+            with self.assertRaises(ValueError):
+                load_cases([first, first])
 
     def test_variant_changes_one_passage_without_mutating_base(self):
         corpus = [{"doc_id": "D01", "passages": {"P1": "30 天", "P2": "其他条款"}}]

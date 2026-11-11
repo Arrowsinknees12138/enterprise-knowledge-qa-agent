@@ -54,6 +54,8 @@ def score(case, result, exit_code):
         follow_up_match = follow_up_match and bool(follow_up.strip())
     expected_error = case.get("observation_error")
     observation_match = not expected_error or any(step["observation"].get("error") == expected_error for step in trace)
+    read_match = set(case.get("required_reads", [])) <= {doc_id for doc_id, _, _ in observed}
+    answer_match = all(term in result.get("answer", "") for term in case.get("answer_terms", []))
     run = result.get("run", {})
     budget_match = all(run.get(key) == value for key, value in case.get("expected_run", {}).items())
     transition = case.get("next_after_read")
@@ -61,16 +63,18 @@ def score(case, result, exit_code):
     exit_match = exit_code == int(case["status"] in FAILURE_STATUSES)
     return {
         "passed": all((exit_match, status_match, citation_match, follow_up_match,
-                       observation_match, budget_match, action_match)),
+                       observation_match, budget_match, action_match, read_match, answer_match)),
         "status_match": status_match,
         "actual_refs": sorted(refs),
         "citation_match": citation_match,
         "follow_up_match": follow_up_match,
         "observation_match": observation_match,
+        "read_match": read_match,
+        "answer_match": answer_match,
         "budget_match": budget_match,
         "action_match": action_match,
         "exit_match": exit_match,
-        "unsupported_answer": result["status"] == "answered" and (not status_match or not citation_match),
+        "unsupported_answer": result["status"] == "answered" and not all((status_match, citation_match, answer_match)),
         "first_search_top3": top3,
         "first_search_hit_at_3": bool(relevant.intersection(top3)) if relevant else None,
         "first_search_all_relevant_at_3": relevant.issubset(top3) if relevant else None,
@@ -91,20 +95,40 @@ def case_options(case, base_corpus, variant_path):
     return options
 
 
+def load_cases(paths):
+    cases = []
+    inputs = []
+    contents = []
+    for path in paths:
+        raw = path.read_bytes()
+        dataset = json.loads(raw)
+        if not isinstance(dataset, list):
+            raise ValueError(f"{path.name} must contain a list of cases.")
+        contents.append(raw)
+        cases.extend(dataset)
+        inputs.append({"file": path.name, "sha256": hashlib.sha256(raw).hexdigest()})
+    if len({case["id"] for case in cases}) != len(cases):
+        raise ValueError("Case IDs must be unique across datasets.")
+    combined = contents[0] if len(paths) == 1 else json.dumps(cases, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    return cases, hashlib.sha256(combined).hexdigest(), inputs
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dataset", type=Path, default=CASES, help="Frozen cases JSON file.")
+    parser.add_argument("--dataset", type=Path, action="append", help="Frozen cases JSON file. Repeat to combine files.")
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--case", action="append", help="Run specific frozen case IDs.")
     args = parser.parse_args()
     if not os.environ.get("DEEPSEEK_API_KEY", "").strip():
         parser.error("Set DEEPSEEK_API_KEY before running the holdout.")
 
-    raw = args.dataset.read_bytes()
+    try:
+        cases, cases_sha256, inputs = load_cases(args.dataset or [CASES])
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
     corpus_bytes = (ROOT / "data" / "knowledge.json").read_bytes()
     base_corpus = json.loads(corpus_bytes)
-    cases = json.loads(raw)
     unknown = set(args.case or []) - {case["id"] for case in cases}
     if unknown:
         parser.error(f"Unknown cases: {', '.join(sorted(unknown))}")
@@ -152,7 +176,8 @@ def main():
         counts["passed"] += item["checks"]["passed"]
     report = {
         "commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
-        "cases_sha256": hashlib.sha256(raw).hexdigest(),
+        "cases_sha256": cases_sha256,
+        "datasets": inputs,
         "corpus_sha256": hashlib.sha256(corpus_bytes).hexdigest(),
         "metrics": metrics,
         "groups": groups,
