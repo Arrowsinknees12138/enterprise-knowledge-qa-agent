@@ -92,8 +92,8 @@
       {"role": "user", "content": "服务台发了企业账号密码重置链接，我还没打开。"},
       {"role": "assistant", "content": "我猜第一次打开后才开始计时。"}
     ],
-    "status": "answered", "refs": ["D12/P1"], "relevant_docs": ["D12"],
-    "answer_terms": ["生成", "15 分钟"]
+    "status": "insufficient_evidence", "refs": [], "relevant_docs": ["D12"],
+    "required_reads": ["D12"]
   },
   {
     "id": "S46-switch-from-recycle-bin-to-external-link", "group": "context",
