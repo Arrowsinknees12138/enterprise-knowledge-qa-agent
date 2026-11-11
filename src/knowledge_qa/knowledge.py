@@ -1,8 +1,19 @@
 import json
+import re
 import unicodedata
 from collections import Counter
 from datetime import date
 from pathlib import Path
+
+
+# Match a self-contained question that asks only for a start event and a deadline.
+DEADLINE_QUESTION = re.compile(
+    r"(?P<audience>[\u4e00-\u9fff]{1,16}?)的"
+    r"(?P<topic>[\u4e00-\u9fff]{2,24}?)(?:办理|处理|开通)?(?:时限|期限)(?:是)?"
+    r"(?:从(?:什么时候|何时|哪一步|哪个环节)(?:开始)?(?:计算|起算|算)|何时起算)[,，]\s*"
+    r"(?P<responsible>[\u4e00-\u9fff]{1,12}?)(?:最迟|最多|至多|应在|需要|要|需)"
+    r"(?:几个|多少个|多少)\s*工作日(?:内)?(?P<action>[\u4e00-\u9fff]{1,12})[。？?]?"
+)
 
 
 def normalize(text):
@@ -73,3 +84,42 @@ class KnowledgeBase:
                 for passage_id, quote in doc["passages"].items()
             ],
         }
+
+    def explicit_deadline_citation(self, question, observed_doc):
+        request = DEADLINE_QUESTION.fullmatch(unicodedata.normalize("NFKC", question.strip()))
+        passages = observed_doc["passages"]
+        if not request or len(passages) != 1:
+            return None
+
+        doc_id = observed_doc["doc_id"]
+        doc = self.documents[doc_id]
+        passage = passages[0]
+        rule = doc.get("deadline")
+        if not isinstance(rule, dict) or rule.get("passage_id") != passage["passage_id"]:
+            return None
+        audiences = rule.get("audiences")
+        trigger, responsible, outcome = (rule.get(field) for field in ("trigger", "responsible", "outcome"))
+        if not isinstance(audiences, list) or not all(
+            isinstance(field, str) and field for field in (trigger, responsible, outcome)
+        ):
+            return None
+
+        topic = request["topic"]
+        if (
+            request["audience"] not in audiences
+            or normalize(topic) not in {normalize(term) for term in doc["terms"]}
+            or request["responsible"] != responsible
+            or outcome not in {request["action"], request["action"] + topic}
+            or not trigger.endswith("后")
+        ):
+            return None
+
+        # Revalidate the rule against the actual read. Edited source text may invalidate its annotation.
+        clause = (
+            rf"{re.escape(trigger)}[,，]\s*{re.escape(responsible)}(?:会|将|应)?在\s*"
+            rf"[0-9]+\s*个?工作日内{re.escape(outcome)}[。.]?"
+        )
+        quote = unicodedata.normalize("NFKC", passage["quote"].strip())
+        if not re.fullmatch(clause, quote):
+            return None
+        return {"doc_id": doc_id, "passage_id": passage["passage_id"]}

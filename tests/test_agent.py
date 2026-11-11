@@ -135,6 +135,50 @@ class KnowledgeTests(unittest.TestCase):
         self.assertEqual(result["citations"], [])
         self.assertEqual(result["trace"][1]["observation"]["passages"][0]["passage_id"], "P1")
 
+    def run_false_deadline_refusal(self, question, history=None):
+        model = ScriptedModel(
+            ("search_docs", {"query": "门禁"}),
+            ("read_doc", {"doc_id": "D03"}),
+            ("finish", {
+                "status": "insufficient_evidence", "citations": [],
+                "gap": "找不到单独的起算规定", "follow_up": "请确认起算点。",
+            }),
+        )
+        return KnowledgeAgent(model, self.knowledge, max_tool_calls=2).run(question, history or [])
+
+    def test_explicit_applicable_deadline_corrects_false_refusal(self):
+        for question in (
+            "新员工的门禁办理时限是从什么时候开始算，行政最迟几个工作日开通？",
+            "试用期员工的门禁办理期限何时起算，行政最迟多少个工作日内开通门禁？",
+        ):
+            with self.subTest(question=question):
+                result = self.run_false_deadline_refusal(question)
+                self.assertEqual(result["status"], "answered")
+                self.assertEqual(result["gap"], "")
+                self.assertEqual(result["follow_up"], "")
+                self.assertIn("提交完整的门禁权限申请后", result["answer"])
+                self.assertIn("2 个工作日", result["answer"])
+                self.assertIn("correction", result["trace"][-1]["observation"])
+                self.assertEqual(result["run"]["tool_calls_used"], 2)
+
+    def test_deadline_correction_does_not_infer_scope_or_counting_rules(self):
+        for question in (
+            "外包人员的门禁办理时限是从什么时候开始算，行政最迟几个工作日开通？",
+            "新员工的门禁办理时限是从什么时候开始算，行政最迟几个工作日开通，提交当天计入吗？",
+        ):
+            with self.subTest(question=question):
+                result = self.run_false_deadline_refusal(question)
+                self.assertEqual(result["status"], "insufficient_evidence")
+                self.assertEqual(result["citations"], [])
+
+    def test_deadline_correction_uses_the_observed_source(self):
+        question = "新员工的门禁办理时限是从什么时候开始算，行政最迟几个工作日开通？"
+        passages = self.knowledge.documents["D03"]["passages"]
+        passages["P1"] = passages["P1"].replace("2 个工作日", "4 个工作日")
+        self.assertIn("4 个工作日", self.run_false_deadline_refusal(question)["answer"])
+        passages["P1"] = "新员工的门禁权限申请由行政处理。"
+        self.assertEqual(self.run_false_deadline_refusal(question)["status"], "insufficient_evidence")
+
     def test_limit_marks_unfinished_without_citations(self):
         result = KnowledgeAgent(MockModel(), self.knowledge, max_steps=1).run("门禁", [])
         self.assertEqual(result["status"], "step_limit")

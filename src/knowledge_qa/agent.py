@@ -28,7 +28,7 @@ class KnowledgeAgent:
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": json.dumps({"question": question, "history": history}, ensure_ascii=False)},
         ]
-        evidence = Evidence(self.knowledge, self.max_tool_calls)
+        evidence = Evidence(self.knowledge, self.max_tool_calls, question=question if not history else "")
         trace = []
         for step in range(1, self.max_steps + 1):
             try:
@@ -63,8 +63,8 @@ class KnowledgeAgent:
                 return self.result("tool_limit", trace, evidence, gap=observation["message"])
             if action.name == "finish" and observation["ok"]:
                 return self.result(
-                    arguments["status"], trace, evidence, observation["citations"],
-                    observation["gap"], arguments["follow_up"],
+                    observation["status"], trace, evidence, observation["citations"],
+                    observation["gap"], observation.get("follow_up", arguments["follow_up"]),
                 )
 
             messages.extend([
@@ -107,9 +107,10 @@ class KnowledgeAgent:
 
 
 class Evidence:
-    def __init__(self, knowledge, max_tool_calls=6):
+    def __init__(self, knowledge, max_tool_calls=6, question=""):
         self.knowledge = knowledge
         self.max_tool_calls = max_tool_calls
+        self.question = question
         self.tool_calls_used = 0
         self.search_cache = {}
         self.candidates = set()
@@ -202,6 +203,13 @@ class Evidence:
                 return self.tool_limit()
             # Keep background passages in the trace, separate from answer citations.
             citations = []
+            if self.question and len(self.reads) == 1 and self.candidates == self.reads.keys():
+                observed_doc = next(iter(self.reads.values()))
+                citation = self.knowledge.explicit_deadline_citation(self.question, observed_doc)
+                if citation:
+                    status = "answered"
+                    citations = [citation]
+                    gap = ""
         if status == "answered" and (self.search_failed or self.candidates - self.reads.keys()):
             return rejection("存在未核对的候选文档或未恢复的检索失败")
 
@@ -230,4 +238,8 @@ class Evidence:
             if not documents <= self.reads_before_new_query:
                 return rejection("请在读完冲突原文后，使用一条新查询补查适用范围、优先级或废止依据")
             gap = "资料中缺少足以判定适用口径的依据，需要确认适用范围、优先级或废止关系。"
-        return {"ok": True, "status": status, "citations": list(refs.values()), "gap": gap}
+        result = {"ok": True, "status": status, "citations": list(refs.values()), "gap": gap}
+        if status != arguments["status"]:
+            result["follow_up"] = ""
+            result["correction"] = "已读且适用的原文明示起算事件和期限"
+        return result
